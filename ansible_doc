@@ -1,0 +1,66 @@
+qa mac mini ansible环境部署及ansible常用模块介绍
+
+一：前期准备工作
+1：规范四台mac mini的hostname
+    10.0.0.24# hostname mac24
+    10.0.0.27# hostname mac27
+    10.0.0.52# hostname mac52
+    10.0.0.53# hostname mac53
+2：分别将四台mac的hostname和ip加入本地hosts
+    cat /etc/hosts
+    10.0.0.24  mac24
+    10.0.0.27  mac27
+    10.0.0.52  mac52
+    10.0.0.53  mac53
+3：ansible的安装环
+   easy_install  pip
+
+二：ansible的安装,配置
+1：安装(只需在一台服务器上安装即可，本例在mac24上安装,即mac24为master，然后对其他机器做免秘钥)
+   pip  install ansible
+2：配置主机文件
+   mkdir /etc/ansible
+   vim /etc/ansible/hosts    #ansible默认的主机列表文件位置
+   [mac]    #主机组名
+   mac24    #主机名
+   mac27
+   mac52
+   mac53
+3: mac24上对本机和其他slave主机做免秘钥访问  
+   mac24:~ root# ssh-keygen
+   mac24:~ root# cp  ~/.ssh/id_rsa.pub  ~/.ssh/authorized_keys
+   mac24:~ root# scp /var/root/.ssh/authorized_keys mac27:/var/root/.ssh/
+   mac24:~ root# scp /var/root/.ssh/authorized_keys mac52:/var/root/.ssh/
+   mac24:~ root# scp /var/root/.ssh/authorized_keys mac53:/var/root/.ssh/
+4：测试如下，即成功
+   mac24:~ root# ansible all -a "pwd"
+   mac53 | success | rc=0 >>
+   /private/var/root
+
+   mac52 | success | rc=0 >>
+   /private/var/root
+
+   mac27 | success | rc=0 >>
+   /private/var/root
+
+   mac24 | success | rc=0 >>
+   /private/var/root
+
+三：ansible的用法和常用模块
+
+1：基本用法
+  ansible   主机名/主机组名/主机名正则匹配  -m  模块名 -f 并发数默认是10   -a "执行的命令"
+  
+  eg:  ansible mac24  -m command  -a "pwd"                #只对hosts文件中mac24主机执行操作 ， command模块是默认模块，支持Linux中的所有命令，默认模块可不写，
+       ansible mac24:mac25:mac27  -m command  -a "pwd"    #对hosts文件中多台主机操作用:分割
+       ansible mac  -m command  -a "pwd"                  #对hosts文件中，定义的mac组所有主机操作
+       ansible mac*  -m command  -a "pwd"                 #对host文件中，所有主机名为mac开头的主机操作
+       ansible all  -m command  -a "pwd"                  #对host文件中，所有主机操作
+2：常用模块
+A：command 支持Linux的所有命令
+B: service 管理服务
+    ansible mac27  -m service -a 'name=diamond state=restarted'
+C: script 远程主机执行本地脚本
+    ansible mac27 -m script -a "/home/user/test.sh"
+D: copy  将本地文件拷贝到远程主机，或者将远程文件拷贝到本机
+    ansible dis1 -m copy -K --sudo -a "src=/home/liuziping/memkeys dest=/etc/cron.d/memkeys owner=root group=root mode=0644"
