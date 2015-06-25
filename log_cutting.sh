@@ -19,7 +19,7 @@ function cut_log(){
     if [ ! -d $log_dir ];then
         mkdir -p $log_dir
     fi    
-    /bin/mv   $log_path/*.log  $log_dir/$log_name$day.log
+    /bin/mv   $log_path/$log_name.log  $log_dir/$log_name$day.log
     /bin/kill -HUP `cat $pidfile`
 }
 
