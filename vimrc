@@ -61,7 +61,7 @@ let NERDTreeWinSize=20             " 窗口大小
 map <F2> :NERDTreeToggle<CR>       
 
 
-" 自动代码补全
+" 自动代码补全,自动补全的部分用tab键来切换选择预期的内容，如果用箭头＋enter键会自动换行
 Bundle 'Shougo/neocomplete.vim'
 " 配置直接拷贝官方的例子 https://github.com/Shougo/neocomplete.vim 
 let g:acp_enableAtStartup = 0
