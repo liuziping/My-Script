@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding=utf-8
 import os
-ip = '211.147.4.100'
+ip = '192.168.1.1'
 def pingip(ip):   
     n=0
     while True:
