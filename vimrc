@@ -41,6 +41,10 @@ set ruler
 " eol:如果插入模式下在行开头，想通过退格键合并两行，需要设置eol。
 " start：要想删除此次插入前的输入，需设置这个。
 set backspace=indent,eol,start
+" 不显示自动补全内容的详细信息
+set completeopt-=preview
+
+
 
 " 插件管理
 set rtp+=~/.vim/bundle/vundle/    " 载入特定目录插件
