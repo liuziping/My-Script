@@ -4,7 +4,7 @@ function scp_pf2(){
   content=`cat <<!
     spawn /usr/bin/scp -r  liuziping@pf2:/var/log/syslog-ng/mail/mail.log ./ 
     expect Password:
-    send "douban2014\n"
+    send "********\n"
     expect eof
     `
   echo "$content"|expect
@@ -17,7 +17,7 @@ function scp_pf4(){
   content=`cat <<!
     spawn /usr/bin/scp -r  liuziping@pf4:/var/log/syslog-ng/mail/mail.log ./ 
     expect Password:
-    send "douban2014\n"
+    send "*******\n"
     expect eof
     `
   echo "$content"|expect
