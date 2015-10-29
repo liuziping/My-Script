@@ -56,6 +56,7 @@ qa mac mini ansible环境部署及ansible常用模块介绍
        ansible mac  -m command  -a "pwd"                  #对hosts文件中，定义的mac组所有主机操作
        ansible mac*  -m command  -a "pwd"                 #对host文件中，所有主机名为mac开头的主机操作
        ansible all  -m command  -a "pwd"                  #对host文件中，所有主机操作
+	   ansible all  -m command  -i myhosts -a "pwd"       #自定义自己的hostfile 
 2：常用模块
 A：command 支持Linux的所有命令
 B: service 管理服务
