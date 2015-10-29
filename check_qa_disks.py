@@ -16,13 +16,9 @@ import ansible.runner
 
 RECEIVERS = (
     'liuziping@douban.com',
-    'lihan@douban.com',
-    'xutao@douban.com',
-    'yongping@douban.com',
-    'pengchuan@douban.com',
 )
 
-PUSH_KEY = 'v1Wm4xLek6wOqNB0C95u3juvdBmsSWMXQjujBeaJcZrJA'  # xutao@douban.com
+PUSH_KEY = '*******************'  # liuziping@douban.com
 PUSH_URL = 'https://api.pushbullet.com/v2/pushes'
 
 
