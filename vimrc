@@ -33,10 +33,11 @@ set incsearch
 set ignorecase
 " 高亮搜索结果
 set hlsearch
-
 " 编辑下面出现状态栏，显示当前编辑是第几行，第几列及当前vim的模式
 set laststatus=2
 set ruler
+" 由于关闭了和vi相关的兼容，想用退格键将字段缩进的删掉，必须设置这个选项 
+set backspace=indent,eol,start
 
 " 插件管理
 set rtp+=~/.vim/bundle/vundle/    " 载入特定目录插件
