@@ -34,6 +34,9 @@ set ignorecase
 " 高亮搜索结果
 set hlsearch
 
+" 编辑下面出现状态栏，显示当前编辑是第几行，第几列及当前vim的模式
+set laststatus=2
+set ruler
 
 " 插件管理
 set rtp+=~/.vim/bundle/vundle/    " 载入特定目录插件
@@ -49,10 +52,6 @@ let NERDTreeWinPos='left'          " 文件目录在左边显示，可以自己�
 let NERDTreeWinSize=20             " 窗口大小
 map <F2> :NERDTreeToggle<CR>       
 
-" 编辑下面出现状态栏，显示当前编辑是第几行，第几列及当前vim的模式
-Bundle 'bling/vim-airline'
-set laststatus=2
-set ruler
 
 " 自动代码补全
 Bundle 'Shougo/neocomplete.vim'
