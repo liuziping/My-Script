@@ -21,8 +21,6 @@ syntax sync minlines=256
 set synmaxcol=200
 " 突出显示当前行
 set cursorline
-" 语法高亮
-set hls 
 " 显示行号
 set nu
 " 显示当前模式
@@ -53,7 +51,10 @@ call vundle#rc()
 " 用vundle管理插件
 Bundle 'gmarik/vundle'            
 
-" 文件浏览插件，:NERDTree或者配置的快捷键F2开启，快捷键可以根据情况自己配置
+" Solarized: 非常流行的配色。
+Plugin 'altercation/vim-colors-solarized'
+
+" 文件浏览插件，:NERDTree或者配置的快捷键F2开启，快捷键可以根据情况自己配置,eg: C-n 表示ctrl＋n
 " 导入插件用Bundle，可以用Plugin替换，两者效果一样
 Bundle 'scrooloose/nerdtree'      
 let NERDTreeWinPos='left'          " 文件目录在左边显示，可以自己设置为right 右边显示
