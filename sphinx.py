@@ -5,7 +5,7 @@ import ansible.runner
 import os,json
 
 """
- 解决 服务器之间文件拷贝和脚本执行的问题（适用于服务器之间做了严格的权限设置，无法互相拷贝的场景） 
+ 解决 服务器之间文件拷贝和脚本执行的问题（适用于服务器之间做了严格的权限设置，无法互相拷贝只能走跳板机的场景） 
  curl "http://192.168.1.129:5001/script/?filename=build_thesaurus.sh&dhost=cache1"
  curl "http://192.168.1.129:5001/copy/?filename=unigram.txt&dhost=cache1&shost=web1"
 
