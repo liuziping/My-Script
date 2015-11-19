@@ -3,12 +3,12 @@
 import smtplib
 from email.mime.text import MIMEText   
 from email.header import Header
-import traceback
+import os,traceback
 
 smtp_host="smtp.******.com"
-smtp_port=25                         #默认就是端口就是25,可不写
-smtp_login='***@****.com'            #登录用户名
-smtp_passwd='***********'            #登录用户密码
+smtp_port=25                                      #默认就是端口就是25,可不写
+smtp_login=os.environ.get('smtp_login')           #登录用户名
+smtp_passwd=os.environ.get('smtp_passwd')         #登录密码，账号密码信息千万不要写入脚本，可以通过export将信息导入环境变量，脚本从环境变量中获取
 smtp_from='***@******.com'           #发件人
 
 def sendmail(subject,content,smtp_to):
