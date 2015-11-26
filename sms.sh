@@ -24,6 +24,6 @@ password="*****"
 subid=""
 url="http://114.*.*.*:8082/SendMT/SendMessage"  #花钱买的短信接口
 #curl -d 把参数传给后面的URL,模拟post提交，必须按照短信接口提供的格式才行
-curl -d UserName=$username   -d UserPass=$password -d subid=$subid -d  Mobile=$contact -d Content="$content" $url
+curl -d UserName=$username   -d UserPass=$password -d subid=$subid -d  Mobile=$contact -d Content="$content" $url  -X POST
 
 #将脚本加可执行权限，拷贝到/usr/local/nagios/libexec/sms.sh  内容 手机号(多个手机号逗号隔开)，测试短信发送成功>，即可应用到nagios中 

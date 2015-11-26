@@ -60,11 +60,11 @@ def hello(fn):
 	return wrapper
  
 @hello
-def foo(test):                                                     #回调函数任意定义一个参数名，来接受传来的值
-#def foo(test,a,b='test'):                                         #可以同时接受其他形式的参数，但接受装饰器的参数必须在前面
+def foo(test):               #回调函数任意定义一个参数名，来接受传来的值
+#def foo(test,a,b='test'):   #可以同时接受其他形式的参数，但接受装饰器的参数必须在前面
 #	print "i am %s,my email is %s" % (test['name'],test['email'])  #打印字典的返回值，结果：i am lzp,my email is lzp@126.com
-	print "i am %s,my age is %s" % (test[0],test[1])               #打印列表的返回值，结果：i am lzp,age is 18
-#	print "i am %s" % test                                         #打印字符串的返回值，结果：i am lzp
+	print "i am %s,my age is %s" % (test[0],test[1])      #打印列表的返回值，结果：i am lzp,age is 18
+#	print "i am %s" % test           #打印字符串的返回值，结果：i am lzp
 
 foo()
 #foo('fuck')

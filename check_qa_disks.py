@@ -18,7 +18,7 @@ RECEIVERS = (
     'liuziping@douban.com',
 )
 
-PUSH_KEY = '*******************'  # liuziping@douban.com
+PUSH_KEY = '*******************'
 PUSH_URL = 'https://api.pushbullet.com/v2/pushes'
 
 
