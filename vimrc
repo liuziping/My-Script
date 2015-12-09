@@ -64,8 +64,10 @@ Plugin 'altercation/vim-colors-solarized'
 Bundle 'scrooloose/nerdtree'      
 let NERDTreeWinPos='left'          " 文件目录在左边显示，可以自己设置为right 右边显示
 let NERDTreeWinSize=20             " 窗口大小
-map <F2> :NERDTreeToggle<CR>       
+map <F2> :NERDTreeToggle<CR>   
 
+" 前端CSS,HTML自动补全插件 https://github.com/mattn/emmet-vim
+Plugin 'mattn/emmet-vim'  
 
 " 自动代码补全,自动补全的部分用tab键来切换选择预期的内容，如果用箭头＋enter键会自动换行
 Bundle 'Shougo/neocomplete.vim'
