@@ -18,13 +18,11 @@ def index():
 	elif request.method =='PUT':
 #		name = request.form.get('name') #curl "http://192.168.1.251:5001/"  -d 'name=wd'  -X  PUT
 		data = request.get_json()
-		data = json.loads(data)
 		name = data['name']
 		return "User is %s" % name
 	elif request.method == 'DELETE':
 #		name = request.form.get('name') #curl  "http://192.168.1.251:5001/"  -d 'name=wd'  -X DELETE
 		data = request.get_json()
-		data = json.loads(data)
 		name = data['name']
 		return "User is %s" % name
 
