@@ -10,7 +10,8 @@ app = Flask(__name__)
 	官方解释：令牌，代表执行某些操作的权利的对象
 	个人理解：用户信息的加密串，系统拿到这个加密串来判断用户是谁，能干什么，不能干什么
 2：token 怎么生成
-    token的生成方式因人而异，大致思路是将自己需要的一些信息，混合时间戳，随机数等加密生成。我自己的习惯是 (用户名，用户id，角色，时间戳，随机数)
+    token的生成方式因人而异，大致思路是将自己需要的一些信息，混合时间戳，随机数等加密生成。我自己的
+习惯是 (用户名，用户id，角色，时间戳，随机数)
 	  生成token
 		token = base64.b64encode(name|uid|role|str(random.random())|int(time.time()+7200))
 3: token 怎么用,以判断登录是否过期为例
@@ -39,7 +40,7 @@ def verify_token(token):
 def login():
 	name = request.form.get('name')
 	passwd = request.form.get('passwd')
-	if name == "wd" and passwd == "123456": #用户密码正确，则生成要给token,实际生产不能怎么干，需要数据库 
+	if name == "wd" and passwd == "123456": #用户密码正确，则生成要给token,实际开发中需要数据库 
 		uid = 1                             #模拟登录成功，从数据库中取到了用户的id,role等信息
 		role = 1               
 		token = create_token(name,uid,role)
@@ -52,14 +53,11 @@ def login():
 		200
 		{"token": "d2R8MXwwfDAuNjYwMDQzNTI5NjkxfDE0NDk4Mzc3OTc=", "code": 0}
 
-		实际生产中，生产的token一般会存在一个公共的地方，共全局调用，个人习惯存到session里面
-		本demo就不细写了
-
 		'''
 
 @app.route('/',methods=['GET','POST','PUT'])
 def index():
-	token = request.args.get('token')   #实际生产中不能这么获取token，可以从session中获取
+	token = request.args.get('token')
 	result = verify_token(token)   #{"username": "wd", "code": 0, "role": "0", "uid": "1"}
 	result=json.loads(result)
 	if int(result['code']) == 1:
