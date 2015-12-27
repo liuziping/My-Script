@@ -46,7 +46,8 @@ set ruler
 set backspace=indent,eol,start
 " 不显示自动补全内容的详细信息
 set completeopt-=preview
-
+" 代码折叠 参考文档 http://www.cnblogs.com/fakis/archive/2011/04/14/2016213.html
+set fdm=indent
 
 
 " 插件管理
