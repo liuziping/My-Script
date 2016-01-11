@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>命令编排demo</h1>
+
+<div>
+<form  id="cmdform" class="form-inline">     <!--定义垂直表单样式-->
+ <div class="form-group"> <!--定义一组div-->
+       <label>Pattern</label>  
+	   <select id="pattern" name="pattern"  class="form-control" >
+	   <option value='test1'>test1</option>
+	   <option value='sa-new'>sa-new</option>
+	   <option value='dev-online'>dev-online</option>
+	   <option value='app-api'>app-api</option>
+	   <option value='web'>web</option>
+	   <option value='ops'>ops</option>
+       <option value='all'>all</option>
+	   </select>
+ </div>    <!---pattern end-->  
+
+ <div class="form-group">
+   <label>Module</label>
+   <select id="module" name="module"  class="form-control" >
+   <option value='shell'>shell</option>
+   <option value='command'>command</option>
+   </select>
+  </div>     <!---command  end-->
+
+  <div class="form-group">
+    <label>Cmd</label>
+    <select id="cmd" name="cmd"  class="form-control" >
+    <option value='pwd'>pwd</option>
+    <option value='uptime'>uptime</option>
+    <option value='df -h'>df -h</option>
+    <option value='free -m'>free -m</option>
+    </select>
+  </div>     <!---cmd  end-->
+
+   <div class="form-group">
+       <label>Forks</label>
+	   <select id="forks" name="forks"  class="form-control" >
+	   <option value='5'>5</option>
+	   <option value='10'>10</option>
+	   <option value='15'>15</option>
+	   </select>
+    </div> <!--forks  end -->
+
+ <div class="form-group">   
+     <button class="btn btn-primary btn-sm">执行命令</button>
+     <button class="btn btn-info btn-sm" id="joblist">任务列表</button>
+ </div><!--button end-->
+</form>
+</div>
+<div id='display' class="row"></div>
+
+{% endblock %}
+
+{% block js %}
+/*joblist function*/
+function joblist(){
+	$.get('joblist',function(data){
+		console.log(data)
+		data = "<pre>"+data+"</pre>"
+ 	 	$('#display').html(data)
+	})
+}
+joblist()
+/* submit cmdform*/
+$('#cmdform').on('submit',function(){
+	var str = $('#cmdform').serialize()
+	var url = '/cmd?'+str
+	console.log(url)
+	$.get(url,function(data){
+		console.log(data)
+		data = "<strong><pre>"+data+"</pre></strong>"
+	  	$('#display').html(data)
+	})
+	return false
+})   //submit end
+/* show joblist */
+$('#joblist').on('click',function(){
+	joblist()
+	return false
+})   
+{% endblock %}
