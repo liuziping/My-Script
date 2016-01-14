@@ -4,12 +4,10 @@ filetype off                  " 打开文件时，不识别文件类型
 " 常用设置
 " 一个tab代表四个空格
 set tabstop=4
-set shiftwidth=4
-set softtabstop=4
 " 将tab替换成空格
 set expandtab
+" 设置文件格式，字符编码
 set fileformat=unix
-
 set fileencodings=utf-8,gb2312,gbk,cp936,big5,ucs-bom
 set encoding=utf-8
 set termencoding=utf-8
