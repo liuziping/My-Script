@@ -1,0 +1,57 @@
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <title>表单提交中文demo</title> 
+</head>
+
+<body>
+
+<div>     
+<form id="form1" accept-charset="UTF-8" method="POST" action='/' >
+    <div>
+        <label>用户名：</label> 
+        <div>
+            <input type="text" name="username" id="username"/>
+            <span for="required" generated="true"></span>
+        </div>
+    </div> <!--username end-->
+    <div>
+    <input type="submit" id="submit" value="原生表单提交">
+    <input type="submit" id="submit1" value="表单数据通过flask统一编码">
+    <input type="submit" id="submit2" value="表单数据作为字符串传给后端处理">
+    </div><!--submit end-->
+</form> <!--form end-->
+</div> <!--div  end -->
+
+<div>
+<p>测试数据：{{username}}</p>
+</div>
+
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script>
+$("#submit1").on('click',function(){
+     var str = $('#form1').serialize()
+    console.log(str)      //username=%E4%BD%A0%E5%A5%BD
+/*  url = "/add?"+str
+    console.log(url)      //"/add?username=%E4%BD%A0%E5%A5%BD"
+    $.getJSON(url,function(data){        提交表单不建议用get的方式   */
+    $.post("/add",str,function(data){    //常用POST方式提交表单数据，表单数据直接通过flask统一编码
+        data=JSON.parse(data);   //将json串转换为对象，然后取值 
+        alert(data['username'])
+          $('p').html(data['username'])
+    })
+     return false;
+})
+
+$("#submit2").on('click',function(){
+    var str = $('#form1').serialize()
+    console.log(str)        //str: username=%E4%BD%A0%E5%A5%BD
+    data={'formdata':str}   //表单内容整体作为字符串传到后端
+    $.post("/add1",data,function(data){  //flask只对data统一编码，str中的中文还是保留原有格式需要后端转码
+        data=JSON.parse(data);   //将json串转换为对象，然后取值 
+        alert(data['username'])
+        $('p').html(data['username'])
+    })
+     return false;
+})
+</script>
