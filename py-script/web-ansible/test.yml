@@ -1,0 +1,11 @@
+---
+- hosts: app-api
+  gather_facts: false
+
+  tasks:
+  - name: get uptime
+    shell: uptime
+ 
+  - name: get error
+    shell: whsdsdo
+
