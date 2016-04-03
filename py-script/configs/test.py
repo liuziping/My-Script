@@ -10,6 +10,6 @@ def getconfig(filenaame,section=''):
 
 if __name__ == '__main__':
 	conf = getconfig('test.conf','web')
-	print conf
+	print conf           #{'path': '/data/web/log', 'port': '1002'}
 	print conf['port']
 	print conf.get('path')

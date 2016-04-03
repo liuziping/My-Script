@@ -5,8 +5,8 @@ def InitLogger(filename,level,name):
 	'''
 		init  logging 
 		由于logging运行的机制是，一旦实例化一个logging实例，该实例下如果有多个handler，
-		任何一个handler执行一次，其他handler复合level的也会跟着执行一次。如果两个handler
-		输出定义的日志文件不一样，level级别低的日志文件就会收到其他handler的日志
+		任何一个handler执行一次，其他handler符合条件level的也会跟着执行一次。如果两个handler
+		输出定义的日志文件不一样，level级别低的日志文件就会收到其他所有高level的handler的日志
 
 		在输出多个日志文件的场景下，可以设置多个logging实例，取不同的名字，handler处理时
 		互不影响
