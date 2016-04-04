@@ -25,7 +25,7 @@ def cmdb(htmlname):
     return render_template(htmlname +'.html')
 
 if __name__ == '__main__':
-    app.run(debug=True,port=9092,host='0.0.0.0')
+    app.run(debug=True,port=9888,host='0.0.0.0')
 
 
 
