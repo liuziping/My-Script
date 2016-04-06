@@ -11,8 +11,6 @@ service_conf = os.path.join(work_dir, 'conf/service.conf')
 config = util.get_config(service_conf, 'web')
 
 
-app.config['cursor'] = db.Cursor(config)
-app.config.update(config)
 
 if __name__ == '__main__':
     app.run(host=config.get('bind', '0.0.0.0'),port=int(config.get('port')), debug=True)
