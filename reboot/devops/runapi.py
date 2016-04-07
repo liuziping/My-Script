@@ -1,7 +1,7 @@
 #!/bin/env python
 # -*- encoding: utf-8 -*-
 from api import app
-import os,sys
+import os,sys,logging,logging.config
 import db,util
 
 #session使用需要设置secret_key
@@ -16,8 +16,9 @@ config = util.get_config(service_conf, 'api')
 #将参数追加到app.config字典中，就可以随意调用了
 app.config.update(config)
 
-#将数据库的操作方法导入配置
+#实例化数据库类，并将实例化的对象导入配置
 app.config['cursor'] = db.Cursor(config)
-print app.config
+#print app.config
+
 if __name__ == '__main__':
     app.run(host=config.get('bind', '0.0.0.0'),port=int(config.get('port')), debug=True)
