@@ -9,6 +9,10 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 service_conf = os.path.join(work_dir, 'conf/service.conf')
 config = util.get_config(service_conf, 'web')
+#print config
+
+#将参数追加到app.config字典中，就可以随意调用了
+app.config.update(config)
 
 
 

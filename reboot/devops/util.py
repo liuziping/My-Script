@@ -22,7 +22,7 @@ def write_log(loggername):
     work_dir = os.path.dirname(os.path.realpath(__file__))
     log_conf= os.path.join(work_dir, 'conf/logger.conf')
     logging.config.fileConfig(log_conf)
-    logger = logging.getLogger("web")
+    logger = logging.getLogger(loggername)
     return logger
 
 
@@ -45,7 +45,7 @@ def validate(key, fix_pwd):
     validate_key = hashlib.md5('%s%s%s' % (x[0], x[1], fix_pwd)).hexdigest()
     if validate_key == x[4]:
         write_log('api').info("api认证通过")
-        return json.dumps({'code':0,'username':x[0],'uid':x[2],'role':x[3]})
+        return json.dumps({'code':0,'username':x[0],'uid':x[2],'r_id':x[3]})
     else:
         write_log('api').warning("密码不正确")
         return json.dumps({'code':1,'errmsg':'密码不正确'})

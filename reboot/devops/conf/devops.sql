@@ -39,6 +39,8 @@ CREATE TABLE `project` (
   `name` varchar(128) NOT NULL COMMENT '项目名',
   `path` varchar(80) NOT NULL COMMENT '项目代码仓库路径',
   `principal` int(10) unsigned NOT NULL COMMENT '负责人',
+  `p_user` int(10) unsigned DEFAULT NULL COMMENT '有权限的用户',
+  `p_group` int(10) unsigned DEFAULT  NULL COMMENT '有权限的组',
   `create_date` date NOT NULL COMMENT '创建时间',
   `is_lock` tinyint(1) unsigned DEFAULT '0' COMMENT '是否锁定 0-未锁定 1-锁定',
   `comment` varchar(256) DEFAULT NULL COMMENT '备注',
