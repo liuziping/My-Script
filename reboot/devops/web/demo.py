@@ -33,8 +33,13 @@ def cmdb(htmlname):
         return redirect('/login')
     return render_template(htmlname +'.html')
 
+@app.errorhandler(404)    #系统自带的装饰器，遇到404回自动返回制定的404页面
+def not_found(e):
+    return render_template('404.html')
 
-
+@app.errorhandler(500)    
+def  internal_server_error(e):
+    return render_template('500.html')
 
 
 
