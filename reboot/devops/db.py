@@ -44,7 +44,7 @@ class Cursor():
 
     def execute_insert_sql(self, table_name, data):
         sql = self._insert_sql(table_name, data)
-        return self.execute(sql)
+        return self._execute(sql)
 
     def _select_sql(self, table_name, fields, where=None, order=None, asc_order=True, limit=None):
         if isinstance(where, dict) and where:
