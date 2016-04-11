@@ -19,6 +19,7 @@ def login():
             res = util.validate(token,app.config['passport_key'])  #解密token
             res = json.loads(res)         #return : dict(username:*,uid:*,role:*)
             session['author'] = token
+            session['username'] = username
     	    return json.dumps({'code':0})
         else:
             return json.dumps({'code':1,'errmsg':result['errmsg']})
@@ -26,5 +27,7 @@ def login():
 
 @app.route("/logout",methods=['GET','POST'])
 def logout():
+    if session.get('author','nologin') == 'nologin':
+        return redirect('/login')
     session.pop('author',None)
     return redirect('/login')  

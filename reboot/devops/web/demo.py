@@ -11,8 +11,8 @@ headers = {'content-type': 'application/json'}
 def index():
     if session.get('author','nologin') == 'nologin':
         return redirect('/login')
-    return render_template('index.html')
-
+    username = session.get('username')
+    return render_template('index.html',user=username)
 
 @app.route('/user/<htmlname>')
 def user(htmlname):
