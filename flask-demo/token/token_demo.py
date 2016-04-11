@@ -26,15 +26,17 @@ def create_token(name,uid,role):
 	return token
     
 def verify_token(token):
-	t = int(time.time())
-	key = base64.b64decode(token)
-	x = key.split('|')
-	if len(x)!=5:
-		return json.dumps({'code':1,'errmsg':'token参数不足'})
-	if t > int(x[4]):	 
-		return json.dumps({'code':1,'errmsg':'登录已过期'})
-	else:
-		return json.dumps({'code':0,'username':x[0],'uid':x[1],'role':x[2]})
+        t = int(time.time())
+        key = base64.b64decode(token)
+        print key
+        x = key.split('|')
+        print x
+        if len(x)!=5:
+            return json.dumps({'code':1,'errmsg':'token参数不足'})
+        if t > int(x[4]):	 
+            return json.dumps({'code':1,'errmsg':'登录已过期'})
+        else:
+            return json.dumps({'code':0,'username':x[0],'uid':x[1],'role':x[2]})
 
 @app.route('/login',methods=['GET','POST'])
 def login():
@@ -57,15 +59,17 @@ def login():
 
 @app.route('/',methods=['GET','POST','PUT'])
 def index():
-	token = request.args.get('token')
-	result = verify_token(token)   #{"username": "wd", "code": 0, "role": "0", "uid": "1"}
-	result=json.loads(result)
-	if int(result['code']) == 1:
-		return  "error: %s" % result['errmsg']
-	if int(result["role"]) == 0:
-		return "%s is admin, you can do everything" % result['username']
-	else:
-		return "%s is not admin, request refuse"  % result['username']
+        token = request.args.get('token',None)
+        if not token:
+            return "token not null"
+        result = verify_token(token)   #{"username": "wd", "code": 0, "role": "0", "uid": "1"}
+        result=json.loads(result)
+        if int(result['code']) == 1:
+            return  "error: %s" % result['errmsg']
+        if int(result["role"]) == 0:
+            return "%s is admin, you can do everything" % result['username']
+        else:
+            return "%s is not admin, request refuse"  % result['username']
 
 
 if __name__ == '__main__':
