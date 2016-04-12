@@ -85,7 +85,7 @@ def getbyid(auth_info,**kwargs):
         if not where:
             return json.dumps({'code':1, 'errmsg':'需要传入一个条件'})
         result = app.config['cursor'].get_one_result('power', fields, where)
-        if result is '':
+        if not result:
             return json.dumps({'code':1, 'errmsg':'传入的条件没有查询结果'})
         util.write_log('api').info(username,'select permission by id successed!')
         return json.dumps({'code':0, 'result':result})
@@ -107,7 +107,7 @@ def update(auth_info, **kwargs):
         where = data.get('where',None)
         data = data.get('data',None)
         result=app.config['cursor'].execute_update_sql('power', data, where)
-        if result == '': 
+        if not result: 
             return json.dumps({'code':1, 'errmsg':'需要指定一个权限'})
         util.write_log('api').info(username,"update power successed" )
         return json.dumps({'code':0,'result':'更新权限信息成功'})
