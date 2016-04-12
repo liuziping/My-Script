@@ -15,17 +15,17 @@ def create(auth_info,**kwargs):
         return json.dumps(auth_info)
     username = auth_info['username']
     if '1' not in auth_info['r_id']:
-        return json.dumps({'code': 1,'errmsg':'只有管理员才有此权限' })
+        return json.dumps({'code': 1,'errmsg':'you not admin,no power' })
     try:
         data = request.get_json()['params']
         if not util.check_name(data['name']):
-            return json.dumps({'code': 1, 'errmsg': '权限名必须为字母和数字'})
+            return json.dumps({'code': 1, 'errmsg': 'name must be string or num'})
         app.config['cursor'].execute_insert_sql('power', data)
         util.write_log('api').info(username, "create power %s success"  %  data['name'])
-        return json.dumps({'code':0,'result':'创建权限%s成功' %  data['name']})
+        return json.dumps({'code':0,'result':'create %s success' %  data['name']})
     except:
         util.write_log('api').error('create power error:%s' % traceback.format_exc())
-        return json.dumps({'code':1,'errmsg': '创建权限失败'})
+        return json.dumps({'code':1,'errmsg': 'create power failed'})
 
 @jsonrpc.method('power.delete')
 @auth_login
@@ -34,21 +34,21 @@ def delete(auth_info,**kwargs):
         return json.dumps(auth_info)
     username = auth_info['username']
     if '1' not in  auth_info['r_id']:
-        return json.dumps({'code': 1,'errmsg':'只有管理员才有此权限' })
+        return json.dumps({'code': 1,'errmsg':'you not admin,no power' })
     try:
         data = request.get_json()['params']
         where = data.get('where',None)
         if not where:
-            return json.dumps({'code':1,'errmsg':'需要指定一个权限'})
+            return json.dumps({'code':1,'errmsg':'must need a condition'})
         result = app.config['cursor'].get_one_result('power', ['name'], where)
         if not result:
-            return json.dumps({'code':1,'errmsg':'你传入条件的记录不存在'})
+            return json.dumps({'code':1,'errmsg':'data not exist'})
         app.config['cursor'].execute_delete_sql('power', where)
         util.write_log('api').info(username, "delete power  success")
-        return json.dumps({'code':0,'result':'删除权限成功'})
+        return json.dumps({'code':0,'result':'delete power success'})
     except:
         util.write_log('api').error("delete power error:%s" % traceback.format_exc())
-        return json.dumps({'code':1,'errmsg': '删除权限失败'})
+        return json.dumps({'code':1,'errmsg': 'delete power failed'})
 
 @jsonrpc.method('power.getlist')
 @auth_login
@@ -57,7 +57,7 @@ def getlist(auth_info,**kwargs):
         return json.dumps(auth_info)
     username = auth_info['username']
     if '1' not in auth_info['r_id']:
-        return json.dumps({'code': 1,'errmsg':'只有管理员才有此权限' })
+        return json.dumps({'code': 1,'errmsg':'you not admin,no power' })
     try:
         output = ['id','name','name_cn','url','comment']
         data = request.get_json()['params']
@@ -67,7 +67,7 @@ def getlist(auth_info,**kwargs):
         return json.dumps({'code':0,'result':result,'count':len(result)})
     except:
         util.write_log('api').error("get list permission error: %s"  %  traceback.format_exc())
-        return json.dumps({'code':1,'errmsg':'获取权限列表失败'})
+        return json.dumps({'code':1,'errmsg':'get power_list failed'})
 
 @jsonrpc.method('power.get')
 @auth_login
@@ -76,22 +76,22 @@ def getbyid(auth_info,**kwargs):
         return json.dumps(auth_info)
     username = auth_info['username']
     if '1' not in auth_info['r_id']:
-        return json.dumps({'code': 1,'errmsg':'只有管理员才有此权限' })
+        return json.dumps({'code': 1,'errmsg':'you not admin,no power' })
     try:
-        output = ['id','name','name_cn','url','comment']
+        output = ['id','name ','name_cn','url','comment']
         data = request.get_json()['params']
         fields = data.get('output', output)
         where = data.get('where',None)
         if not where:
-            return json.dumps({'code':1, 'errmsg':'需要传入一个条件'})
+            return json.dumps({'code':1, 'errmsg':'must need a condition'})
         result = app.config['cursor'].get_one_result('power', fields, where)
         if not result:
-            return json.dumps({'code':1, 'errmsg':'传入的条件没有查询结果'})
+            return json.dumps({'code':1, 'errmsg':'data not exist'})
         util.write_log('api').info(username,'select permission by id successed!')
         return json.dumps({'code':0, 'result':result})
     except:
-        util.write_log('api').error("select permission by id error: %s" %  traceback.format_exc())
-        return json.dumps({'code':1,'errmsg':'获取权限信息失败'})
+        util.write_log('api').error("select power by id error: %s" %  traceback.format_exc())
+        return json.dumps({'code':1,'errmsg':'get power failed'})
 
 
 @jsonrpc.method('power.update')
@@ -101,16 +101,18 @@ def update(auth_info, **kwargs):
         return json.dumps(auth_info)
     username = auth_info['username']
     if '1' not in auth_info['r_id']:
-        return json.dumps({'code': 1,'errmsg':'只有管理员才有此权限' })
+        return json.dumps({'code': 1,'errmsg':'you not admin,no power' })
     try:
-        data = request.get_json()['params']
+        data = request.get_json ()['params']
         where = data.get('where',None)
         data = data.get('data',None)
+        if not where:
+            return json.dumps({'code':1, 'errmsg':'must need a condition'})
         result=app.config['cursor'].execute_update_sql('power', data, where)
         if not result: 
-            return json.dumps({'code':1, 'errmsg':'需要指定一个权限'})
+            return json.dumps({'code':1, 'errmsg':'data not exist'})
         util.write_log('api').info(username,"update power successed" )
-        return json.dumps({'code':0,'result':'更新权限信息成功'})
+        return json.dumps({'code':0,'result':'update power success'})
     except:
-        util.write_log('api').error("update error: %s" % traceback.format_exc())
-        return json.dumps({'code':1,'errmsg':'更新权限失败'})
+        util.write_log('api').error("update error: %s" % traceback. format_exc())
+        return json.dumps({'code':1,'errmsg':'update power failed'})
