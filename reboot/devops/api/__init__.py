@@ -10,5 +10,6 @@ jsonrpc = JSONRPC(app, '/api')
 
 import login
 import power
+import role
 import user
 

@@ -16,10 +16,12 @@ UNIQUE 	KEY `username` (`username`)
 
 CREATE TABLE `role` (
 `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-`name` int(10)  NOT NULL COMMENT '角色名',
-`p_id` int(10)  NOT NULL COMMENT '权限id，允许多个p_id,存为字符串类型',
-`info` varchar(50) COMMENT '角色描述信息',
- PRIMARY  KEY (`id`)
+`name` varchar(20)  NOT NULL COMMENT '角色名',
+`name_cn` varchar(40) NOT NULL COMMENT '角色中文名',
+`p_id` varchar(20) NOT NULL COMMENT '权限id，允许多个p_id,存为字符串类型',
+`info` varchar(50) DEFAULT NULL COMMENT '角色描述信息',
+ PRIMARY  KEY (`id`),
+ UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
