@@ -32,16 +32,17 @@ def rpc():
                 'method': 'user.create',      
                 'id':'1',
                 'params':{
-                    'username':'rock',
+                    'username':'panda',
                     'password':'123456',
                     'repwd':'123456',
-                    'name':'pcccc',
+                    'name':'panda',
                     'email':'787696331@qq.com',
                     'mobile':'121212121',
-                    'r_id':'1,2',
+                    'r_id':'1,3',
                     'is_lock':0
                 }
             }
+        '''
         '''
         #get请求
         data = {
@@ -51,6 +52,28 @@ def rpc():
                 'params':{
                     'output':['id','username','name','email','mobile'],
                     'where':{'id':2}
+                }
+        }
+        '''
+        '''
+        #update请求
+        data = {
+                'jsonrpc':'2.0',
+                'method': 'user.update',      
+                'id':'1',
+                'params':{
+                    'data':{'r_id':'1,3'},
+                    'where':{'id':'3'}
+                }
+        }
+        '''
+        #delete请求
+        data = {
+                'jsonrpc':'2.0',
+                'method': 'user.delete',      
+                'id':'1',
+                'params':{
+                    'where':{'id':'5'}
                 }
         }
         r = requests.post(url, headers=headers,json=data)
