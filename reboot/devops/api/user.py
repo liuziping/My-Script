@@ -38,7 +38,7 @@ def createuser(auth_info,*arg,**kwargs):
         util.write_log('api').info(username, "create_user %s" % data['username'])
         return json.dumps({'code': 0, 'result': '创建用户%s成功' % data['username']})
     except:
-         util.write_log('api').error("Create user error: %s" % traceback.format_exc())
+        util.write_log('api').error("Create user error: %s" % traceback.format_exc())
         return json.dumps({'code':  1, 'errmsg': '创建用户失败，有异常情况'})
 
 #通过传入的条件，通常为id，查询某条用户的信息，用于管理员修改用户信息

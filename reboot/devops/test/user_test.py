@@ -50,7 +50,7 @@ def rpc():
                 'id':'1',
                 'params':{
                     'output':['id','username','name','email','mobile'],
-                    'where':{'id':1}
+                    'where':{'id':2}
                 }
         }
         r = requests.post(url, headers=headers,json=data)
