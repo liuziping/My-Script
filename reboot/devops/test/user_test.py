@@ -56,6 +56,27 @@ def rpc():
         }
         '''
         '''
+        #getlist请求
+        data = {
+                'jsonrpc':'2.0',
+                'method': 'user.getlist',      
+                'id':'1',
+                'params':{
+                    #'output':['id','username','name','email','mobile'],
+                }
+        }
+        '''
+        '''
+        #getinfo请求
+        data = {
+                'jsonrpc':'2.0',
+                'method': 'user.getinfo',      
+                'id':'1',
+                'params':{
+                }
+        }
+        '''
+        '''
         #update请求
         data = {
                 'jsonrpc':'2.0',
@@ -67,6 +88,7 @@ def rpc():
                 }
         }
         '''
+        '''
         #delete请求
         data = {
                 'jsonrpc':'2.0',
@@ -76,7 +98,15 @@ def rpc():
                     'where':{'id':'5'}
                 }
         }
-        r = requests.post(url, headers=headers,json=data)
+        '''
+        #/git/password修改密码 
+        data = {
+            #'oldpassword':'123456',
+            'user_id':1,
+            'password':'123456'
+        }
+        r = requests.post("http://127.0.0.1:2000/api/password", headers=headers,json=data)
+        #r = requests.post(url, headers=headers,json=data)
 
         print r.status_code
         print r.text 

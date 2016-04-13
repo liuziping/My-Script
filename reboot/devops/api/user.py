@@ -51,7 +51,7 @@ def userinfo(auth_info,**kwargs):
         return  json.dump(auth_info)
     username = auth_info['username']
     try:
-        output = ['id','username','name','email','mobile','role','is_lock','r_id']
+        output = ['id','username','name','email','mobile','is_lock','r_id']
         fields = kwargs.get('output',output) #api可以指定输出字段，如果没有指定output，就按默认output输出
         where = kwargs.get('where',None)     #前端传来的where条件
         if not where:
@@ -65,7 +65,7 @@ def userinfo(auth_info,**kwargs):
         util.write_log('api').error("Get users  error: %s" % traceback.format_exc())
         return json.dumps({'code':1,'errmsg':'Get user failed'})
 
-'''
+
 #获取用户具体的信息，包括基本信息，所属组，所拥有的权限，用于用户个人中心的展示和个人资料更新
 @jsonrpc.method('user.getinfo')
 @auth_login
@@ -73,12 +73,11 @@ def userselfinfo(auth_info,**kwargs):
     if auth_info['code'] ==  1:
         return  json.dump(auth_info)
     username = auth_info['username']
-    fields = ['id','username','name','email','mobile','role','is_lock','r_id']
+    fields = ['id','username','name','email','mobile','is_lock','r_id']
     try:
         user = app.config['cursor'].get_one_result('user', fields, where={'username': username})
         if user.get('r_id', None):
             r_id = user['r_id'].split(',')
-            #获取组所有的id,name并存为字典如：{'1': 'sa', '2': 'php'}
             rids = app.config['cursor'].get_results('role', ['id', 'name', 'p_id'], where={'id': r_id})
         else:
             rids = {}
@@ -90,7 +89,7 @@ def userselfinfo(auth_info,**kwargs):
 
         if pids:   #将用户的权限id转为权限名
             mypids = app.config['cursor'].get_results('power', ['id', 'name', 'name_cn', 'url'], where={'id': pids})
-            user['p_id'] = dict([(str(x['name']), dict([(k, x[k]) for k in ('name_cn', 'url')])) for x in mypids])
+            user['p_id'] = dict([(str(x['name']), dict([(k, x[k]) for k in ('name_cn', 'url')])) for x in mypids])     #返回格式：{'git':{'name_cn':'git','url':'http://git.com'},......}
         else:
             user['p_id'] = {}
 
@@ -98,7 +97,7 @@ def userselfinfo(auth_info,**kwargs):
         return  json.dumps({'code': 0, 'user': user})
     except:
         logging.getLogger('api').error("Get users list error: %s" % traceback.format_exc())
-        return json.dumps({'code':1,'errmsg':'获取用户信息失败'})
+        return json.dumps({'code':1,'errmsg':'get userinfo failed'})
 
 #获取用户列表
 @jsonrpc.method('user.getlist')
@@ -107,9 +106,9 @@ def userlist(auth_info,**kwargs):
     if auth_info['code'] ==  1:
         return  json.dump(auth_info)
     username = auth_info['username']
-    r_id = auth_info['r_id'])
+    r_id = auth_info['r_id']
     users = []
-    fields = ['id','username','name','email','mobile','role','is_lock','r_id']
+    fields = ['id','username','name','email','mobile','is_lock','r_id']
     try:
         if '1' not in r_id:
             return json.dumps({'code': 1,'errmsg':'只有管理员才有此权限' })
@@ -126,7 +125,7 @@ def userlist(auth_info,**kwargs):
     except:
         logging.getLogger().error("Get users list error: %s" % traceback.format_exc())
         return json.dumps({'code':1,'errmsg':'获取用户列表失败'})
- '''
+
 #更新用户信息
 @jsonrpc.method('user.update')
 @auth_login
@@ -174,38 +173,36 @@ def userdelete(auth_info, **kwargs):
         util.write_log('api').error('Delete user error: %s' %  traceback.format_exc())
         return json.dumps({'code':1,'errmsg':'Delete user failed'})
 
-'''
 #修改密码
-@app.route('/api/password',methods=['PUT'])
+@app.route('/api/password',methods=['POST'])
 @auth_login
 def passwd(auth_info):
     if auth_info['code'] == 1:  
         return json.dumps(auth_info)
     username = auth_info['username']
     uid = int(auth_info['uid'])
-    r_id = auth_info['r_id'])
+    r_id = auth_info['r_id']
     try:
         data = request.get_json()
         if '1' in r_id and data.has_key('user_id'):   #管理员修改用户密码，需要传入user_id,不需要输入老密码
             user_id = data['user_id']
-            if not app.config['cursor'].if_userid_exist(user_id): 
-                return json.dumps({'code':1,'errmsg':'需要更改密码的用户不存在'})
+            if not app.config['cursor'].if_id_exist('user',user_id): 
+                return json.dumps({'code':1,'errmsg':'User not exist'})
             password = hashlib.md5(data['password']).hexdigest()
             app.config['cursor'].execute_update_sql('user', {'password': password}, {'id': user_id})
         else:                  #用户自己修改密码，需要输入老密码
             if not data.has_key("oldpassword") :
-                return json.dumps({'code':1,'errmsg':'需要提供原密码'})
+                return json.dumps({'code':1,'errmsg':'need oldpassword'})
             oldpassword = hashlib.md5(data['oldpassword']).hexdigest()
             res = app.config['cursor'].get_one_result('user', ['password'], {'username': username})
             if res['password'] != oldpassword:
-                return json.dumps({'code':1,'errmsg':'原密码输入有误'})
+                return json.dumps({'code':1,'errmsg':'oldpassword wrong'})
             password = hashlib.md5(data['password']).hexdigest()
             app.config['cursor'].execute_update_sql('user', {'password': password}, {'username': username})
 
         util.write_log('api').info(username,'update user password success')
-        return json.dumps({'code':0,'result':'更新密码成功'})
+        return json.dumps({'code':0,'result':'update user passwd success'})
     except:
         util.write_log('api').error('update user password error : %s' % traceback.format_exc())
-        return json.dumps({'code':1,'errmsg':'更新密码有异常'})
+        return json.dumps({' code':1,'errmsg':'update user password failed'})
 
-'''

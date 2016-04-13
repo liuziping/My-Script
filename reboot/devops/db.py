@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-import util
+import util,traceback
 import MySQLdb as mysql
 
 class Cursor():
