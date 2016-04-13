@@ -17,7 +17,6 @@ def auth_login(func):
         except:
             util.write_log('api').warning("Validate error: %s" % traceback.format_exc())
             return json.dumps({'code': 1, 'errmsg': '验证异常'})
-        print res
         return func(res, *arg, **kwargs)
     wrapper.__name__ = '%s_wrapper' % func.__name__
     return wrapper
