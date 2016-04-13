@@ -43,8 +43,13 @@ class Cursor():
         return sql
 
     def execute_insert_sql(self, table_name, data):
-        sql = self._insert_sql(table_name, data)
-        return self._execute(sql)
+        try:
+            sql = self._insert_sql(table_name, data)
+            if not sql: 
+                return None
+            return self._execute(sql)
+        except:
+            util.write_log('api').error("Execute '%s' error: %s" % (sql, traceback.format_exc()))
 
     def _select_sql(self, table_name, fields, where=None, order=None, asc_order=True, limit=None):
         if isinstance(where, dict) and where:
@@ -68,26 +73,31 @@ class Cursor():
             sql = "%s LIMIT %s,%s" % (sql, limit[0], limit[1])
         util.write_log('api').info("Select sql: %s" % sql)
         return sql
-
+ 
     def get_one_result(self, table_name, fields, where=None, order=None, asc_order=True, limit=None):
-        sql = self._select_sql(table_name, fields, where, order, asc_order, limit)
-        if not sql:
-            return None
-        self._execute(sql)
-        result_set = self._fetchone()
-        if result_set:
+        try:
+            sql = self._select_sql(table_name, fields, where, order, asc_order, limit)
+            if not sql:
+                return None
+            self._execute(sql)
+            result_set = self._fetchone()
             return dict([(k, '' if result_set[i] is None else result_set[i]) for i,k in enumerate(fields)])
-        else:
+        except:
+            util.write_log('api').error("Execute '%s' error: %s" % (sql, traceback.format_exc()))
             return {}
 
     def get_results(self, table_name, fields, where=None, order=None, asc_order=True, limit=None):
-        sql = self._select_sql(table_name, fields, where, order, asc_order, limit)
-        self._execute(sql)
-        result_sets = self._fetchall()
-        return [dict([(k, '' if row[i] is None else row[i]) for i,k in enumerate(fields)]) for row in result_sets]
+        try:
+            sql = self._select_sql(table_name, fields, where, order, asc_order, limit)
+            self._execute(sql)
+            result_sets = self._fetchall()
+            return [dict([(k, '' if row[i] is None else row[i]) for i,k in enumerate(fields)]) for row in result_sets]
+        except:
+            util.write_log('api').error("Execute '%s' error: %s" % (sql, traceback.format_exc()))
+            return []
 
     def _update_sql(self, table_name, data, where, fields=None):
-        if not (where and isinstance(where, dict)):
+        if not (where  and isinstance(where, dict)):
             return ""
         where_cond = ["%s='%s'" % (k, v) for k,v in where.items()]
         if fields:
@@ -99,11 +109,13 @@ class Cursor():
         return sql
 
     def execute_update_sql(self, table_name, data, where, fields=None):
-        sql = self._update_sql(table_name, data, where, fields)
-        if sql:
-            return self._execute(sql)
-        else:
-            return ""
+        try:
+            sql = self._update_sql(table_name, data, where, fields)
+            if sql:
+                return self._execute(sql)
+        except:
+            util.write_log('api').error("Execute '%s' error: %s" % (sql, traceback.format_exc()))
+
 
     def _delete_sql(self, table_name, where):
         if not (where and isinstance(where, dict)):
@@ -114,18 +126,25 @@ class Cursor():
         return sql
 
     def execute_delete_sql(self, table_name, where):
-        sql = self._delete_sql(table_name, where)
-        if sql:
-            return self._execute(sql)
-        else:
-            return ""
+        try:
+            sql = self._delete_sql(table_name, where)
+            if sql:
+                return self._execute(sql)
+        except:
+            util.write_log('api').error("Execute '%s' error: %s" % (sql, traceback.format_exc()))
 
-    def if_field_exist(self,table, field,value):
-        result = self.get_one_result(table, [field], {field: value})
+    def if_id_exist(self, table_name,field_id):
+        if isinstance(field_id, list):
+            id_num=len(field_id)
+            result = self.get_results(table_name, ['id'], {'id': field_id})
+            if id_num !=len(result): 
+                result=False
+        else:
+            result = self.get_one_result(table_name, ['id'], {'id': field_id})
         if result:
             return True
         else:
-            util.write_log('api').error(" '%s' is not exist" % field)
+            util.write_log('api').error("%s '%s' is not exist" % (table_name,field_id))
             return False
 
 

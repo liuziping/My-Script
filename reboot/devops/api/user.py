@@ -23,6 +23,8 @@ def createuser(auth_info,*arg,**kwargs):
         #api端对传入端参数验证
         if 'r_id' not in data:
             return json.dumps({'code': 1, 'errmsg': "must need a role!"})
+        if not app.config['cursor'].if_id_exist('role',data['r_id'].split(',')):
+            return json.dumps({'code': 1, 'errmsg': "Role not exist!"})
         if not util.check_name(data['username']):
             return json.dumps({'code': 1, 'errmsg': "username must be string or num!"})
         if data['password'] != data['repwd']:

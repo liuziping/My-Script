@@ -19,8 +19,10 @@ def role_create(auth_info, **kwargs):
         return json.dumps({'code': 1,'errmsg':'you not admin,no power' })
     try:
         data = request.get_json()['params']
-        if not data.has_key('p_id'): #这里要验证pid是否存在     
+        if not data.has_key('p_id'):     
             return json.dumps({'code':1,'errmsg':'must hava p_id'})
+        if not app.config['cursor'].if_id_exist('power',data['p_id'].split(',')):     
+            return json.dumps({'code':1,'errmsg':'p_id not exist'})
         if not util.check_name(data['name']):
             return json.dumps({'code': 1, 'errmsg': 'name must be string or int'})
         app.config['cursor'].execute_insert_sql('role', data)
@@ -28,7 +30,7 @@ def role_create(auth_info, **kwargs):
         return json.dumps({'code':0,'result':'create role %s scucess' % data['name']})
     except:
         util.write_log('api').error(username,"create role error: %s" % traceback.format_exc())
-        return json.dumps({'cod e':1,'errmsg':'create role fail'})
+        return json.dumps({'code':1,'errmsg':'create role fail'})
 
 @jsonrpc.method('role.getlist')
 @auth_login
