@@ -94,7 +94,7 @@ button.detail{
     <a class="navbar-brand" href="/">Reboot Admin</a>
     <ul class="nav navbar-nav">
 	<li  class="dropdown" id="profile-messages" >
-	    <a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i class="fa fa-user fa-fw"></i><span class="text">{% if errmsg %}<span style="color: red;">{{errmsg}}</span>{%else%}{{user}}{%endif%}</span> <b class="caret"></b></a>
+	    <a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i class="fa fa-user fa-fw"></i><span class="text">{% if errmsg %}<span style="color: red;">{{errmsg}}</span>{%else%}{{user.name}}{%endif%}</span> <b class="caret"></b></a>
 	    <ul class="dropdown-menu">
 		<li><a href="/user/userinfo"><i class="fa fa-user fa-fw"></i>个人中心</a></li>
 		<li class="divider"></li>
