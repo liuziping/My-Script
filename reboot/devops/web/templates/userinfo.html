@@ -22,36 +22,36 @@
        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span ariaa-hidden="true">&times;</span></button>
  	   <h3 class="modal-title">修改个人资料</h3>
      </div> <!--modal-header end-->
-  <div class="modal-body">
-     <form class="form-horizontal" id="updateForm" method="POST">
-       	<input type="hidden" id="upid" name="id" value="{{ user.id }}">
+     <div class="modal-body">
+     <form class="form-horizontal" id="updateForm">
+       	<input type="hidden" name="id" value="{{ user.id }}">
      	<div class="form-group">
-            <label class="control-label">用户名</label>
-     		 <div class="controls">
-       		 	<input id="upusername" name="username" value="{{ user.username }}">
+            <label class="col-sm-2 control-label">用户名</label>
+     		 <div  class="col-sm-10">
+       		 	<input  name="username" class="form-control" value="{{ user.username }}">
       		</div> 
        	</div> <!-- username  end-->
-     	<div class="form-group">
-			 <label class="control-label">姓名</label>
-     		 <div class="controls">
-       		 	<input id="upname" name="name" value="{{ user.name }}">
+     	<div class="form-group" >
+			 <label class="col-sm-2 control-label">姓名</label>
+     		 <div class="col-sm-10">
+       		 	<input  name="name" class="form-control"  value="{{ user.name }}">
       		</div> 
        	</div> <!--name  end-->
      	<div class="form-group">
-            <label class="control-label">E-mail</label>
-     		 <div class="controls">
-       		 	<input id="upemail" name="email" value="{{ user.email }}">
+            <label class="col-sm-2 control-label">E-mail</label>
+     		 <div class="col-sm-10">
+       		 	<input class="form-control" name="email" value="{{ user.email }}">
       		</div> 
        	</div> <!--email  end-->
      	<div class="form-group">
-            <label class="control-label">联系电话</label>
-     		 <div class="controls">
-       		 	<input id="upmobile" name="mobile" value="{{ user.mobile }}">
+            <label class="col-sm-2 control-label">联系电话</label>
+     		 <div class="col-sm-10">
+       		 	<input class="form-control"  name="mobile" value="{{ user.mobile }}">
       		</div>  
        	</div> <!--mobile  end-->
     	<div class="form-group">
      		<div class="modal-footer">
-			 	<button class="btn btn-primary"  id = "upinfobtn">更新</button>
+			 	<button class="btn btn-primary"  id = "upinfobtn" >更新</button>
 				<button class="btn btn-warning exit-btn" data-dismiss="modal">退出</button>
             </div> 
       </div><!--button end-->
@@ -72,23 +72,23 @@
 	<h3 class="modal-title">修改个人密码</h3>
     </div> <!--modal-header end-->
     <div class="modal-body">
-    <form class="form-horizontal" id="updatepw" method="POST">
-     	<div class="form-group">
-			<label class="control-label">旧密码</label>
-     		 <div class="controls">
-       		 	<input id="oldpasswd"  type="password"  name="oldpasswd" >
+    <form class="form-horizontal" id="updatepw">
+     	<div class="form-group"> 
+			<label class="col-sm-2 control-label">旧密码</label>
+     		 <div class="col-sm-10">
+       		 	<input class="form-control" type="password"  name="oldpasswd" >
       		</div> 
        	</div> <!-- oldpasswd end-->
      	<div class="form-group">
-			<label class="control-label">新密码</label>
-     		 <div class="controls">
-       		 	<input id="newpasswd"  type="password"  name="newpasswd" >
+			<label class="control-label col-sm-2">新密码</label>
+     		 <div class="col-sm-10">
+       		 	<input class="form-control" type="password"  name="newpasswd" >
       		</div> 
        	</div> <!--newpasswd  end-->
     	<div class="form-group">
      		<div class="modal-footer">
 				<button class="btn btn-primary" id = "uppwbtn" >更新</button>
-			 	<button class="btn btn-warning exit-btn" data-dismiss="modal">退出</button>
+			 	<button class="btn btn-warni ng exit-btn" data-dismiss="modal">退出</button>
             </div> 
       </div><!--button end-->
     </form><!--form end--> 
