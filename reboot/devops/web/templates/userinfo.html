@@ -24,7 +24,7 @@
      </div> <!--modal-header end-->
      <div class="modal-body">
      <form class="form-horizontal" id="updateForm">
-       	<input type="hidden" name="id" value="{{ user.id }}">
+       	<input type="hidden"  name="id" value="{{ user.id }}">
      	<div class="form-group">
             <label class="col-sm-2 control-label">用户名</label>
      		 <div  class="col-sm-10">
@@ -135,14 +135,20 @@ $("#upinfobtn").on('click',function(){
    var data = {'method':name,'formdata':str}
    $.post('/updateapi',data,function(data){
         data=JSON.parse(data)
+        console.log(data)
         data = JSON.parse(data['result']) //object
-        if(data['code'] == 0){   //recevie json object
-             swal("更新信息成功")
-             $('#editModal').modal('hide')
-             window.location.reload();
-             
+        if(data['code'] == 0){  
+            swal({
+                title:"success",
+                text:"更新成功",
+                type:"success",
+                confirmButtonText:'确定'
+                },function(){
+                    $('#editModal').modal('hide')
+                    location.reload()
+                })
         }else{
-             swal("更新信息失败")
+                swal("error", data['errmsg'],"error")
         }
    })
         return false
@@ -159,13 +165,14 @@ $("#uppwbtn").on('click',function(){
    var str = $("#updatepw").serialize()
    var url = '/user/chpwdoneself'
    $.post(url,str,function(data){
-       data=JSON.parse(data)
+        data=JSON.parse(data)
+        console.log(data)
         if (data['code']==0){   //recevie json object
              swal("更新成功")
              $('#updatepasswd').modal('hide')
         }else{
              swal(data['errmsg'])
-             }
+              }
    })
         return false
 })
