@@ -47,13 +47,13 @@ def role_select(auth_info,**kwargs):
           
         #查询权限表，生产id2name的字典
         result = app.config['cursor'].get_results('power', ['id', 'name'])
-        power_name = dict([(x['id'], x['name']) for x in result])
+        power_name = dict([(str(x['id']), x['name']) for x in result])
 
         #将角色对应的p_id都转为name,最终返回的结果p_id的值都是name
         result = []
         res = app.config['cursor'].get_results('role', fields)
         for x in res:
-            p_name = [power_name[int(p_id)] for p_id in x['p_id'].split(',')]
+            p_name = [power_name.get(p_id,'git') for p_id in x['p_id'].split(',')]
             x['p_id'] = ','.join(p_name)  #将原有x['p_id']中的id转为name
             result.append(x)
 

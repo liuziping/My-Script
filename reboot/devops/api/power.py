@@ -78,7 +78,7 @@ def getbyid(auth_info,**kwargs):
     if '1' not in auth_info['r_id']:
         return json.dumps({'code': 1,'errmsg':'you not admin,no power' })
     try:
-        output = ['id','name ','name_cn','url','comment']
+        output = ['id','name','name_cn','url','comment']
         data = request.get_json()['params']
         fields = data.get('output', output)
         where = data.get('where',None)

@@ -52,8 +52,10 @@ def userinfo(auth_info,**kwargs):
     username = auth_info['username']
     try:
         output = ['id','username','name','email','mobile','is_lock','r_id']
-        fields = kwargs.get('output',output) #api可以指定输出字段，如果没有指定output，就按默认output输出
-        where = kwargs.get('where',None)     #前端传来的where条件
+        data=request.get_json()['params']
+        fields = data.get('output',output) #api可以指定输出字段，如果没有指定output，就按默认output输出
+        where = data.get('where',None)     #前端传来的where条件
+        util.write_log('api').info("where=%s" % where) 
         if not where:
             return json.dumps({'code':1, 'errmsg':'must need a condition'})
         result = app.config['cursor'].get_one_result('user', fields, where)
@@ -118,7 +120,7 @@ def userlist(auth_info,**kwargs):
 
         result = app.config['cursor'].get_results('user', fields)
         for user in result: #查询user表中的r_id,与role表生成的字典对比，一致则将id替换为name,如，"sa,php"
-            user['r_id'] = ','.join([rids[x] for x in user['r_id'].split(',') if x in rids])
+            user['r_id'] = ','.join([rids.get(x,'test') for x in user['r_id'].split(',') if x in rids])
             users.append(user)
         util.write_log('api').info(username, 'get_all_users')
         return  json.dumps({'code': 0, 'users': users,'count':len(users)})

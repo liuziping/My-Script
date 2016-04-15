@@ -71,8 +71,9 @@ def getapi():
         "m_table":request.args.get('m_table',None),
         'field':request.args.get('field',None),
         's_table':request.args.get('s_table',None),
-        'where':int(request.args.get('id'))
+        'where':{'id':int(request.args.get('id'))}
     }
+    util.write_log('web').info(data)
     r = requests.post(get_url(),headers=headers,json=data)
     return r.text
 
@@ -108,6 +109,7 @@ def deleteapi():
          "id":int(request.args.get('id'))
          }
     }
+    util.write_log('web').info(data)
     r = requests.post(get_url(),headers=headers,json=data)
     return r.text
 
