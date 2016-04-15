@@ -38,7 +38,7 @@
     <div class="control-group">
 		<label class="control-label col-sm-3">角色: </label>
 		<div class="col-sm-9">
-                <select id="r_id" name="r_id" class="form-control multiselect" multiple="multiple" >
+                <select id="r_id" name="r_id" class="form-control multiselect" datatype="*" errormsg="角色不能为空" multiple="multiple" >
                    </select>
 		</div >  
 	</div> <!--选择角色-->
@@ -75,9 +75,11 @@
                <input  type="password" name="repwd" class="form-control"  datatype="*" recheck="password" errormsg="您两次输入的账号密码不一致！" />
         </div> 
     </div> <!--重新输入密码-->
-    <div class="modal-footer">
+    <div class="form-group">
+         <div class="modal-footer">
                 <button class="btn btn-primary" id="submitbtn" >确认添加</button>
-    </div> 
+        </div>
+    </div>
     </form> 
 
       </div><!-- /.modal-body-->
@@ -252,7 +254,7 @@ $("#addForm").Validform({
     }
 })
 /*用户添加*/
-$('#submitbtn').on('click',function(){
+$('#addForm').on('submit',function(){
         var str = $('#addForm').serialize()
         var data={'method':name,'formdata':str}
         $.post('/addapi',data,function(data){ 
@@ -267,14 +269,14 @@ $('#submitbtn').on('click',function(){
                         confirmButtonText:'确定'
                         },function(){
                             $('#addModal').modal('hide')
-                            location.reload()
-                         });
+                            window.location.reload();
+                         })
             }else{
                 swal("error","创建用户失败," + data['errmsg'],"error")
-             }
-         })
+             }   /*if end*/
+         })  /*post end*/
          return false;
-})
+})  /*submit end*/
 /*update passwd*/
 $("tbody").on('click','.passwd-btn',function(){
     var id = $(this).attr('data-id')
