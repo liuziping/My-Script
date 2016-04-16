@@ -53,7 +53,7 @@ def role_select(auth_info,**kwargs):
         result = []
         res = app.config['cursor'].get_results('role', fields)
         for x in res:
-            p_name = [power_name.get(p_id,'git') for p_id in x['p_id'].split(',')]
+            p_name = [power_name[p_id] for p_id in x['p_id'].split(',') if p_id in power_name]
             x['p_id'] = ','.join(p_name)  #将原有x['p_id']中的id转为name
             result.append(x)
 
