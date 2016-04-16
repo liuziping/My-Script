@@ -22,25 +22,38 @@ def index():
         session['role'] = user['r_id'] #角色名eg:['sa','php']
         session['perm'] = user['p_id'].keys()  #权限名eg:['git','mysql']
         session['username'] = user['name'] if user['name'] else user['username']
-        return render_template('index.html',info=session,user=session['user'])
+        user['role'] = ','.join(user['r_id'])
+        user['perm'] = ','.join(['<a href="%s" style="color:blue">%s</a>' % (x['url'], x['name_cn']) for x in user['p_id'].values()])
+        return render_template('index.html',info=session,user=user)
     else:
         return redirect('/login')
+        
+#适用于比较简单多功能，直接/htmlname 就能访问到,eg:deshboard
+@app.route('/<htmlname>')   
+def single(htmlname):
+    if session.get('author','nologin') == 'nologin':
+        return redirect('/login')
+    headers['authorization'] = session['author']
+    validate_result = json.loads(util.validate(session['author'], app.config['passport_key']))
+    if int(validate_result['code']) == 0:
+        return render_template(htmlname+'.html',info=session,user=session['user'])
+    else:
+       return render_template(htmlname+'.html',errmsg=validate_result['errmsg']) 
 
-@app.route('/user/<htmlname>')
+#用户权限系统模块，输入的htmlname名会展示对应的html页面
+@app.route('/user/<htmlname>') 
 def user(htmlname):
     if session.get('author','nologin') == 'nologin':
         return redirect('/login')
     headers['authorization'] = session['author']
     validate_result = json.loads(util.validate(session['author'], app.config['passport_key']))
     if int(validate_result['code']) == 0:
-        user = session['user']
-        user['role'] = ','.join(user['r_id'])
-        user['perm'] = ','.join(['<a href="%s" style="color:blue">%s</a>' % (x['url'], x['name_cn']) for x in user['p_id'].values()])
-        return render_template(htmlname+'.html',info=session,user=user)
+        return render_template(htmlname+'.html',info=session,user=session['user'])
     else:
        return render_template(htmlname+'.html',errmsg=validate_result['errmsg']) 
 
-@app.route('/project/<htmlname>')
+#项目管理模块
+@app.route('/project/<htmlname>') 
 def project(htmlname):
     if session.get('author','nologin') == 'nologin':
         return redirect('/login')
@@ -51,18 +64,29 @@ def project(htmlname):
     else:
        return render_template(htmlname+'.html',errmsg=validate_result['errmsg']) 
 
-@app.route('/cmdb/<htmlname>')
+#cmdb模块
+@app.route('/cmdb/<htmlname>')  
 def cmdb(htmlname):
     if session.get('author','nologin') == 'nologin':
         return redirect('/login')
     headers['authorization'] = session['author']
     validate_result = json.loads(util.validate(session['author'], app.config['passport_key']))
     if int(validate_result['code']) == 0:
-        return render_template(htmlname+'.html',info=session,user=username)
+        return render_template(htmlname+'.html',info=session,user=session['user'])
     else:
         return render_template(htmlname+'.html',errmsg=validate_result['errmsg']) 
 
-
+#第三方API接口页面
+@app.route('/api/<htmlname>')  
+def api(htmlname):
+    if session.get('author','nologin') == 'nologin':
+        return redirect('/login')
+    headers['authorization'] = session['author']
+    validate_result = json.loads(util.validate(session['author'], app.config['passport_key']))
+    if int(validate_result['code']) == 0:
+        return render_template(htmlname+'.html',info=session,user=session['user'])
+    else:
+        return render_template(htmlname+'.html',errmsg=validate_result['errmsg']) 
 
 #管理员修改用户密码
 @app.route("/user/changepasswd",methods=['GET','POST'])
