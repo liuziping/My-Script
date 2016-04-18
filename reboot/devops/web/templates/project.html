@@ -12,15 +12,88 @@
       <button style="float:right;" class="btn btn-primary btn-sm" id="addBtn">添加项目</button>
    </div> <!--widget-title end-->
 
-    <div class="widget-content">  
+<!--添加项目模态窗-->
+<div id="addModal" class="modal fade">
+ <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title">添加项目</h4>
+	  </div><!--modal-header end-->
+
+    <div class="modal-body">
+    <form class="form-horizontal" id="addForm" accept-charset="UTF-8">
+    <div class="control-group">
+        <label class="control-label col-sm-3">项目名：</label>
+        <div class="col-sm-9">
+         <input type="text" name="name" class="form-control"/>
+        </div>
+    </div> <!--项目名添加-->
+    <div class="control-group">
+        <label class= "control-label col-sm-3">项目路径：</label>
+        <div class="col-sm-9">
+            <input  type="text" name="path" class="form-control" />
+        </div> 
+    </div><!--项目路径添加-->
+    <div class="control-group">
+		<label class = "control-label col-sm-3">负责人: </label>
+		<div class="col-sm-9">
+                <select  id="principal" name="principal" class ="form-control multiselect"  multiple="multiple" >
+                    </select>
+		</div>   
+	</div> <!-- 项目负责人-->
+    <div class="control-group">
+		<label class = "control-label col-sm-3">项目成员: </label>
+		<div class="col-sm-9">
+                <select  id="p_user" name="p_user" class ="form-control multiselect"  multiple="multiple" >
+                    </select>
+		</div>   
+	</div> <!-- 项目成员-->
+    <div class="control-group">
+		<label class = "control-label col-sm-3">项目组: </label>
+		<div class="col-sm-9">
+                <select  id="p_group" name="p_group" class ="form-control multiselect"  multiple="multiple" >
+                    </select>
+		</div>   
+	</div> <!-- 项目组-->
+   <div class="control-group">
+        <label class="control-label col-sm-3">状态：</label>
+        <div class="col-sm-9">
+            <select name='is_lock' class="form-control"  style='width:120px'> 
+                 <option value=0>正常</option>
+                 <option value=1>锁定</option>
+              </select>
+        </div>   
+    </div>  <!--状态选择--> 
+    <div class="control-group">
+        <label class="control-label col-sm-3">备注：</label>
+        <div class="col-sm-9">
+        <textarea class="form-control" rows="3" class="form-control"  name="comment"></textarea>
+        </div>     
+    </div>  <!--备注-->
+    <div class="form-group">
+         <div class="modal-footer">
+                <button class="btn btn-primary" id="submitbtn" >确认添加</button> 
+			 	<button class="btn btn-warning" data-dismiss="modal">退出</button>
+        </div>  
+    </div>
+    </form> 
+
+      </div><!-- /.modal-body-->
+   </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+    
+<div class="widget-content">  
     <!--项目列表-->
 		<table id ="datatable"  class="table table-bordered table-striped table-hover">
 		<thead>
 			 <tr>
 			 	<th>项目名</th>
+				<th>项目路径</th>
 				<th>负责人</th>
-				<th>项目开发者</th>
-				<th>创建时间</th>
+				<th>项目成员</th>
+				<th>项目组</th>
 				<th>状态</th>
 				<th>备注</th>
 				<th>操作</th>
@@ -29,15 +102,151 @@
 		<tbody>
 		</tbody>
 	   </table>
-    <!--添加项目模态窗-->
 
-    <!--更新项目模态窗-->
-
-	</div><!--widget-content end-->
+</div><!--widget-content end-->
 
 </div><!--widget-box end-->
 {% endblock %}
 
+
 {% block js %}
+
+name='project'
+function datatable(){
+    $('#datatable').DataTable({
+        "language": {
+            "zeroRecords": "没有找到记录",
+            "sInfo": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 ),显示第 _START_ 至 _END_ 项(总共 _TOTAL_ 项)",
+            "infoEmpty": "无记录",
+            "infoFiltered": "(从 _MAX_ 条记录过滤)",
+            "sSearch": "搜索:",
+            "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "上一页",
+                "sNext": "下一页",
+                "sLast": "末页"
+            }
+        }
+    });
+};
+/* list all data*/
+function list(){
+    url = "/listapi?method="+name
+    $.getJSON(url,function(data){
+       data=JSON.parse(data['result']); //object 
+       console.log(data)   
+       if (data['code']== 0){       
+           var str = ''
+           $.each(data.result,function(k,v){   
+               if (v['is_lock']==0){
+                   v['is_lock']="正常"
+               }else{
+                   v['is_lock']="锁定"
+               } 
+               str +='<tr class="odd gradeX">'+  
+               '<td>'+v['name']+'</td>'+  
+               '<td>'+v['path']+'</td>'+  
+               '<td>'+v['principal']+'</td>'+  
+               '<td>'+v['p_user']+'</td>'+ 
+               '<td>'+v['p_group']+'</td>'+ 
+               '<td><span style="color:#5EDF47;">'+v['is_lock']+'</span></td>'+ 
+               '<td>'+v['comment']+'</td>'+ 
+               '<td>'+
+               '<button class="btn btn-primary btn-sm update-btn" data-id="'+v['id']+'">更新</button>'+
+               '<button class="btn btn-danger btn-sm delete-btn" data-id="'+v['id']+'">删除</button>'+
+               '</td>'+ '</tr>'          
+           })       
+                $("tbody").html(str)
+                 datatable()
+            }else{
+                swal("error", data['errmsg'],"error")
+            }
+           })
+}
+
+list()
+/*列出用户的信息，并拼接成复选框*/
+function userlist(){
+    var url = "/listapi?method=user"
+    $.getJSON(url, function(data){
+         data=JSON.parse(data['result'])
+        console.log(data)   
+        if (data['code']== 0){
+            var str = ''
+            $.each(data.users, function(k,v){
+                str += '<option value="'+v['id']+'">'+v['name']+'</option>'
+            })
+            $("#p_user,#principal").html(str)
+            $('#p_user,#principal').multiselect({maxHeight:200, enableCaseInsensitiveFiltering: true})
+            $("#p_user,#principal").multiselect('refresh')
+        }else{
+                swal("error","获取权限列表失败," + data['errmsg'],"error")
+        } //if end
+    })
+}
+/*列出角色的信息，并拼接成复选框*/
+function rolelist(){
+    var url = "/listapi?method=role"
+    $.getJSON(url, function(data){
+        data=JSON.parse(data['result'])
+        console.log(data)   
+        if (data['code']== 0){
+            var str = ''
+            $.each(data.result, function(k,v){
+                str += '<option value="'+v['id']+'">'+v['name']+'</option>'
+            })
+            $("#p_group").html(str)
+            $('#p_group').multiselect({maxHeight:200, enableCaseInsensitiveFiltering: true})
+            $("#p_group").multiselect('refresh')
+        }else{
+                swal("error","获取权限列表失败," + data['errmsg'],"error")
+         } //if end
+    })
+
+}
+
+/*点击按钮，显示添加用户模态窗*/
+$("#addBtn").on('click',function(){
+    userlist()
+    rolelist()
+    $('#addModal').modal('show')
+})
+$("#addForm").Validform({
+    btnSubmit:"#submitbtn",
+    tiptype:3, 
+    datatype:{
+        "zh2-4" : /^[\u4E00-\u9FA5\uf900-\ufa2d]{2,4}$/,
+    }
+})
+
+
+/*用户添加*/
+$('#addForm').on('submit',function(){
+        var str = $('#addForm').serialize()
+        var data={'method':name,'formdata':str}
+        $.post('/addapi',data,function(data){ 
+            data=JSON.parse(data);   //将json串转换为对象，然后取值
+            data = JSON.parse(data['result']) //object
+            console.log(data)
+            if (data['code']==0){
+                     swal({
+                        title:"success", 
+                        text:"添加成功",
+                        type:"success",
+                        confirmButtonText:'确定'
+                        },function(){
+                            $('#addModal').modal('hide')
+                            window.location.reload();
+                         })
+            }else{
+                swal("error","创建用户失败," + data['errmsg'],"error")
+             }   /*if end*/
+         })  /*post end*/
+           return false;
+})  /*submit end*/
+
+
+
+
 
 {% endblock %}
