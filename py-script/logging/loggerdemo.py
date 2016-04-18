@@ -32,16 +32,23 @@ if __name__ == '__main__':
 	logger.info("just a info")
 	logger.debug("just a debug")
 
+    #这种写法和上面一样，适用于参数比较少的场景
+    InitLogger('/tmp/test.log',logging.INFO,'test').info('just a info')
+
 '''
 其他模块调用方法
 cat  test.py 
 	import logging,loggerdemo
-
+ 
 	logger = loggerdemo.InitLogger('/tmp/test.log',logging.DEBUG,'test')
 	logger.info("just a info")
 	logger.debug("just a debug")
-	logger1 = loggerdemo.InitLogger('/tmp/test1.log',logging.INFO,'test1')
+
+    logger1 = loggerdemo.InitLogger('/tmp/test1.log',logging.INFO,'test1')
 	logger1.info("just a info")
 	logger1.debug("just a debug")
+
+    等价于：
+    loggerdemo.InitLogger('/tmp/test1.log',logging.INFO,'test1').info("just a info")
 
 '''
