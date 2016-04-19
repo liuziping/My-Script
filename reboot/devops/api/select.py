@@ -22,8 +22,9 @@ def selected(auth_info,**kwargs):
         res=res[field].split(',')  #eg: ['1','2']
         result = app.config['cursor'].get_results(s_table,['id','name'])
         for x in result: #eg: [{'id':1,'name':'sa'},{'id':2,'name':'php'}]
-           for r_id in res:
-               if r_id in str(x['id']): 
+           for f in res:
+               #if f in  str(x['id']):    #不能这么干，因为 '1'in '1'是true。 '1' in "11"  也是true 
+               if int(f) ==  int(x['id']): 
                     x['selected'] = 'selected="selected"'
         util.write_log('api').info(username,'selected  %s  successfully' % (s_table))
         return json.dumps({'code':0,'result':result})

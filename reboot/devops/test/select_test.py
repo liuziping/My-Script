@@ -30,10 +30,10 @@ def rpc():
                 'method': 'selected.get',      
                 'id':'1',
                 'params':{
-                    'm_table':'user',
-                    'field':'r_id',
-                    'where':{'id':1},
-                    's_table':'role'
+                    'm_table':'project',
+                    'field':'principal',
+                    'where':{'id':3},
+                    's_table':'user'
                 }
             }
         r = requests.post(url,headers=headers,json=data)

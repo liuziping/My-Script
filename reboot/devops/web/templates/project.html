@@ -84,6 +84,80 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
     
+<!--更新项目模态窗-->
+<div id="updateModal" class="modal fade">
+ <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title">更新项目</h4>
+	  </div><!--modal-header end-->
+
+    <div class="modal-body">
+     <p hidden id="uperrorMsg" class="text-danger" style="color:red"></p> <!-- foe error msg-->
+    <form class="form-horizontal" id="updateForm" accept-charset="UTF-8">
+    <input type="hidden" id='upid' name="id">  <!--update need id-->
+    <div class="control-group">
+        <label class="control-label col-sm-3">项目名：</label>
+        <div class="col-sm-9">
+         <input type="text" name="name" id="upname" class="form-control"/>
+        </div> 
+    </div> <!--项目名更新-->
+    <div class="control-group">
+        <label class= "control-label col-sm-3">项目路径：</label>
+        <div class="col-sm-9">
+            <input  type="text" name="path" id="uppath" class="form-control" />
+        </div> 
+    </div><!--项目路径更新-->
+    <div class="control-group">
+		<label class="control-label col-sm-3">负责人: </label>
+		<div class="col-sm-9">
+                <select  id="upprincipal" name="principal" class ="form-control multiselect"  multiple="multiple" >
+                     </select>
+		</div>    
+	</div> <!-- 项目负责人更新-->
+    <div class="control-group">
+		<label class = "control-label col-sm-3">项目成员: </label>
+		<div class="col-sm-9">
+                <select  id="upp_user" name="p_user" class ="form-control multiselect"  multiple="multiple" >
+                     </select>
+		</div>    
+	</div> <!-- 项目成员-->
+    <div class="control-group">
+		<label class = "control-label  col-sm-3">项目组: </label>
+		<div class="col-sm-9">
+                <select  id="upp_group" name="p_group" class ="form-control multiselect"  multiple="multiple" >
+                    </select> 
+		</div>   
+	</div> <!-- 项目组-->
+   <div class="control-group">
+        <label class="control-label col-sm-3">状态：</label>
+        <div class="col-sm-9">
+            <select name='is_lock' id="upis_lock" class="form-control"  style='width:120px'> 
+                 <option value=0>正常</option>
+                 < option value=1>锁定</option>
+              </select>
+        </div>    
+    </div>  <!--状态选择--> 
+    <div class="control-group">
+        <label class="control-label col-sm-3">备注：</label>
+        <div class="col-sm-9">
+        <textarea id="upcomment" rows="3" class="form-control"  name="comment"></textarea>
+        </div>      
+    </div>  <!--备注-->
+    <div class="form-group">
+         <div class="modal-foo ter">
+                <button class="btn btn-primary" id="upbtn" >确认更新</button> 
+			 	<button class=" btn btn-warning" data-dismiss="modal">退出</button>
+        </div>  
+    </div>
+    </form> 
+
+      </div><!-- /.modal-body-->
+   </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <div class="widget-content">  
     <!--项目列表-->
 		<table id ="datatable"  class="table table-bordered table-striped table-hover">
@@ -211,7 +285,7 @@ $("#addBtn").on('click',function(){
     rolelist()
     $('#addModal').modal('show')
 })
-$("#addForm").Validform({
+$("#addForm,#updateForm").Validform({
     btnSubmit:"#submitbtn",
     tiptype:3, 
     datatype:{
@@ -239,12 +313,142 @@ $('#addForm').on('submit',function(){
                             window.location.reload();
                          })
             }else{
-                swal("error","创建用户失败," + data['errmsg'],"error")
+                swal("error","创建项目," + data['errmsg'],"error")
              }   /*if end*/
          })  /*post end*/
            return false;
 })  /*submit end*/
 
+/*点击按钮，显示更新项目的模态窗,并获取用户的信息*/
+$("tbody").on('click','.update-btn',function(){
+    var id = $(this).attr('data-id')
+    var url = "/getapi?method="+name+"&id="+id
+    $.getJSON(url,function(data){
+      data = JSON.parse(data['result'])
+      if (data['code']==0){
+          $('#upid').val(data['result']['id'])
+          $('#upname').val(data['result']['name'])
+          $('#uppath').val(data['result']['path'])
+          $('#upcomment').val(data['result']['comment'])
+          $('#upis_lock').val(data['result']['is_lock'])
+          $('#updateModal').modal('show')
+          s_userlist(id)
+          s_rolelist(id)
+          s_principal(id)
+      }else{
+          swal("Error", data['errmsg'], "error")
+      }
+    })
+})
+/*获取项目的成员，拼接为下拉列表*/
+function s_userlist(id){
+    var url = "/getapi?method=selected&id="+id+"&m_table=project&field=p_user&s_table=user"
+    $.getJSON(url, function(data){
+        data=JSON.parse(data['result'])
+        console.log(data)
+        var str=''
+        $.each(data.result, function(k,v){
+            console.log(k,v)
+            str +='<option value='+v['id']+" "+v['selected']+'>'+v['name']+
+            '</option>'
+        })
+        console.log(str)
+        $("#upp_user").html(str)
+        $('#upp_user').multiselect({maxHeight:200, enableCaseInsensitiveFiltering: true})
+        $('#upp_user').multiselect('refresh');
+    })
+}
+
+
+/*获取项目的负责人，拼接为下拉列表*/
+function s_principal(id){
+    var url = "/getapi?method=selected&id="+id+"&m_table=project&field=principal&s_table=user"
+    $.getJSON(url, function(data){
+        data=JSON.parse(data['result'])
+        console.log(data)
+        var str=''
+        $.each(data.result, function(k,v){
+            console.log(k,v)
+            str +='<option value='+v['id']+" "+v['selected']+'>'+v['name']+
+            '</option>'
+        })
+        console.log(str)
+        $("#upprincipal").html(str)
+        $('#upprincipal').multiselect({maxHeight:200, enableCaseInsensitiveFiltering: true})
+        $('#upprincipal').multiselect('refresh');
+    })
+}
+
+
+/*获取项目的组，拼接为下拉列表*/
+function s_rolelist(id){
+    var url = "/getapi?method=selected&id="+id+"&m_table=project&field=p_group&s_table=role"
+    $.getJSON(url, function(data){
+        data=JSON.parse(data['result'])
+        console.log(data)
+        var str=''
+        $.each(data.result, function(k,v){
+            console.log(k,v)
+            str +='<option value='+v['id']+" "+v['selected']+'>'+v['name']+
+            '</option>'
+        })
+        console.log(str)
+        $("#upp_group").html(str)
+        $('#upp_group').multiselect({maxHeight:200, enableCaseInsensitiveFiltering: true})
+        $('#upp_group').multiselect('refresh');
+    })
+
+}
+
+/*更新用户信息*/
+$('#updateForm').on('submit',function(){
+        var str = $('#updateForm').serialize()
+        var data = {'method':name,'formdata':str}
+        $.post('/updateapi',data, function(data){  // data is string
+            data = JSON.parse(data)    //object
+            data = JSON.parse(data['result']) //object
+            console.log(data)
+            if (data['code']==0){   
+            swal({
+                title:"success",
+                text:"更新成功",
+                type:"success",
+                confirmButtonText:'确定'
+                },function(){
+                    $('#updateModal').modal('hide')
+                    location.reload()
+                })
+            }else{
+                $('#uperrorMsg').html('Failed: '+data['errmsg']).show()
+            }
+        })
+            return false   //get data and end
+})  //submit form
+
+/*删除用户*/
+$("tbody").on('click','.delete-btn',function(){
+    if(confirm("是否确认删除？")){
+        var id = $(this).attr('data-id')
+        var url =  "/deleteapi?method="+name+"&id="+id
+        console.log(url)
+        $.getJSON(url,function(data){
+            data = JSON.parse(data['result'])
+            if (data['code']== 0 ){
+                swal({
+                    title:"success",
+                    text:"删除成功",
+                    type:"success",
+                    confirmButtonText:'删除成功'
+                    },function(){
+                        location.reload()
+                    })
+                
+            }else{
+                swal(data['errmsg'])
+            }
+        })
+    }  // end confirm
+})   
 
 
 
