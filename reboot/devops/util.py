@@ -8,6 +8,7 @@ import hashlib
 import traceback
 import ConfigParser
 import logging,logging.config
+from api import app
 
 def get_config(service_conf, section=''):
     config = ConfigParser.ConfigParser()
@@ -54,3 +55,65 @@ def check_name(name):
         return name.isalnum() and len(name) >= 2
     else:
         return False
+
+def getinfo(table_name, fields):
+        '''
+        实现查询表中多任意两列，并将结果拼接为字典
+        fields为列表存两个字段,格式为 ['field1','field2'], 例如['id','name'],['name','r_id']
+        结果一，两列都是字符串如：用户id2name {'1':'tom','2','jerry'}; 组信息id2name {'1':'sa','2':'ask'}
+        结果二，第二列是个列表如：用户name2r_id：{u'wd': [u'1', u'2'], u'admin': [u'1', u'2', u'4', u'3']}
+
+        '''
+        result = app.config['cursor'].get_results(table_name,fields)
+        if fields[1] in ['r_id','p_id','p_user','p_group']:  #第二列如果是列出的几项。则把字符串换成列表
+	        result = dict((str(x[fields[0]]), x[fields[1]].split(',')) for x in result)
+        else:
+	        result = dict((str(x[fields[0]]), x[fields[1]]) for x in result)
+        return result
+
+
+#获取一个组里面的用户成员
+def role_members():
+    users = getinfo('user',['id','name'])   #{'1':'wd','2':'pc'}
+    roles = getinfo('role',['id','name'])   #{'1':'sa','2':'dba','3':'dev'}
+    r_id = getinfo('user',['id','r_id'])     #{'1':['1','2'],'2':['2'.'3']......}
+
+    g = {}
+    for uid, rids in r_id.items():
+        for rid in rids:
+            if uid not in users or rid not in roles:                                                
+               continue
+            if roles[rid] not in g:
+                g[roles[rid]] = []
+            g[roles[rid]].append(users[uid])
+    return g
+    #print g    #{'sa': ['wd'], 'dba': ['wd','pc'], 'dev': ['pc']}
+
+#获取一个项目中所有的用户成员（用户和组中的成员要去重）结果格式： {'devops':['wd','pc'],'test':['wd','rock']}
+def project_members():
+        users = getinfo('user',['id','name'])   #{'1':'wd','2':'pc'}
+        roles = getinfo('role',['id','name'])   #{'1':'sa','2':'dba','3':'dev'}
+        r_users = role_members()
+        result = app.config['cursor'].get_results('project',['id','name','principal','p_user','p_group']) 
+        #result=[{'id':'1','name':'devops','principal':'1','p_user':'1,2','p_group':'1,3'},......]
+        projects={}
+        for p in result:
+            projects[p['name']]=[]
+            for pri in p['principal'].split(','):
+                if pri in users:
+                    projects[p['name']].append(users[pri]) 
+            for u in p['p_user'].split(','):
+                if u in users:
+                    projects[p['name']].append(users[u]) 
+            for g in p['p_group'].split(','):
+                 if g in roles:
+                    projects[p['name']] + r_users.get(roles[g],[])
+            projects[p['name']] = list(set(projects[p['name']]))
+        
+        return projects
+
+#用户返回他所拥有权限的项目结果为：{'wd':['1','2']},{'pc':['1']},{'rock':['2']}
+def user_projects(name):
+    members = project_members()       #{'devops':['wd','pc'],'test':['wd','rock']}
+    projects = getinfo('project',['name','id'])   #{'devops':'1','test':'2'}
+    return dict([(projects[x],x) for x in members if name in members[x]] )

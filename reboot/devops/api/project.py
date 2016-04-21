@@ -138,3 +138,17 @@ def project_delete(auth_info,**kwargs):
         util.write_log('api'). error('delete project error: %s' %  traceback.format_exc())
         return json.dumps({'co de':1,'errmsg':'delete project failed'}) 
 
+
+#新添加查询某个用户所拥有的项目列表
+@app.route('/api/userprojects')
+@auth_login
+def userprojects(auth_info,**kwargs):
+    if auth_info['code'] == 1:
+        return json.dumps(auth_info)             
+    username = auth_info['username']
+    try:
+        res = util.user_projects(username) #dict
+        return json.dumps({'code': 0, 'result': res})
+    except:
+        util.write_log('api').error("调用userproject函数失败: %s" % traceback.format_exc())
+        return json.dumps({'code': 1, 'errmsg': '查询项目列表错误'})
