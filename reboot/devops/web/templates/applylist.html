@@ -1,0 +1,273 @@
+{% extends "layout.html" %}
+{% block css %}
+.table th, .table td { 
+text-align: center; 
+}
+.widget-content .dataTables_filter{
+position:static;
+}
+{% endblock %}
+
+{% block breadcrumb %}
+<li><a href="#">发布系统</a><span class="divider"></span></li>
+<li class="active">申请列表</li>
+{% endblock %}
+
+<!--主体内容-->
+{% block body %}
+
+<div class="widget-box">
+  <div class="widget-title">
+      <h5 style="float:left;"><i class="fa fa-table fa-fw"></i>申请列表</h5>
+  </div> <!--end widget-title-->
+</div>  
+
+<!--add modal emulation-->
+<div id="emulationModal" class="modal  fade">
+ <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">仿真发布</h4>
+      </div><!--modal-header end-->
+   
+    <div class="modal-body">
+    <p hidden id="errorMsg" class="text-danger" style="color:red"></p> <!-- foe error msg-->
+    <form class="form-horizontal" id="emulationForm">
+        <input id='id' type="hidden" name='id'>
+        <div class="form-group">
+            <label class="control-label col-sm-3">版本号</label>
+            <div class="col-sm-9">
+                <input id='version' class="form-control" type='text' name='version'>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="modal-footer">
+                <button class="btn btn-primary" id='Emulation_btn'>仿真发布</button>
+                <button class="btn btn-warning" data-dismiss="modal">退出</button>
+            </div>
+      </div><!--button end-->
+    </form><!--form end-->
+
+    </div> <!--modal body  end-->
+   </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!--add modal emulation end-->
+
+
+
+<div class="widget-content">
+   <table id ="datatable"  class="table table-bordered table-striped">
+	<thead>
+		<tr>
+            <th scope="col">项目名</th>
+			<th scope="col">最新版本</th>
+            <th scope="col">申请人</th>
+            <th scope="col">申请时间</th>
+            <th scope="col">发布状态</th>
+            <th scope="col">操作</th>
+        </tr>
+    </thead> 
+    <tbody>
+    </tbody>
+   </table>
+</div> <!--widget-content-->
+
+</div> <!--widget-box end-->
+{% endblock %}
+
+{% block js %}
+
+name = "apply"
+
+/* DataTable */
+function datatable(){
+$('#datatable').DataTable({
+	"bDestroy":true,
+    "language": {
+        "lengthMenu": "每页 _MENU_ 条记录",
+        "zeroRecords": "没有找到记录",
+        "sInfo": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 ),显示第 _START_ 至 _END_ 项(总共 _TOTAL_ 项)",
+        "infoEmpty": "无记录",
+        "infoFiltered": "(从 _MAX_ 条记录过滤)",
+        "sSearch": "搜索:",
+        "oPaginate": {
+            "sFirst": "首页",
+            "sPrevious": "上一页",
+            "sNext": "下一页",
+            "sLast": "末页"
+        }
+    }
+});
+}
+
+/*将状态id替换为文字*/
+function replace(id){
+       var parent=$("[data-id="+id+"]").parents('tr');
+       var statusDom=parent.find('.status');
+       if (statusDom.html()==1){
+           parent.find('.product-btn').attr('disabled',true).css('cursor', 'not-allowed'); 
+           statusDom.html('申请中....')
+       }else{
+           parent.find('.emulation-btn').attr('disabled',true).css('cursor', 'not-allowed'); 
+           statusDom.html("审核中....").css('color','red')
+       }
+}
+/* list all data */
+function list(){
+    var url = "/listapi?method="+name
+    $.getJSON(url,function(data){
+       var str = ''
+       data=JSON.parse(data['result']); //object 
+       console.log(data)
+       if (data['code']==0){
+           $.each(data.result,function(k,v){   //循环输出数组Array[3]的值
+                str +='<tr class="odd gradeX">'+
+                    '<td class="project_name">'+v['project_name']+'</td>'+  
+                    '<td class="commit">'+v['commit']+'</td>'+ 
+                    '<td class="applicant">'+v['applicant']+'</td>'+  
+                    '<td class="apply_date">'+v['apply_date']+'</td>'+
+                    '<td class="status" style="color:#5EDF47;">'+v['status']+'</td>'+
+                    '<td>'+
+                    '<button class="btn btn-info btn-sm emulation-btn" data-id="'+v['id']+'">仿真</button>'+
+                    '<button class="btn btn-success btn-sm product-btn" data-id="'+v['id']+'" >正式</button>'+
+                    '<button class="btn btn-danger btn-sm cancel-btn" data-id="'+v['id']+'">取消</button>'+
+                    '<button class="btn btn-primary btn-sm detail-btn" data-id="'+v['id']+'">详情</button>'+
+                    '</td>'+
+                    '</tr>'          
+           })   //each end    
+           $("tbody").html(str)
+           $.each(data.result,function(k,v){ 
+                replace(v['id'])	
+           })  //each end
+           datatable()
+    }else{
+                swal("error", data['errmsg'],"error")
+    
+    }  //end if 
+  })  //getJSON end 
+}    //function end 
+list()
+
+//弹出仿真
+$('tbody').on('click','.emulation-btn', function(){
+    var id = $(this).attr('data-id')
+    var  url = "/getapi?method=apply&id="+id
+    $.getJSON(url,function(data){
+        console.log(data)
+        data = JSON.parse(data['result'])
+        if (data['code']==0){
+            $('#id').val(data['result']['id'])
+        }else{
+            swal("OMG",data['errmsg'],"error");
+        }
+    })
+    $('#emulationModal').modal('show')
+})
+//提交仿真测试
+$('#Emulation_btn').on('click',function(){
+    var str=$('#emulationForm').serialize()
+    var data = {'method':name,'formdata':str}
+    $.post('/updateapi',data, function(data){  
+         data = JSON.parse(data)
+         data = JSON.parse(data['result'])
+         if (data['code']==0){
+            swal({
+                title:"success",
+                text:"仿真发布成功",
+                type:"success",
+                confirmButtonText:'确定'
+                },function(){
+                    $('#emulationModal').modal('hide')
+                    location.reload()
+                 })
+        }else{
+            swal("OMG",data['errmsg'],"error");
+        } 
+    })
+    return false;
+})
+
+//弹出详细按钮页面
+$("tbody").on('click','.detail-btn',function(){
+    var id = $(this).attr('data-id')
+    detail(id)
+})
+
+//点击正式发布按钮
+$('tbody').on('click','.product-btn',function(){
+    var id = $(this).attr('data-id')
+     product(id)
+})
+
+//点击取消按钮
+$('tbody').on('click','.cancel-btn',function(){
+     var id = $(this).attr('data-id')
+     cancel(id)
+})
+
+//详情按钮信息页面
+function detail(id){
+    var url = "/getapi?method=apply&id="+id
+    var str = ''
+    $.getJSON(url,function(data){
+         data = JSON.parse(data['result'])
+         console.log(data)
+         if (data['code']==0){  
+            str = '项目名: ' + data['result']['project_name']+'\n'+
+                '发布简介: '+data['result']['info']+'\n'+
+                 '发布详情: '+data['result']['detail']
+            swal(str)
+        }else{
+            swal("OMG", data['errmsg'],"error")
+        }
+    })
+    return false;
+}
+
+
+//正式发布
+function product(id){
+     var url = "/apply/success?id="+id
+     $.getJSON(url,function(data){
+        data = JSON.parse(data.result)
+        console.log(data)
+        if(data['code']==0){
+            swal({
+                title:"success",
+                text:"正式发布成功",
+                type:"success",
+                confirmButtonText:'确定'
+                },function(){
+                    location.reload()
+                })
+        }else{
+            swal("ERROR!","正式发布错误","error")
+          }
+    })
+    return false;
+}
+
+//取消
+function cancel(id){
+    var url = "/apply/cancel?id="+id
+    console.log(url)
+    $.getJSON(url,function(data){
+        data = JSON.parse(data.result)
+        console.log(url)
+        if(data['code']==0){
+            swal({
+                title:"success",
+                text:"取消发表成功",
+                type:"success",
+                confirmButtonText:'确定'
+                },function(){
+                    location.reload()
+                 })
+        }else{
+            swal("No!","网站后端出现错误!","error")
+         }
+    })
+    return false;
+}
+{% endblock %}

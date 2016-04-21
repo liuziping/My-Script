@@ -84,6 +84,7 @@ button.detail{
     margin-top: 30px;
 }
 
+{% block css %} {% endblock%}
 </style>
 
 </head>
@@ -177,9 +178,12 @@ button.detail{
                 {% endif %}
                 {% if info and 'deploy' in info.perm %}
                 <li>
+                    <a href="/project/applylist">申请列表</a>
+                </li>
+                {% endif %}
+                <li>
                     <a href="/project/deploy">发布列表</a>
                 </li>  
-                 {% endif %}
             </ul>    
             </li> <!--代码发布系统结束-->
             <li><!--监控平台-->

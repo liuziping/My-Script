@@ -113,3 +113,15 @@ def deleteapi():
     r = requests.post(get_url(),headers=headers,json=data)
     return r.text
 
+@app.route('/apply/<string:method>')
+def applyapi(method):
+    headers['authorization'] = session['author']
+    data['method'] = 'apply.'+method
+    data['params'] = {
+         "where":{
+         "id":int(request.args.get('id'))
+          }
+    }
+    util.write_log('web').info(data)
+    r = requests.post(get_url(),headers=headers,json=data)
+    return r.text

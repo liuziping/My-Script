@@ -4,8 +4,13 @@ from flask import Flask, render_template,session,redirect,request
 from  . import app  
 import requests,json
 import util
+from public import get_url
 
 headers = {'content-type': 'application/json'}
+data = {
+        "jsonrpc": "2.0",
+        "id":1,
+}
 #deshboard页面
 @app.route('/')
 def index():
@@ -60,7 +65,15 @@ def project(htmlname):
     headers['authorization'] = session['author']
     validate_result = json.loads(util.validate(session['author'], app.config['passport_key']))
     if int(validate_result['code']) == 0:
-        return render_template(htmlname+'.html',info=session,user=session['user'])
+           data['method'] = 'userprojects.getlist'                                                      
+           data['params'] = {}
+           r = requests.post(get_url(),headers=headers,json=data)
+           result = json.loads(r.text)
+           result = json.loads(result['result'])
+           if int(result['code']) == 0:
+               return render_template(htmlname+'.html',info=session,user=session['user'],result=result['result'])
+           else:
+               return render_template(htmlname+'.html',info=session,result=result['errmsg'])
     else:
        return render_template(htmlname+'.html',errmsg=validate_result['errmsg']) 
 
