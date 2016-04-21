@@ -106,9 +106,17 @@ def rpc():
             'user_id':1,
             'password':'123456'
         }
+        r = requests.post("http://127.0.0.1:2000/api/password", headers=headers,json=data)
         '''
-        r = requests.get("http://127.0.0.1:2000/api/userprojects", headers=headers)
-     #   r = requests.post(url, headers=headers,json=data)
+        #userprojects.getlist请求,用户有权限的所有项目
+        data = {
+                'jsonrpc':'2.0',
+                'method': 'userprojects.getlist',      
+                'id':'1',
+                'params':{
+                }
+        }
+        r = requests.post(url, headers=headers,json=data)
 
         print r.status_code
         print r.text 

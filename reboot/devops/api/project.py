@@ -140,7 +140,7 @@ def project_delete(auth_info,**kwargs):
 
 
 #新添加查询某个用户所拥有的项目列表
-@app.route('/api/userprojects')
+@jsonrpc.method('userprojects.getlist')
 @auth_login
 def userprojects(auth_info,**kwargs):
     if auth_info['code'] == 1:

@@ -72,7 +72,7 @@ def getinfo(table_name, fields):
         return result
 
 
-#获取一个组里面的用户成员
+#获取一个组里面的用户成员,以用户表的r_id,反推组成员，故如果组内无成员，就不会返回
 def role_members():
     users = getinfo('user',['id','name'])   #{'1':'wd','2':'pc'}
     roles = getinfo('role',['id','name'])   #{'1':'sa','2':'dba','3':'dev'}
@@ -93,7 +93,7 @@ def role_members():
 def project_members():
         users = getinfo('user',['id','name'])   #{'1':'wd','2':'pc'}
         roles = getinfo('role',['id','name'])   #{'1':'sa','2':'dba','3':'dev'}
-        r_users = role_members()
+        r_users = role_members()        #{'sa': ['wd'], 'dba': ['wd','pc'], 'dev': ['pc']}
         result = app.config['cursor'].get_results('project',['id','name','principal','p_user','p_group']) 
         #result=[{'id':'1','name':'devops','principal':'1','p_user':'1,2','p_group':'1,3'},......]
         projects={}
@@ -107,7 +107,7 @@ def project_members():
                     projects[p['name']].append(users[u]) 
             for g in p['p_group'].split(','):
                  if g in roles:
-                    projects[p['name']] + r_users.get(roles[g],[])
+                    projects[p['name']] + r_users.get(roles[g],[]) #由于r_users不保存空组的信息，但项目表可能选择了空组，r_users[role]就会出现keyerro.故遇到这种情况取空列表
             projects[p['name']] = list(set(projects[p['name']]))
         
         return projects
