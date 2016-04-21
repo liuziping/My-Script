@@ -112,7 +112,7 @@ def project_members():
         
         return projects
 
-#用户返回他所拥有权限的项目结果为：{'wd':['1','2']},{'pc':['1']},{'rock':['2']}
+#用户返回他所拥有权限的项目结果为：{"1": "test", "3": "devops"}
 def user_projects(name):
     members = project_members()       #{'devops':['wd','pc'],'test':['wd','rock']}
     projects = getinfo('project',['name','id'])   #{'devops':'1','test':'2'}
