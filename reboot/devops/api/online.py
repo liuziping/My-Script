@@ -57,10 +57,12 @@ def apply_list(auth_info,**kwargs):
         return json.dumps(auth_info)
     username = auth_info['username']
     try:
-        output = ['id','project_id','info','applicant','version','commit','status','detail']
+        output = ['id','project_id','info','applicant','version','apply_date','commit','status','detail']
         data = request.get_json()['params']  
         fields = data.get('output', output)
         applyer = app.config['cursor'].get_results('project_apply',fields)   #申请人看到的项目列表
+        for res in applyer:
+            res['apply_date']=str(res['apply_date'])
 
         where = {'status':['1','2']}
         result = app.config['cursor'].get_results('project_apply',fields,where) #只列出申请中和审核中的项目给发布者
@@ -68,6 +70,7 @@ def apply_list(auth_info,**kwargs):
         id2name_project=util.getinfo('project',['id','name'])
         for res in result:
             res['project_name'] = id2name_project[str(res['project_id'])]           
+            res['apply_date']=str(res['apply_date'])
 
         util.write_log('api').info(username, 'get apply list success!')
         return  json.dumps({'code':0,'data': applyer, 'result':result,'count':len(result)})
@@ -84,18 +87,19 @@ def apply_one(auth_info,**kwargs):
     username = auth_info['username']
     try:
         data = request.get_json()['params']
-        output = ['id','project_id','info','applicant','version','commit','status','detail']
+        output = ['id','project_id','info','applicant','version','commit','apply_date','status','detail']
         fields = data.get('output', output)
         where = data.get('where',None)
         result = app.config['cursor'].get_one_result('project_apply',fields,where)
         #id转换成名字
         id2name_project=util.getinfo('project',['id','name'])
         result['project_name'] = id2name_project[str(result['project_id'])] 
+        result['apply_date']=str(result['apply_date'])
 
         util.write_log('api').info(username, 'get one apply detail success')
         return json.dumps({'code':0,'result':result})
     except:
-        util.write_log('api').error("get apply detail faild : %s"  %  traceback.format_exc())
+        util.write_log('api').error("get  apply detail faild : %s"  %  traceback.format_exc())
         return json.dumps({'code':1,'errmsg':'任务详情获取失败!'})
 
 #仿真发布 打上version版本号,触发仿真代码脚本,执行代码同步，同时更新status为2 并插入一条记录到project_deploy,状态为2
