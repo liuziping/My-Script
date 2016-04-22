@@ -36,4 +36,92 @@
 
 {% block js %}
 
+/* list all data */
+function list(){
+    var url = "/listapi?method=deploy"
+    $.getJSON(url,function(data){
+       data=JSON.parse(data['result']); //object 
+       console.log(data)
+       var str = ''
+       $.each(data.result,function(k,v){   //循环输出数组Array[3]的值
+           if (v['status'] == 1){
+               v['status'] ="申请中...."
+           }else if (v['status'] == 2){
+               v['status'] ="审核中...."
+           } else if  (v['status'] == 3){
+               v['status'] ="发布失败."
+           }else{
+               v['status'] ="发布完成"
+           }
+           str +='<tr class="odd gradeX">'+ 
+           '<td>'+v['project_name']+'</td>'+  
+           '<td>'+v['version']+'</td>'+  
+           '<td>'+v['commit']+'</td>'+  
+           '<td>'+v['applicant']+'</td>'+  
+           '<td>'+v['apply_date']+'</td>'+ 
+           '<td>'+v['status']+'</td>'+ 
+           '<td>'+
+           '<button class="btn btn-primary btn-sm detail-btn" data-id="'+v['id']+'">详情</button>'+
+           '</td>'+
+           '</tr>'
+       })
+         $("tbody").html(str)
+         style()
+         datatable()
+    })
+}
+list()
+/* DataTable */
+function datatable(){
+$('#datatable').DataTable({
+    "bDestroy":true,
+    "language": {
+        "lengthMenu": "每页 _MENU_ 条记录",
+        "zeroRecords": "没有找到记录",
+        "sInfo": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 ),显示第 _START_ 至 _END_ 项(总共 _TOTAL_ 项)",
+        "infoEmpty": "无记录",
+        "infoFiltered": "(从 _MAX_ 条记录过滤)",
+        "sSearch": "搜索:",
+        "oPaginate": {
+            "sFirst": "首页",
+            "sPrevious": "上一页",
+            "sNext": "下一页",
+            "sLast": "末页"
+        }
+    },
+    "order": [[4, 'desc'], [0, 'asc']]
+});
+}
+function style(){
+    $('td:contains("申请中")').css('color','Lime')
+    $('td:contains("审核中")').css('color','blue')
+    $('td:contains("发布失败")').css('color','red')
+    $('td:contains("发布完成")').css('color','green')
+}
+
+/*get data for update */
+$("tbody").on('click','.detail-btn',function(){
+    var id = $(this).attr('data-id')
+    var url = "/getapi?method=deploy&id="+id
+    $.getJSON(url,function(data){
+    data = JSON.parse(data['result'])
+    console.log(data)
+    /*
+    if (data['code']==0){
+          $('#id').val(data['result']['id']) 
+          $('#upname').val(data['result']['name']) 
+          $('#upusername').val(data['result']['username']) 
+          $('#upemail').val(data['result']['email']) 
+          $('#upmobile').val(data['result']['mobile']) 
+          $('#uprole').val(data['result']['role']) 
+          $('#uplock').val(data['result']['is_lock']) 
+          user_groups(id)
+          $('#updateModal').modal('show')  //show modal
+      }else{
+         $('#errorMsg').html('failed '+result['errmsg']).show()
+      }
+     */
+    })
+    
+})
 {% endblock %}

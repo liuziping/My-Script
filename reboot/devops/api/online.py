@@ -34,6 +34,7 @@ def apply_create(auth_info, **kwargs):
         data['commit']='11111'               #脚本获取
         data['apply_date'] = time.strftime('%Y-%m-%d %H:%M')
         data['status'] = 1
+        data['applicant'] = username 
         where = {"project_id":int(data['project_id'])}
         data.pop('project_username')  
         res = app.config['cursor'].get_one_result('project_apply',field,where)
@@ -155,4 +156,49 @@ def apply_success(auth_info,**kwargs):
     except: 
         util.write_log('api').error("apply success  get failed : %s" % traceback.format_exc())
         return json.dumps({'code':1,'errmsg':'正式上线失败,请联系运维人员!'})
+
+
+#上线历史记录查询
+@jsonrpc.method("deploy.getlist")
+@auth_login
+def deploy_list(auth_info,**kwargs):
+    if auth_info['code'] == 1:
+        return json.dumps(auth_info)
+    username = auth_info['username']
+    try:
+        fields = ['id','project_id','applicant','version','commit','apply_date','status']
+        result = app.config['cursor'].get_results('project_deploy',fields) 
+        #id转换成名字
+        id2name_project=util.getinfo('project',['id','name'])
+        for res in result:
+            res['project_name'] = id2name_project[str(res['project_id'])]           
+            res['apply_date']=str(res['apply_date'])
+       
+        util.write_log('api').info(username, 'get deploy list success!')
+        return  json.dumps({'code':0, 'result':result, 'count':len(result)})
+    except:
+        util.write_log('api').error("select deploy list error:%s" % traceback.format_exc())
+        return json.dumps({'code': 1, 'errmsg': '获取上线历史记录失败'})
+
+#上线历史记录详情
+@jsonrpc.method("deploy.get")
+@auth_login
+def deploy_get(auth_info, **kwargs):
+    if auth_info['code'] == 1:
+        return json.dumps(auth_info)
+    username = auth_info['username']
+    try:
+         data = request.get_json()['params']
+         where = data.get('id',None)
+         fields = ['id', 'project_id','info','applicant','version','commit','apply_date','status','detail']
+         result = app.config['cursor'].get_one_result('project_deploy', fields, where)
+         #id转换成名字
+         id2name_project=util.getinfo('project',['id','name'])
+         result['project_name'] = id2name_project[str(result['project_id'])]           
+         result['apply_date']=str(result['apply_date'])
+         util.write_log('api').info(username, "get deploy  success!")
+         return json.dumps({'code':0, 'result':result,})
+    except:
+        util.write_log('api').error("get deploy error:%s" % traceback.format_exc())
+        return json.dumps({'code': 1, 'errmsg': "获取版本上线历史记录失败"})
 
