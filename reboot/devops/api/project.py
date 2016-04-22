@@ -41,8 +41,6 @@ def project_select(auth_info,**kwargs):
     if auth_info['code'] == 1:
         return json.dumps(auth_info)
     username = auth_info['username']
-    if '1' not in auth_info['r_id']:
-        return json.dumps({'code': 1,'errmsg':'you not admin,no power' })
     try:
         output = ['id','name','path','principal','p_user','p_group','is_lock','comment']
         data = request.get_json()['params']
@@ -62,8 +60,11 @@ def project_select(auth_info,**kwargs):
             p['principal'] = ','.join([ users[x] for x in  p['principal'].split(',') if x in users ])
             p['p_user'] =  ','.join([users[u] for u in p.get('p_user','0').split(',') if u in users])
             p['p_group'] =  ','.join([roles[r] for r in p.get('p_group','0').split(',')  if r in roles])
-
-
+        
+        #普通用户只能查看其有权限的项目
+        if '1' not in  auth_info['r_id']:  
+            p=util.user_projects(username)  #调用公共函数，查出用户的项目id2name{'1':'devops','2':'test'}
+            projects = [res for res in projects for pid in p.keys() if pid==res['id']] #获取对应项目的详情 
         util.write_log('api').info(username, 'select project list success')
         return json.dumps({'code':0,'result':projects,'count':len(projects)})
     except:

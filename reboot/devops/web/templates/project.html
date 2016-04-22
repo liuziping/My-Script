@@ -7,6 +7,7 @@
 
 {% block body %}
 <div class="widget-box">
+{% if info and 'sa' in info.role %}
    <div class="widget-title"> 
       <h5 style="float:left;"><i class="fa fa-table fa-fw"></i>项目管理</h5>
       <button style="float:right;" class="btn btn-primary btn-sm" id="addBtn">添加项目</button>
@@ -158,6 +159,8 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+{% endif %}
+
 <div class="widget-content">  
     <!--项目列表-->
 		<table id ="datatable"  class="table table-bordered table-striped table-hover">
@@ -170,7 +173,9 @@
 				<th>项目组</th>
 				<th>状态</th>
 				<th>备注</th>
+                {% if info and 'sa' in info.role %}
 				<th>操作</th>
+                {% endif %}
 			</tr>
 		</thead> 
 		<tbody>
@@ -225,10 +230,12 @@ function list(){
                '<td>'+v['p_group']+'</td>'+ 
                '<td><span style="color:#5EDF47;">'+v['is_lock']+'</span></td>'+ 
                '<td>'+v['comment']+'</td>'+ 
+                {% if info and 'sa' in info.role %}
                '<td>'+
                '<button class="btn btn-primary btn-sm update-btn" data-id="'+v['id']+'">更新</button>'+
-               '<button class="btn btn-danger btn-sm delete-btn" data-id="'+v['id']+'">删除</button>'+
-               '</td>'+ '</tr>'          
+               '</td>'+ 
+               {% endif %}
+               '</tr>'          
            })       
                 $("tbody").html(str)
                  datatable()
@@ -239,6 +246,8 @@ function list(){
 }
 
 list()
+
+{% if info and 'sa' in info.role %}
 /*列出用户的信息，并拼接成复选框*/
 function userlist(){
     var url = "/listapi?method=user"
@@ -450,7 +459,7 @@ $("tbody").on('click','.delete-btn',function(){
     }  // end confirm
 })   
 
-
+{% endif %}
 
 
 {% endblock %}
