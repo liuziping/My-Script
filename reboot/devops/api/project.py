@@ -47,8 +47,8 @@ def project_select(auth_info,**kwargs):
         fields = data.get('output', output)
           
         #查询用户表，生成id2name的字典
-        result = app.config['cursor'].get_results('user', ['id', 'name'])
-        users = dict([(str(x['id']), x['name']) for x in result])
+        result = app.config['cursor'].get_results('user', ['id', 'username'])
+        users = dict([(str(x['id']), x['username']) for x in result])
 
         #查询角色表，生成id2name的字典
         res = app.config['cursor'].get_results('role', ['id', 'name'])

@@ -74,7 +74,7 @@ def getinfo(table_name, fields):
 
 #获取一个组里面的用户成员,以用户表的r_id,反推组成员，故如果组内无成员，就不会返回
 def role_members():
-    users = getinfo('user',['id','name'])   #{'1':'wd','2':'pc'}
+    users = getinfo('user',['id','username'])   #{'1':'wd','2':'pc'}
     roles = getinfo('role',['id','name'])   #{'1':'sa','2':'dba','3':'dev'}
     r_id = getinfo('user',['id','r_id'])     #{'1':['1','2'],'2':['2'.'3']......}
 
@@ -91,7 +91,7 @@ def role_members():
 
 #获取一个项目中所有的用户成员（用户和组中的成员要去重）结果格式： {'devops':['wd','pc'],'test':['wd','rock']}
 def project_members():
-        users = getinfo('user',['id','name'])   #{'1':'wd','2':'pc'}
+        users = getinfo('user',['id','username'])   #{'1':'wd','2':'pc'}
         roles = getinfo('role',['id','name'])   #{'1':'sa','2':'dba','3':'dev'}
         r_users = role_members()        #{'sa': ['wd'], 'dba': ['wd','pc'], 'dev': ['pc']}
         result = app.config['cursor'].get_results('project',['id','name','principal','p_user','p_group']) 
