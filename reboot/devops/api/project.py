@@ -47,24 +47,22 @@ def project_select(auth_info,**kwargs):
         fields = data.get('output', output)
           
         #查询用户表，生成id2name的字典
-        result = app.config['cursor'].get_results('user', ['id', 'username'])
-        users = dict([(str(x['id']), x['username']) for x in result])
+        users=util.getinfo('user',['id', 'name'])
 
         #查询角色表，生成id2name的字典
-        res = app.config['cursor'].get_results('role', ['id', 'name'])
-        roles = dict([(str(x['id']), x['name']) for x in res])
+        roles=util.getinfo('role',['id', 'name'])
 
         #查询项目表，把项目表中p_uesr,p_group,principal的ID 转为name
         projects = app.config['cursor'].get_results('project', fields)
-        for p  in projects:  #principal是必选项，肯定有值，p_user,p_group允许为空，故在取值时用了get方法设置默认值
-            p['principal'] = ','.join([ users[x] for x in  p['principal'].split(',') if x in users ])
-            p['p_user'] =  ','.join([users[u] for u in p.get('p_user','0').split(',') if u in users])
-            p['p_group'] =  ','.join([roles[r] for r in p.get('p_group','0').split(',')  if r in roles])
+        for p  in projects:  #循环项目列表，判断项目表中的p_user的id是否存在，如果存在则id2name
+            p['principal'] = ','.join([users[x] for x in  p['principal'].split(',') if x in users])
+            p['p_user'] =  ','.join([users[u] for u in p['p_user'].split(',') if u in users])
+            p['p_group'] =  ','.join([roles[r] for r in p['p_group'].split(',')  if r in roles])
         
         #普通用户只能查看其有权限的项目
         if '1' not in  auth_info['r_id']:  
             p=util.user_projects(username)  #调用公共函数，查出用户的项目id2name{'1':'devops','2':'test'}
-            projects = [res for res in projects for pid in p.keys() if pid==res['id']] #获取对应项目的详情 
+            projects = [pro for pro in projects for pid in p.keys() if pid==pro['id']] #获取对应项目的详情 
         util.write_log('api').info(username, 'select project list success')
         return json.dumps({'code':0,'result':projects,'count':len(projects)})
     except:
@@ -137,7 +135,7 @@ def project_delete(auth_info,**kwargs):
         return json.dumps({'code':0,'result':'delete project scucess'})
     except:
         util.write_log('api'). error('delete project error: %s' %  traceback.format_exc())
-        return json.dumps({'co de':1,'errmsg':'delete project failed'}) 
+        return json.dumps({'code':1,'errmsg':'delete project failed'}) 
 
 
 #新添加查询某个用户所拥有的项目列表
@@ -148,7 +146,7 @@ def userprojects(auth_info,**kwargs):
         return json.dumps(auth_info)             
     username = auth_info['username']
     try:
-        res = util.user_projects(username) #dict
+        res = util.user_projects(username) #{'1':'devops','2':'test'}
         return json.dumps({'code': 0, 'result': res})
     except:
         util.write_log('api').error("调用userproject函数失败: %s" % traceback.format_exc())
