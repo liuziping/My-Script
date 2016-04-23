@@ -11,7 +11,76 @@
       <h5 style="float:left;"><i class="fa fa-table fa-fw"></i>发布列表</h5>
    </div> <!--widget-title end-->
 
-    <div class="widget-content">  
+<!-- modal for  project detail-->
+<div id="detail" class="modal fade">
+ <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">上线发布详情</h4>
+      </div><!--modal-header end-->
+   
+    <div class="modal-body">
+        <p hidden id="errorMsg" class="text-danger" style="color:red"></p> <!-- foe error msg-->
+        <div class="form-group"> 
+            <label class="control-label col-sm-3">项目名</label>
+            <div class="col-sm-9">
+                 <span id="project_name" class="input-xlarge uneditable-input form-control"></span>
+            </div>
+        </div> <!--project_name end-->
+        <div class="form-group">
+            <label class="control-label col-sm-3">发布简介</label>
+            <div class="col-sm-9">
+                <span id="project_info" class="input-xlarge uneditable-input form-control"></span>
+            </div>
+        </div><!--project_info end-->
+        <div class="form-group">
+            <label class="control-label col-sm-3">发布版本</label>
+            <div class="col-sm-9">
+                <span id="project_version" class="input-xlarge uneditable-input form-control"></span>
+            </div>
+        </div><!--version end-->
+        <div class="form-group">
+            <label class="control-label col-sm-3">代码版本</label>
+            <div class="col-sm-9">
+                <span id="project_commit" class="input-xlarge uneditable-input form-control"></span>
+            </div>
+        </div> <!--commit end-->
+        <div class="form-group">
+            <label class="control-label col-sm-3">操作人</label>
+            <div class="col-sm-9">
+                <span id="project_applicant" class="input-xlarge uneditable-input form-control"></span>
+            </div>
+        </div> <!--applicant end-->
+        <div class="form-group">
+            <label class="control-label col-sm-3">操作时间</label>
+            <div class="col-sm-9">
+                <span id="project_date" class="input-xlarge uneditable-input form-control"></span>
+            </div>
+        </div> <!--project_date end-->
+        <div class="form-group">
+            <label class="control-label col-sm-3">发布状态</label>
+            <div class="col-sm-9">
+                <span id="project_status" class="input-xlarge uneditable-input form-control"></span>
+            </div>
+        </div> <!--project_status end-->
+        <div class="form-group">
+            <label class="control-label col-sm-3">发布详情</label>
+            <div class="col-sm-9">
+                <span id="project_detail" class="input-xlarge uneditable-input form-control"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="modal-footer">
+                <button class="btn btn-warning" data-dismiss="modal">退出</button> 
+            </div>
+      </div><!--button end-->
+    </div> <!--modal body  end-->
+   </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!--add modal emulation end-->
+
+<div class="widget-content">  
     <!--发布列表-->
 		<table id ="datatable"  class="table table-bordered table-striped table-hover">
 		<thead>
@@ -99,29 +168,37 @@ function style(){
     $('td:contains("发布完成")').css('color','green')
 }
 
-/*get data for update */
+/*弹出详情页 */
 $("tbody").on('click','.detail-btn',function(){
     var id = $(this).attr('data-id')
     var url = "/getapi?method=deploy&id="+id
     $.getJSON(url,function(data){
     data = JSON.parse(data['result'])
     console.log(data)
-    /*
     if (data['code']==0){
-          $('#id').val(data['result']['id']) 
-          $('#upname').val(data['result']['name']) 
-          $('#upusername').val(data['result']['username']) 
-          $('#upemail').val(data['result']['email']) 
-          $('#upmobile').val(data['result']['mobile']) 
-          $('#uprole').val(data['result']['role']) 
-          $('#uplock').val(data['result']['is_lock']) 
-          user_groups(id)
-          $('#updateModal').modal('show')  //show modal
+        data=data.result
+        console.log(data.status)
+        if (data.status=='1'){
+           data.status="申请中......"
+        }else if(data.status=='2'){
+           data.status='审核中.....'
+        }else if(data.status=='3'){
+           data.status='发布失败'
+        }else{
+           data.status='发布完成'
+        } 
+        $('#project_name').html(data.project_name);
+        $('#project_info').html(data.info);
+        $('#project_version').html(data.version);
+        $('#project_commit').html(data.commit);
+        $('#project_applicant').html(data.applicant);
+        $('#project_date').html(data.apply_date);
+        $('#project_status').html(data.status);
+        $('#project_detail').html(data.detail);
+        $('#detail').modal('show')
       }else{
-         $('#errorMsg').html('failed '+result['errmsg']).show()
+         $('#errorMsg').html('failed '+data['errmsg']).show()
       }
-     */
     })
-    
 })
 {% endblock %}

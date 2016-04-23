@@ -189,7 +189,7 @@ def deploy_get(auth_info, **kwargs):
     username = auth_info['username']
     try:
          data = request.get_json()['params']
-         where = data.get('id',None)
+         where = data.get('where',None)
          fields = ['id', 'project_id','info','applicant','version','commit','apply_date','status','detail']
          result = app.config['cursor'].get_one_result('project_deploy', fields, where)
          #id转换成名字
@@ -197,6 +197,7 @@ def deploy_get(auth_info, **kwargs):
          result['project_name'] = id2name_project[str(result['project_id'])]           
          result['apply_date']=str(result['apply_date'])
          util.write_log('api').info(username, "get deploy  success!")
+         util.write_log('api').info(result)
          return json.dumps({'code':0, 'result':result,})
     except:
         util.write_log('api').error("get deploy error:%s" % traceback.format_exc())

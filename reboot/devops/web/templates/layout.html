@@ -182,14 +182,16 @@ button.detail{
                     <a href="/project/apply">申请发布</a>
                 </li>
                 {% endif %}
-                {% if info and 'deploy' in info.perm %}
+                {% if info and 'applylist' in info.perm %}
                 <li>
                     <a href="/project/applylist">申请列表</a>
                 </li>
                 {% endif %}
+                {% if info and 'deploy' in info.perm %}
                 <li>
                     <a href="/project/deploy">发布列表</a>
                  </li>  
+                {% endif %}
             </ul>    
             </li> <!--发布系统结束-->
 
