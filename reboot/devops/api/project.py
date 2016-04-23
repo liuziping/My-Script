@@ -5,9 +5,9 @@ from . import app , jsonrpc
 from auth import auth_login
 import json, traceback
 import util
-import time
+import time,os
 
-#这里是关于项目的增删改查
+# 这里是关于项目的增删改查
 
 @jsonrpc.method('project.create')
 @auth_login
@@ -138,7 +138,7 @@ def project_delete(auth_info,**kwargs):
         return json.dumps({'code':1,'errmsg':'delete project failed'}) 
 
 
-#新添加查询某个用户所拥有的项目列表
+# 查询某个用户所拥有的项目列表
 @jsonrpc.method('userprojects.getlist')
 @auth_login
 def userprojects(auth_info,**kwargs):
@@ -151,3 +151,42 @@ def userprojects(auth_info,**kwargs):
     except:
         util.write_log('api').error("调用userproject函数失败: %s" % traceback.format_exc())
         return json.dumps({'code': 1, 'errmsg': '查询项目列表错误'})
+
+# 从project库中读取项目信息，生成git配置文件，实现对运维平台和git仓库打通
+
+@app.route('/api/gitolite',methods=['GET'])
+def git_api():
+    res = gitolite()
+    return res
+
+'''
+渲染gitolite配置文件及推送接口
+Use:
+    curl http://127.0.0.1:1000/api/gitolite
+'''
+def gitolite():
+    git_confile = app.config['git_confile']
+    api_dir = os.path.dirname(os.path.realpath(__file__))
+    script_dir =  os.path.join(api_dir.rstrip('api'),'script')
+    projects,pro_pri = util.project_members() 
+    try :
+        # 将项目和用户信息写入配置文件中
+        with open(git_confile,'w') as f:
+                str1= ""
+                for k,v in projects.items():
+                    v = list(set(v)-set(pro_pri[k]))  # 由于projests中存放了项目所有的成员，包括负责人。需要吧负责人剔除   
+                    str1 += "repo %s \n" % k
+                    str1 += " RW+ = %s \n" % ' '.join(pro_pri[k])   # 负责人的权限最大
+                    if v:                                           # 如果项目除了负责人外，有其他成员，则设置成员的权限
+                        str1 += " -  master = %s \n" %(' '.join(v)) # 项目成员无权操作master分支，其他分支可任意操作 
+                        str1 += " RW = %s \n" %(' '.join(v))
+                    
+                f.write(str1)
+        # git add/commit/push生效.路径暂时写死，定版前修改
+        #stdout=util.run_script_with_timeout("sh %s/git.sh" % script_dir)
+        #print stdout
+        return  json.dumps({'code':0,'result':"git操作成功"})
+    except:
+        util.write_log('api').error("get config error: %s" % traceback.format_exc())
+        return json.dumps({'code':1,'errmsg':"get config error"})
+

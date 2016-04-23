@@ -96,12 +96,15 @@ def project_members():
         r_users = role_members()        #{'sa': ['wd'], 'dba': ['wd','pc'], 'dev': ['pc']}
         result = app.config['cursor'].get_results('project',['id','name','principal','p_user','p_group']) 
         #result=[{'id':'1','name':'devops','principal':'1','p_user':'1,2','p_group':'1,3'},......]
+        pro_pri = {}
         projects={}
         for p in result:
             projects[p['name']]=[]
+            pro_pri[p['name']]=[]
             for pri in p['principal'].split(','):
                 if pri in users:
                     projects[p['name']].append(users[pri]) 
+                    pro_pri[p['name']].append(users[pri]) 
             for u in p['p_user'].split(','):
                 if u in users:
                     projects[p['name']].append(users[u]) 
@@ -110,10 +113,10 @@ def project_members():
                     projects[p['name']] + r_users.get(roles[g],[]) #由于r_users不保存空组的信息，但项目表可能选择了空组，r_users[role]就会出现keyerro.故遇到这种情况取空列表
             projects[p['name']] = list(set(projects[p['name']])) #将p_user和p_group中的用户去重复
         
-        return projects
+        return projects,pro_pri
 
 #返回用户所拥有权限的项目，结果为：{"1": "test", "3": "devops"}
 def user_projects(name):
-    members = project_members()       #{'devops':['wd','pc'],'test':['wd','rock']}
+    members,pro_pri = project_members()       #{'devops':['wd','pc'],'test':['wd','rock']}
     projects = getinfo('project',['name','id'])   #{'devops':'1','test':'2'}
     return dict([(projects[x],x) for x in members if name in members[x]] )
