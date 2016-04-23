@@ -152,7 +152,7 @@ def apply_success(auth_info,**kwargs):
         pid = pid['id']
         data,where = {'status':4},{'id':pid}
         apply_pub(username,data,where)
-        return json.dumps({'code ':0,'result':'apply success'})
+        return json.dumps({'code':0,'result':'apply success'})
     except: 
         util.write_log('api').error("apply success  get failed : %s" % traceback.format_exc())
         return json.dumps({'code':1,'errmsg':'正式上线失败,请联系运维人员!'})
