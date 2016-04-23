@@ -158,14 +158,20 @@ button.detail{
             </ul>    
             </li> <!--CMDB资产平台结束-->
 
-            <li><!--代码发布系统-->
-            <a href="#"><i class="fa fa-rocket fa-fw"></i>代码发布系统<span class="fa arrow"></span></a>
+            <li><!--代码管理-->
+            <a href="#"><i class="fa fa-file-code-o fa-fw"></i>代码管理<span class="fa arrow"></span></a>
             <ul class="nav nav-second-level">
                 {% if info and 'git' in info.perm %}
                 <li>
-                    <a href="/project/project">项目管理</a>
+                    <a href="/project/project">GIT仓库管理</a>
                 </li>
                 {% endif %}
+            </ul>    
+            </li> <!--代码管理结束-->
+
+            <li><!--发布系统-->
+            <a href="#"><i class="fa fa-rocket fa-fw"></i>发布系统<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
                 {% if info and 'testing' in info.perm %}
                 <li>
                     <a href="/project/testing">测试发布</a>
@@ -183,9 +189,10 @@ button.detail{
                 {% endif %}
                 <li>
                     <a href="/project/deploy">发布列表</a>
-                </li>  
+                 </li>  
             </ul>    
-            </li> <!--代码发布系统结束-->
+            </li> <!--发布系统结束-->
+
             <li><!--监控平台-->
             <a href="#"><i class="fa fa-eye fa-fw"></i>监控平台<span class="fa arrow"></span></a>
             <ul class="nav nav-second-level">
@@ -196,6 +203,7 @@ button.detail{
                 {% endif %}
             </ul>
             </li><!--监控平台结束-->
+
             <li><!--运维可视化平台-->
             <a href="#"><i class="fa fa-line-chart fa-fw"></i>运维可视化<span class="fa arrow"></span></a>
             <ul class="nav nav-second-level">
@@ -206,6 +214,7 @@ button.detail{
                 {% endif %}
             </ul>
             </li><!--运维可视化平台结束-->
+
             <li><!--第三方接口平台-->
             <a href="#"><i class="fa fa-wrench fa-fw"></i>第三方API<span class="fa arrow"></span></a>
             <ul class="nav nav-second-level">
