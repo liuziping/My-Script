@@ -242,7 +242,7 @@ function product(id){
                     location.reload()
                 })
         }else{
-            swal("ERROR!","正式发布错误","error")
+            swal("ERROR!",data['errmsg'],"error")
           }
     })
     return false;

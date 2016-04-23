@@ -141,9 +141,9 @@ function list(){
                 }else if(v.status=='0'){
                     statusDom.html('新项目').css('color','Magenta')
                 }else if(v.status=='3'){
-                    statusDom.html('发布完成').css('color','blue');
+                    statusDom.html('发布失败').css('color','red');
                 }else{
-                    statusDom.html('发布失败').css('color','red')
+                    statusDom.html('发布完成').css('color','blue')
                 
                 }
              })<!--end each -->
