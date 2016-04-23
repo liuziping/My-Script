@@ -39,7 +39,6 @@ def validate(key, fix_pwd):
     if len(x) != 5:
         write_log('api').warning("token参数数量不足")
         return json.dumps({'code':1,'errmsg':'token参数不足'})
-
     if t > int(x[1]) + 2*60*60:
         write_log('api').warning("登录已经过期")
         return json.dumps({'code':1,'errmsg':'登录已过期'})
@@ -50,6 +49,7 @@ def validate(key, fix_pwd):
     else:
         write_log('api').warning("密码不正确")
         return json.dumps({'code':1,'errmsg':'密码不正确'})
+
 def check_name(name):
     if isinstance(name, str) or isinstance(name, unicode):
         return name.isalnum() and len(name) >= 2
@@ -64,7 +64,7 @@ def getinfo(table_name, fields):
         结果二，第二列是个列表如：用户name2r_id：{u'wd': [u'1', u'2'], u'admin': [u'1', u'2', u'4', u'3']}
 
         '''
-        result = app.config['cursor'].get_results(table_name,fields)
+        result = app.config['cursor'].get_results(table_name,fields) #[{'id':1,'name':'wd'},.....]
         if fields[1] in ['r_id','p_id','p_user','p_group']:  #第二列如果是列出的几项。则把字符串换成列表
 	        result = dict((str(x[fields[0]]), x[fields[1]].split(',')) for x in result)
         else:
@@ -72,7 +72,7 @@ def getinfo(table_name, fields):
         return result
 
 
-#获取一个组里面的用户成员,以用户表的r_id,反推组成员，故如果组内无成员，就不会返回
+#获取一个组里面的用户成员,以用户表的r_id,反推组成员，故如果组内无成员，则这个组就不会返回
 def role_members():
     users = getinfo('user',['id','username'])   #{'1':'wd','2':'pc'}
     roles = getinfo('role',['id','name'])   #{'1':'sa','2':'dba','3':'dev'}
@@ -108,11 +108,11 @@ def project_members():
             for g in p['p_group'].split(','):
                  if g in roles:
                     projects[p['name']] + r_users.get(roles[g],[]) #由于r_users不保存空组的信息，但项目表可能选择了空组，r_users[role]就会出现keyerro.故遇到这种情况取空列表
-            projects[p['name']] = list(set(projects[p['name']]))
+            projects[p['name']] = list(set(projects[p['name']])) #将p_user和p_group中的用户去重复
         
         return projects
 
-#用户返回他所拥有权限的项目结果为：{"1": "test", "3": "devops"}
+#返回用户所拥有权限的项目，结果为：{"1": "test", "3": "devops"}
 def user_projects(name):
     members = project_members()       #{'devops':['wd','pc'],'test':['wd','rock']}
     projects = getinfo('project',['name','id'])   #{'devops':'1','test':'2'}
