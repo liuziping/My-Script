@@ -134,13 +134,14 @@ class Cursor():
             util.write_log('api').error("Execute '%s' error: %s" % (sql, traceback.format_exc()))
 
     def if_id_exist(self, table_name,field_id):
-        if isinstance(field_id, list):
+        if isinstance(field_id, list) and field_id:
             id_num=len(field_id)
             result = self.get_results(table_name, ['id'], {'id': field_id})
             if id_num !=len(result): 
                 result=False
         else:
             result = self.get_one_result(table_name, ['id'], {'id': field_id})
+
         if result:
             return True
         else:
