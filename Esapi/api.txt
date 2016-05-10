@@ -1,0 +1,163 @@
+###################   创建   ###############
+# 创建索引（数据库）
+PUT /panda/
+{
+  "settings": {
+         "index": {
+            "number_of_replicas": "0",
+            "number_of_shards": "5"
+          }
+  }
+}
+
+# 查看所有索引信息
+GET /_all/_settings
+# 获取某个索引信息
+GET /panda/_settings
+#获取多个索引信息
+GET /wd,panda/_settings
+# 获取索引里面每个字段的数据类型
+GET /wd,panda/_mappings
+
+
+################    增   ###################
+
+# 插入数据
+PUT /panda/books/1
+{
+  "title":"my book",
+   "author" : {
+    "first" : "Zachary",
+    "last" : "Tong"
+  },
+  "publish_date":"2015-02-06",
+  "price":"49.99"
+}
+
+#################   删   ###################
+
+# 删除索引（库）
+DELETE /panda
+# 删除类型（表）
+DELETE /panda/books
+# 删除文档（列）
+DELETE /panda/books/1
+
+
+
+#############     改     ##################
+
+# 更新某一个列的值
+POST panda/books/1
+{
+   "title":"my book",
+   "author" : {
+    "first" : "Zachary",
+    "last" : "Tong"
+  },
+  "publish_date":"2015-02-06",
+  "price":"99.99"
+}
+
+# 更新某一列具体字段的值
+POST /panda/books/1/_update
+{
+  "doc": {
+    "price":100
+  }
+}
+
+##############    查   ##################
+
+# 查询某一列的所有值及指定列的值
+GET /panda/books/1
+GET /panda/books/1?_source=title
+GET /panda/books/1?_source=title,price
+
+
+# 多条数据查询的两种方式
+# url不指定库和表
+GET /_mget
+{
+  "docs":[
+  {
+    "_index":"panda",
+    "_type":"books",
+    "_id":1     
+  },
+  {
+    "_index":"panda",
+    "_type":"books",
+    "_id":2
+    "_source":["title","author"]    #指定展示的列。默认所有列都展示
+  }
+  ]
+}
+
+# url指定库和表
+GET /panda/books/_mget
+{
+  "ids":["1","2"],
+  "_source":"title"
+}
+
+
+
+
+##############    批量操作  ##################
+
+# 批量创建索引数据的两种方式
+
+POST /store/products/_bulk
+{ "index": { "_id": 1 }}
+{ "price" : 10, "productID" : "SD1002136" }
+{ "index": { "_id": 2 }}
+{ "price" : 20, "productID" : "SD2678421" }
+
+GET /store/products/_mget
+{
+  "ids":["1","2"]
+}
+
+POST /_bulk
+{ "create": { "_index": "music", "_type": "classical", "_id": "1" }}
+{ "title": "Ave Verum Corpus" }
+{ "create": { "_index": "music", "_type": "classical", "_id": "2" }}
+{ "title": "Corpus" }
+
+GET /music/classical/_mget
+{
+  "ids":["1","2"]
+}
+
+
+# 批量更新的两种方式
+POST /panda/books/_bulk
+{ "index":  { "_id": 1}}
+{ "title":"Elasticsearch: The Definitive Guide","price":5 }
+{ "index":  { "_id": 2}}
+{ "title":"The Elasticsearch cookbook","price":15 }
+
+
+POST /_bulk
+{ "update": { "_index": "panda", "_type": "books", "_id": "1"} }
+{ "doc" : {"price" : "18"} }
+{ "update": { "_index": "panda", "_type": "books", "_id": "2"} }
+{ "doc" : {"price" : "20"} }
+
+GET /panda/books/_mget
+{
+  "ids":["1","2"]
+}
+
+# 批量删除的两种方式
+
+POST /_bulk 
+{"delete": {"_index": "music", "_type": "classical", "_id": "1" }}
+{"delete": {"_index": "music", "_type": "classical", "_id": "2" }}
+
+POST  /music/classical/_bulk
+{"delete":{"_id": "1"}}
+{"delete":{"_id": "2"}}
+
+
