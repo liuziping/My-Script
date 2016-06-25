@@ -1,0 +1,360 @@
+一：普通搜索
+信息检索内容大致包括如下几个主要部分
+      ○ 查询（query）
+      ○ 分页（from/size）
+      ○ 字段（field）
+      ○ 排序（sort）
+      ○ 过滤（filter）
+      ○ 高亮（hightlight）
+      ○ 统计（facets/aggs）
+
+1：简单搜索——_search?q=查询词
+
+
+格式：
+            GET /index_name/type_name/_search?q=查询词
+
+＃ 指定index名及type名搜索
+    GET /panda/books/_search?q=title:Elasticsearch&pretty=true
+＃ 指定index名搜索
+    GET /lzp/_search?q=title:Elasticsearch&pretty=true
+＃ 全局搜索
+    GET /_search?q=title:Elasticsearch&pretty=true
+# 多个条件搜索
+     GET /_search?q=title:Elasticsearch&author:wd
+
+等价于：
+GET /lzp/books/_search
+{
+    "query" : { 
+        "match" : {
+           “title":"Elasticsearch"
+        }
+    }
+}
+
+＃结果分析
+{
+   "took": 3,                       # 搜索耗费的时间
+   "timed_out": false,
+   "_shards": {
+      "total": 22,                  ＃  一共检索的分片数
+      "successful": 22,             ＃ 检索成功的分片数量
+      "failed": 0
+   },
+   "hits": {                       
+      "total": 3,                                        ＃查询的结果数量
+      "max_score": 0.19178301,             ＃对搜索结果打分，最高分的值
+      "hits": [                                           ＃ 搜索结果以列表形式存储
+         {
+            "_index": "lzp",
+            "_type": "books",
+            "_id": "3",
+            "_score": 0.19178301,       ＃最高分，即匹配程度最高的数据排在前面
+            "_source": {
+               "title": "Elasticsearch Blueprints",
+               "price": 90
+            }
+         },
+         {
+            "_index": "lzp",
+            "_type": "books",
+            "_id": "1",
+            "_score": 0.15342641,
+            "_source": {
+               "title": "Elasticsearch: The Definitive Guide",
+               "price": "18"
+            }
+         },
+         {
+            "_index": "lzp",
+            "_type": "books",
+            "_id": "2",
+            "_score": 0.15342641,
+            "_source": {
+               "title": "The Elasticsearch cookbook",
+               "price": "20"
+            }
+         }
+      ]
+   }
+}
+
+2：term查询——查询指定字段里面包含某些关键字的数据并提升权重
+GET /lzp/books/_search
+{
+  "query": {
+ "version": true,   #搜索结果会显示版本号，每次更新版本号都会更新。版本号涉及到锁的问题
+    "term": {                # 查询title字段中有cookbook的数据
+     "title":"cookbook"，
+    "boost":10            # title字段的cookbook权重调高，默认值为1
+    }
+  }
+}
+
+GET /lzp/books/_search
+{
+  "query": {
+    "terms": {
+      "title": ["cookbook","Blueprints"]  # 查询title字段中有多个关键字点数据
+      , "minimum_match": 1                   ＃ 1 只要有一个关键词匹配就选择，2两个都有才匹配
+    }
+  }
+}
+3：match——可以接受文字，数字，日期等数据类型，功能同term
+3.1、 查询指定索引下的所有文档
+GET /lzp/books/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+3.2、 查询某个指定指定字段中的关键字
+GET /_search
+{
+    "query": {
+        "match": {
+            "title": "QUICK!"      # 匹配指定字段的检索
+           # "_all" : "QUICK"      # 匹配全部字段的检索用_all
+        }
+    }
+}
+
+GET /_search
+{
+  "query": {
+    "match": {
+      "title": {
+        "query":  "quick brown dog",          # 多词查询
+        "minimum_should_match": "75%"         # 相关的文档必须匹配的关键词个数。参数值可以设为整数和百分数
+      }
+    }
+  }
+}
+
+3.3、 查询title和preview这两个字段里都包含Elasticsearch关键词的文档,并制定返回的字段子集
+GET /lzp/books/_search
+{
+  "query": {
+    "multi_match": {                                   #  查询在多个字段上执行 match 查询并一起返回结果。
+        "query": "Elasticsearch",
+        "fields": ["title", "preview"]
+    },
+    "_source":["title","content","preview"]            #  制定返回结果的字段集
+  }
+}
+
+
+3.4、Elasticsearch通过下面的步骤执行match查询：
+A：检查field类型
+     title字段是一个字符串(analyzed)，所以该查询字符串也需要被分析(analyzed)
+B：分析查询字符串
+      查询词QUICK!经过标准分析器的分析后变成单词quick。因为我们只有一个查询词，因此match查询可以以一种低级别term查询的方式执行。
+C：找到匹配的文档
+      term查询在倒排索引中搜索quick，并且返回包含该词的文档。在这个例子中，返回的文档是1，2，3。
+D：为每个文档打分
+      term查询综合考虑词频（每篇文档title字段包含quick的次数）、逆文档频率（在全部文档中title字段包含quick的次数）、包含quick的字段长度（长度越短越相关）来计算每篇文档的相关性得分_score。
+
+
+
+4：from，size——设置返回结果数量，相当于mysql的limit
+参数说明size每次返回多少个结果，默认值为10from忽略最初的几条结果，默认值为0
+
+
+GET /lzp/books/_search
+{
+  "from": 0,                 ＃ 从第一条结果开始
+  "size": 2,                   ＃ 只显示两条结果  
+  "query": {
+    "term": {
+     "title":"elasticsearch"
+    }
+  }
+}
+5：fields——指定搜索返回字段（默认会返回所有列）
+GET /lzp/books/_search
+{
+  "fields": ["price","title"],     # 指定返回的字段
+  "query": {
+    "term": {
+     "title":"elasticsearch"
+    }
+  }
+}
+6：sort——排序，desc降序，asc升序
+GET /lzp/books/_search
+{
+  "query": {
+    "term": {
+     "title":"elasticsearch"
+    }
+  },                    #先将结果查询出来，然后排序，逗号不能丢
+  "sort": [
+    {
+      "price": {
+        "order": "asc"
+      }
+    }
+  ]
+    }
+7: prefix——前缀匹配
+GET /lzp/books/_search
+{
+  "query": {
+   "prefix": {      ＃前缀匹配
+     "title": {
+       "value": "th"
+     }
+   }
+  }
+}
+
+8：range——控制范围
+GET /lzp/books/_search
+{
+  "query": {
+   "range": {
+     "price": {
+       "from": "10",                          
+       "to": "80",
+        "include_lower":true,       # 包含最小值10， 默认为true
+                   "include_upper":false     ＃ 不包含最大值80，默认为true
+     }
+   }
+  }
+}
+9：wildcard——正则匹配，＊匹配所有，？匹配一个，耗性能
+GET /lzp/books/_search
+{
+  "query": {
+   "wildcard": {
+     "title": "*as*"
+     }
+   }
+}
+
+
+
+二：filte查询——相当于mysql的where
+
+1： 创建原始数据
+POST /store/products/_bulk
+{ "index": { "_id": 1 }}
+{ "price" : 10, "productID" : "SD1002136" }
+{ "index": { "_id": 2 }}
+{ "price" : 20, "productID" : "SD2678421" }
+{ "index": { "_id": 3 }}
+{ "price" : 30, "productID" : "SD8897573" }
+{ "index": { "_id": 4 }}
+{ "price" : 30, "productID" : "SD4535233" }
+
+GET /store/products/_mget
+{
+   "ids" : [ "1", "2" , "3", "4"]
+}
+
+2：最简单filter查询
+# filtered 查询价格是20的商品
+# mysql实现
+        SELECT document FROM products WHERE price = 20
+# ES实现
+GET /store/products/_search
+{
+    "query" : {
+        "filtered" : {
+        "query":    { "match_all": {}},                      # 默认使用 match_all 查询 ,可以不写            
+        "filter" : {  "term" : { "price" : 20 }              # 指定过滤条件
+                   {"terms" : { "price" : [10,20]}}           # 指定多个过滤条
+           }  
+       }
+  }
+}
+
+3：bool过滤查询——and,or,not
+    # 查询价格等于20的或者productID为SD4535233的商品，排除价格30元的。
+    # SELECT product FROM products WHERE (price = 20 OR productID = "SD1002136") AND (price != 30)
+    
+    # must: 条件必须满足，相当于 and
+    # should: 条件可以满足也可以不满足，相当于 or
+    # must_not: 条件不需要满足，相当于 not
+
+GET /store/products/_search
+{
+  "query" : {
+        "bool" : {
+          "should" : [                        
+            { "term" : {"price" : 20}},
+            { "term" : {"productID" : "SD1002136"}}
+          ],
+          "must_not" : {
+            "term" : {"price" : 30}           
+          }
+        }
+  }
+}
+4：range范围过滤
+# SELECT document FROM products WHERE price BETWEEN 20 AND 40
+# gt :  > 大于
+# lt :  < 小于
+# gte :  >= 大于等于
+# lte :  <= 小于等于
+
+GET /store/products/_search
+{
+  "query" : {
+        "range" : {
+          "price" : {
+            "gte" : 30,
+            "lt" : 41
+          }
+        }
+    }
+}
+5：处理null空值的方法
+
+GET /store/products/_search
+{
+  "query" : {
+         "exists" : { "field" : "tags" }                  # 存在tags的列，且tags列的值不能为空
+         "missing" : { "field" : "tags" }             # 不存在tags列
+      }
+  }
+}
+
+三：混合查询——和之前的查询配合使用
+1： constant_score——让查询得到一个恒定的分值，score的值最大就是1
+GET /lzp/books/_search
+{
+  "query": {
+    "constant_score": {       #结果的分值都是1，score的值最大就是1
+        "query": {
+            "term" : {
+                "title" : "elasticsearch"
+            }
+          }
+     }
+  }
+}
+
+2：indices查询——适用于多个索引上查询
+
+GET /_search
+{
+  "query": {
+      "indices" : {
+           "indices" : ["lzp"],                 #查询lzp索引里的数据
+                 "query": {
+                    "term" : {
+                        "title" : "elasticsearch"
+               }
+        },
+     "no_match_query" : {           # 查询其他索引里的数据
+            "term" : {
+                "price" : 10
+            }
+        }
+      }
+  }
+}
+
+

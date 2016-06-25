@@ -1,46 +1,52 @@
-PUT mall
+##  baike
+
+1: 创建索引并定义数据类型
+GET  /baike/_mapping
+DELETE /baike
+PUT /baike
 {
   "settings": {
         "number_of_shards": 5,
         "number_of_replicas": 0
   },
   "mappings": {
-      "mall": {
+      "people": {
         "properties": {
-          "city_cn_name": {
-            "type": "string","index": "not_analyzed"
+          "name": {
+            "type": "string",
+            "search_analyzer": "ik",
+            "analyzer": "ik"
           },
-          "city_py_name": {
-            "type": "string"
+          "info": {
+            "type": "string",
+            "analyzer": "ik",
+            "search_analyzer": "ik"
           },
-          "host": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "province_cn_name": {
-            "type": "string","index": "not_analyzed"
-          },
-          "province_py_name": {
-            "type": "string"
-          },
-          "search_date": {
-            "type": "string"
-          },
-          "search_keyword": {
-            "type": "string","index": "not_analyzed"
-          },
-          "search_platform":{
-            "type": "long"
-          },
-          "search_platform_name": {
-            "type": "string","index": "not_analyzed"
-          },
-          "search_result_total": {
-            "type": "string"
-          },
+          "edit_date":{
+            "type": "date",
+            "format": "yyyy-MM-dd"
+          }
         }
       }
+    }
+}
+
+2: 插入数据
+POST /baike/people
+{
+  "name": "习近平",
+  "info": "习近平，男，汉族，1953年6月生，陕西富平人，1969年1月参加工作，1974年1月加入中国共产党，清华大学人文社会学院马克思主义理论与思想政治教育专业毕业，在职研究生学历，法学博士学位。现任中国共产党中央委员会总书记，中共中央军事委员会主席，中华人民共和国主席，中华人民共和国中央军事委员会主席。",
+  "edit_date": "2016-06-24"
+}
+
+
+3: 搜索
+GET /baike/_search
+{
+  "query":{
+      "multi_match":{
+           "query":"王岐山",
+           "fields":["name","info"]
+         }  
   }
 }

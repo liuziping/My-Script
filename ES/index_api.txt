@@ -1,3 +1,4 @@
+一：索引管理（数据库管理）
 ###################   创建   ###############
 # 创建索引（数据库）
 PUT /panda/
@@ -9,24 +10,46 @@ PUT /panda/
           }
   }
 }
+ 
+###################   删除   ###############
+# 删除索引（库）
+DELETE /panda
 
+
+###################   修改   ###############
+# 修改索引副本数量
+
+PUT /library/_settings
+{
+"number_of_replicas" : 2
+}
+
+备注：索引一旦被创建，主分片数量就不能改变，但副本可以修改，可以根据需要修改副本的数量，即从分片的数量
+
+###################   查询   ###############
 # 查看所有索引信息
 GET /_all/_settings
+
 # 获取某个索引信息
 GET /panda/_settings
+
 #获取多个索引信息
 GET /wd,panda/_settings
+
 # 获取索引里面每个字段的数据类型
-GET /wd,panda/_mappings
+GET /pand*/_mappings
 
 
+
+
+二：文档操作（数据表管理）
 ################    增   ###################
 
 # 插入数据
 PUT /panda/books/1
 {
   "title":"my book",
-   "author" : {
+    "author" : {
     "first" : "Zachary",
     "last" : "Tong"
   },
@@ -34,10 +57,15 @@ PUT /panda/books/1
   "price":"49.99"
 }
 
+创建文档时的_id可以指定，如果不指定会自动生成，自生成ID是由22个字母组成的
+POST /website/blog/
+{
+  "title": "My second blog entry",
+  "text":  "Still trying this out...",
+}
+
 #################   删   ###################
 
-# 删除索引（库）
-DELETE /panda
 # 删除类型（表）
 DELETE /panda/books
 # 删除文档（列）
