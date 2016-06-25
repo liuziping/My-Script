@@ -1,0 +1,41 @@
+<html>
+<head lang="en">
+    <META charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/site.min.css">
+    <title>中文搜索</title>
+</head>
+<body>
+<header class="site-header jumbotron">
+<div class="site-nav">
+    <a href="#" target="_blank">ES</a><span>/</span> <a href="#about">关于</a>
+</div>
+<div class="container">
+    <div class="row"><div class="col-xs-12"><h1>Reboot一下</h1>
+    <form role="search" action="/search/" method="POST">
+    <div class="form-group">
+         <input type="text" name="query" id="query" value="{{query}}" class="form-control search clearable">
+    </div>
+    </form>
+    </div>
+    </div>
+</div>
+</header>
+
+{% if total and total == 0 %} 
+<h6>没有找到你要的结果</h6>
+{% elif result and total != 0  %}
+<h6>为您找到相关结果约{{total}}个，耗时{{took}}s</h6>
+{% endif %}
+<hr>
+
+<ul>
+{% for item in result %}
+    <li>{{item}} </li>
+    <hr>
+{% endfor%}
+</ul>
+</body>
+<script type="text/javascript" src="/static/js/jquery-3.0.0.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+<html>
