@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #coding:utf-8
 from multiprocessing import Pool
-import os,sys,time,random
+import sys
 import requests
 
 

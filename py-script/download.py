@@ -50,5 +50,5 @@ class downloader(object):
         self.fd.close()
 
 if __name__=='__main__':
-    down = downloader('http://51reboot.com/src/blogimg/pc.jpg',num=5)
+    down = downloader('http://img.miaoshoucdn.com/img/2016-04/45c91492c3c56001ea76cb18f8c69b0d.jpg',num=2)
     down.run()
