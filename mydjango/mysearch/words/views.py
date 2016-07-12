@@ -17,7 +17,7 @@ def search(request):
             doc_type = "people",
             body = {
                 "query":{
-                    'multi_match':{
+                    "multi_match":{
                        "query":query,
                        "fields":["name","info"]
                         }}})
