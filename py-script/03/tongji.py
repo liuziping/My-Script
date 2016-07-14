@@ -10,20 +10,26 @@ for s in content.split(" "):
         result[s] +=1
     else:
         result[s] = 1
-print result
+#print result
 
 # 字典翻转拼接为num:word的字典
 res  = {}
 for k,v in result.items():
     res.setdefault(v,[])
     res[v].append(k)
-print res
+#print res
 
 
 count = 0
+f = open('tongji.html','a+')
+f.write("<html><table style='border:solid 1px'>")
+f.write("<th style='border:solid 1px'>次数</th><th style='border:solid 1px'>单词</th>")
 while count < 4:
     key = max(res.keys())
     print "出现了%s次的单词：%s" % (key,res[key])
+    for word in res[key]:
+        f.write('<tr><td style="border:solid 1px">%s</td><td style="border:solid 1px">%s</td></tr>' % (key,word))
     res.pop(key)
     count = count +1
-
+f.write("</table></html>")
+f.close()
