@@ -17,7 +17,7 @@ res  = {}
 for k,v in result.items():
     res.setdefault(v,[])
     res[v].append(k)
-#print res
+print res
 
 
 count = 0

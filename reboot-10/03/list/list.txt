@@ -1,0 +1,144 @@
+＃＃＃＃＃＃＃ 讲课风格 ＃＃＃＃＃＃＃＃
+
+
+一： 是什么——what
+    1：什么技术
+    2：有哪些功能
+  
+二：怎么用——how   增删改查         
+    1： 思路——流 程图…
+    2： 实战——伪代码
+    3： 代码review 代码优化
+：
+二：为什么——why
+    1： 解决了什么问题
+    2： 应用场景——离开应用场景谈技术，就是耍流氓
+
+第三天
+
+1：列表及Python基础回顾,作业点评 
+2：字典   列表字典生成式及应用场景
+3：字符串 字典字符串转换，及应用场景
+4：文件操作 文件字典转换，及应用场景，随堂练习，用户登录注册系统
+5：总结——基础数据结构的知识脑图——增删改查 
+
+作业前的小练习：统计一段英文文章的单词出现数量并，将前十的单词做成网页展示
+作业：将nginx日志的访问前十名ip做成网页展示
+
+1: 列表的操作
+  help(list)                 # 列表的帮助，列出所有列表的用法
+  type(name)                 # type判断数据类型是列表还是字典或者元组
+
+  shoplist = ['apple','mango','carrot','banana']              #  创建列表
+  shoplist.append('rice')                      # 增。列表尾添加一个项目
+  shoplist.insert(2,"c jk")                     # 增。 在列表的第三个位置插入一个元素，从0开始算起
+
+  del shoplist[0]                              # 删。根据索引删除列表中的项目
+  shoplist.remove('apple')                     # 删。根据内容删除元素
+  shoplist.pop()                              # 删。删除最后一个元素并输出
+   
+  shoplist["apple"] ="xigua"                  # 改。 通过内容修改
+  shoplist[0]="apple"                          # 改。 通过索引修改
+ 
+  len(shoplist)                                          # 查。查看列表的元素个数
+  max(shoplist)                                         # 查。列表中的最大值
+  min(shoplist)                                          # 查。列表中的最小值
+  shoplist.count('apple')                              # 查。输出列表中某个元素的个数
+  if  apple in shoplist                               # 查。搜索apple是否在列表中
+  shoplist.index("apple")                       # 查。 输出apple元素在列表中的位置（索引号）
+
+  shoplist[0]                                             # 分片查，输出索引为0的元素，即第一个元素
+  shoplist[0:2]                                          # 分片查，输出前三个元素
+  shoplist[:]                                              # 分片查。输出所有
+  shoplist[1:]                                            # 分片查。输出第二个和后面所有的
+  shoplist[0:-1]                                         # 分片查：除了最后一个都输出
+
+  shoplist.sort()                                       # 查。 将项目按首字母排序 ,数字>大写>小写
+  shoplist.reverse()                                # 查。 项目顺序倒转
+
+
+二: 列表的遍历——查
+1： for x  in list
+       print x
+
+2:   for i, element in enumerate(list):  # for循环将列表中的元素及他们的下标
+        print i,element  
+
+三：split vs  join——字符串和列表直接的转化
+1： split、 将字符串转为列表
+格式：
+    字符串.split("字符串的分隔方式")      
+举例：     
+>>> ip = '192.168.1.11'
+>>> ip1=ip.split(".")         # split按要求将字符串转换为列表,以".”为分割符,分成不同的元素 
+  ['192','168','1','11']  
+
+In [1]: a = "192/168/1/2"
+In [3]: a.split("/")         # 本例以/作为分隔符
+Out[3]: ['192', '168', '1', '2']
+
+2：join——讲列表转为字符串
+In [10]: a = ['192', '168', '1', '2']
+
+In [12]: " ".join(a)
+Out[12]: '192 168 1 2'
+
+In [13]: "#".join(a)
+Out[13]: '192#168#1#2'
+
+In [14]: ".".join(a)
+Out[14]: '192.168.1.2'
+
+四：列表生成式
+  格式：
+    [ x  for  x in 内容] 
+    [ x  for  x in 内容 if 条件] 
+
+    1：把要生成的元素 x 放到前面，执行的时候，先执行后面的for循环
+    2：后面跟上for循环，可以有多个for循环，也可以在for循环后面再加个if条件
+    3：for循环后面可以是任何方式的迭代器(元组,列表,生成器..),只要可迭代对象的元素中至少有一个值.
+
+举例：
+In [4]: [x for x in 'abcd']
+Out[4]: ['a', 'b', 'c', 'd']
+
+列表生成式
+In [25]: [ x for x in res if x >10 ]
+Out[25]: [11, 12, 13]
+
+原生实现
+In [30]: ssss = []
+In [31]: for x in res:
+   ....:     if x > 10:
+   ....:         ssss.append(x)
+   ....:         
+In [32]: ssss
+Out[32]: [11, 12, 13]
+  
+五：列表在线上环境上的小小应用——让sql语句更优雅
+
+1：不优雅的sql
+sql = "select  id, name,age,email,job  from user"
+sql = "select  id, name,age,email,job  from user"
+优点：
+   简单容易读
+缺点：
+   1：如果列比较多，sql会很长，很不优雅
+   2：如果显示的列有变动，如果有多条sql语句修改会比较麻烦
+
+2：优雅的方式
+fields = ["id","name","age","email"]  # 将要输出列定义到列表中，每次变动只需要修改列表就行
+sql = "select %s from user" % ",".join(fields)
+结果：
+  sql = "select  id, name,age,email from user" 
+  
+
+
+
+
+
+
+
+
+
+

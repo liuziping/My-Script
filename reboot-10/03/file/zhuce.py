@@ -1,16 +1,17 @@
 #/bin/env python
 #coding:utf-8
 
-f = open('user.txt','a')
+f = open('user.txt','a+')
+'''
 # 单条写入
-# f.write("wd:1234")
+f.write("wd:1234\n")
 
 # 多条写入
-# names=["kk:123\n","panda:123\n"]
-# f.writelines(names)
+names=["kk:123\n","panda:123\n"]
+f.writelines(names)
 
 # 交互写入,用户注册
-
+'''
 while True:
     name = raw_input("请输入姓名:").strip()
     password = raw_input("请输入密码:").strip()
@@ -24,7 +25,7 @@ while True:
     else:
         print "恭喜你，注册成功"
         break;
-f.write("%s:%s" % (name,password))
+f.write("%s:%s\n" % (name,password))
 
 f.close()
 

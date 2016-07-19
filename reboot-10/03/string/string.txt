@@ -1,0 +1,192 @@
+ 1、 字符串的包含和序列
+                
+         name = 'Swaroop'
+if name.startswith('Swa'):                              # startswith测试字符串是否以给定字符串开始
+   print 'Yes, the string starts with "Swa"'
+if 'a' in name:                                                 # in操作符检验一个给定字符串是否是另一字符串的一部分
+   print 'Yes,it contains the string "a"'
+if name.find('war') !=-1:       # find用来找出给定字符串在另一字符串的位置，-1表示没有找到           
+   print 'Yes,it contains the string "war"'
+
+In [2]: a = "1"
+In [3]: b = "15"
+In [4]: if a in b:                             # 这种情况比较蛋疼。要注意 
+   ...:     print  "ok"
+   ...: else:
+   ...:     print "no"
+   ...: 
+ok
+  
+
+
+2、 字符串连接   
+
+>>> "1+2+3+4".split('+')        # split将字符串分割为列表  ['1', '2', '3', '4'] 
+>>> seq = ['1','2','3','4','5']                                
+>>>'+'.join(seq)                       # join 将列表转换为字符串 用"+"连接。 '1+2+3+4+5'    
+
+mulLine = '''Hello!!!
+Wellcome to Python's world!
+There are a lot of interesting things!
+Enjoy yourself. Thank you!'''
+
+print ''.join(mulLine.splitlines())         #没有换行，所有内容一行输出
+print '------------'
+print ''.join(mulLine.splitlines(True))    #splitlines(True)保留原文格式
+
+
+
+3:、python一共有两种格式化输出语法，
+
+A：类似于C语言printf的方式，称为 Formatting Expression
+
+1：格式化输出字符串
+
+In [19]: 'i am %s ' %('test')
+Out[19]: 'i am test '
+
+2：格式输出列表
+
+>>>list=['hello', '1', '7']
+>>> '%s %d-%d' % ('hello', 7, 1)          
+'hello 7-1'  
+
+In [33]: '%s,%s:%s' % (list[0],list[1],list[2])
+Out[33]: 'hello,1:7'
+
+In [24]: '%s' %   ','.join(list)
+Out[24]: 'hello,1,7'
+
+In [25]: '%s' % (list)
+Out[25]: "['hello', '1', '7']"
+
+3：格式化字典
+
+In [1]: dict={'name':'wd','age':18}
+In [2]: 'i am %(name)s,my age is %(age)d' % (dict)      #字典取值格式 %(key)s    
+Out[2]: 'i am wd,my age is 18'
+
+B：类似于C#的方式，称为String Formatting Method Calls
+
+1：格式化输出字符串
+
+In [17]: 'i am {}'.format('test')
+Out[17]: 'i am test'
+
+2：格式输出列表
+
+>>> '{0} {1}:{2}'.format('hello', '1', '7')              #列表取值格式 {index-no}
+'hello 1:7'  
+
+In [15]: '{0} {1}:{2}'.format(*list)
+Out[15]: 'hello 1:7'
+
+In [10]:  '{} {}:{}'.format('hello', '1', '7')              #如果{}为空，会默认安装列表的索引从前到后取值
+Out[10]: 'hello 1:7'
+
+3: 格式化输出字典
+
+In [8]: 'i am {name},my age is {age}'.format(**dict)                     #字典传值，字典必须加**, 否则不会讲dict当做字典取值，而是当成一个字符串
+Out[8]: 'i am wd,my age is 18'
+
+In [10]:  'i am {name},my age is {age}'.format(name='wd',age=18)
+Out[10]: 'i am wd,my age is 18'
+
+
+In [16]: 'i am {}'.format(dict)              #字典不加 **,会把字典当成一个字符串传入                  
+Out[16]: "i am {'age': 18, 'name': 'wd'}"
+
+
+C：%连接字符串更高效姿势
+
+a：普通版本的%连接
+                     a = 'hello'
+b = 'python'
+c = 1
+print '%s %s %d ' % (a, b, c)      #按后面变量的顺序依次给%s.%d赋值，s字符串 d整数
+
+结果
+hello python 1
+             
+D：字符串的大小写
+
+s = 'hEllo pYthon'
+print s.upper()            HELLO PYTHON   全部转换为大写
+print s.lower()             hello python        全部转换为小写
+print s.capitalize()      Hello python        首字母大写，其他都小写
+print s.title()               Hello Python         每个单词首字母大写，其他都小写
+
+print 'A'.isupper() #True  用于判断
+print 'A'.islower() #False
+print 'Python Is  Good'.istitle() #True
+
+ E: 命令行参数
+
+        cat test.py
+        import os, sys
+        os.system(sys.argv[1])      #0表示程序本身  1表示程序执行需要跟一个参数
+
+       python  test.py   cmd                     
+
+ F:  常用字符串命令
+
+ >>> import string
+>>> string.letters
+'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+>>> string.ascii_letters
+'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+>>> string.ascii_lowercase
+'abcdefghijklmnopqrstuvwxyz'
+>>> string.ascii_uppercase
+'ABCDEFGHIJKLMNOPQRSTUVWXYZ
+>>> string.ascii_letters + string.digits     # 可以生成常用的验证码 
+'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+>>> string.digits     
+'0123456789'       
+ >>> '   abd   '.strip()                                   # strip()返回去掉两侧空格的字符串
+    'abd'  
+
+   产生四位字母加数字的随机验证码
+   import random,string
+   In [31]: a=string.letters+string.digits       # 产生数字加大小写字母的字符串
+   In [32]: ''.join(random.sample(a,4))          # 从字符串中随机提取四位数，返回的结果是列表，通过join转换为字符串
+  Out[32]: 'IpoE'
+
+G：字符串的切片——同列表
+
+        name = "abcdefg"
+ name[2]        c
+ name[2:3]     cd
+ len(name)      7 字符串长度
+ name.startswith("ab")   true    字符串是否以ab开始，返回布尔值
+ name.endswith("ab")     false    字符串是否以ab结束
+ name.find("b")    1   查看字符串内部制定字符的索引
+ name.index("b")  1  同上。区别是find找不到会返回-1， index找不到会报错
+
+H：rstrip()，lstrip() ——删除 string 字符串末尾的指定字符（默认为空格）
+
+语法
+str.rstrip([chars])
+参数
+chars -- 指定删除的字符（默认为空格）
+返回值
+返回删除 string 字符串末尾的指定字符后生成的新字符串。
+
+实例一：
+
+#!/usr/bin/python
+str = "     this is string example....wow!!!     ";
+print str.rstrip();                              #      this is string example....wow!!!     删除右边的空格
+str = "88888888this is string example....wow!!!8888888";   # 只会删除右边的88
+print str.rstrip('8');                          #  88888888this is string example....wow!!!
+
+
+实例二：
+
+In [2]: "test.py".rstrip('.py')
+Out[2]: 'test'
+
+for filename in os.listdir('/home/liuziping/devops.aiyuanxin.com/devops/'):             # 相当于  ls
+    if filename.endswith('.py'):                                                                                       # 匹配所有 .py结尾文件件                                                                                                   
+print filename.rstrip('.py')                                                                                  # 将.py结尾的文件除掉 .py显示文件名 
+

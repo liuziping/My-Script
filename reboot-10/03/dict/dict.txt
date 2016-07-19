@@ -1,0 +1,156 @@
+1、字典结构
+    把键（名字）和值（详细情况）联系在一起    字典是dict类的实例/对象。 
+    
+#!/bin/env python
+contact={                                        
+        'wd' : ['136548620','IT',18],                 # 字典内部可以套用列表
+        'pc'  : '425565334',
+        'other': {'test':122456,},                     # 字典内部可以是字典
+}
+contact['fengjie']='123467524'                   # 添加元素，字典的存储不分顺序
+  
+
+2、字典基本操作
+     
+    contact['rain'] = '12345678'                       # 修改普通字典
+    contact['wd'][2]=30                                # 修改内部套用列表的列表
+    contact['other']['test']= 654321                   # 修改内部套用字典的列表
+
+    contact.pop('cjk')                                 # 删除键
+
+    contact.keys()                                # 查所有key
+    contact.keys()[-1]                            # 查看字典的所有的键，以列表存储，[-1]为最后一个键
+    contact.values()                              # 查询所有的值
+    contact.get("key"，dafault)                   # 查看指定key的值 dict提供的get方法，如果key不存在，可以返回None，或者自己指定的value：
+    contact["key"]                               # 同上获取指定key的值,如果 key不存在会报错，故更推荐上面的用法
+
+
+小栗子：字典的key/value替换
+
+重点： 翻转过来后，value作为key可能会重复，所以要判断，写成列表的形式
+
+In [1]: dict = {'wd':'ops','kk':'ops','woniu':'dev','rock':'dev','pc':'devops'}
+In [3]: for k,v in dict.items():
+   ...:     if v not in new_dict:
+   ...:         new_dict[v]=[k]
+   ...:     else:
+   ...:         new_dict[v].append(k)
+   ...:         
+
+In [4]: new_dict
+Out[4]: {'dev': ['woniu', 'rock'], 'devops': ['pc'], 'ops': ['kk', 'wd']}
+
+高级方法实现字典反转,只针对一对一的k/v结构
+
+dict1={1:2,3:4,6:7,9:10}  
+  
+print  dict((v,k) for k,v in d.iteritems())  
+print dict([(v,k) for k,v in d.iteritems()]) 
+
+
+单词统计＋字典翻转
+
+#!/usr/bin/env python
+#coding:utf-8
+
+content="who have touched their lives Love begins with a smile grows with a kiss and ends with a tear The brightest future will always be based on a forgotten past you can’t go on well in lifeuntil you let go of your past failures and heartaches" 
+
+result = {}
+for s in content.split(" "):
+    if s in result:
+        result[s] +=1 
+    else:
+        result[s] = 1 
+print result
+res  = {} 
+for k,v in result.items():
+    res.setdefault(v,[])           ＃ dict.setdefault(k,v) 给字典设置默认值，对应的get,获取字典的默认值
+    res[v].append(k)
+print res 
+
+
+4、update(dict2)——合并字典
+  把dict2的元素加入到dict中去，键字重复时会覆盖dict中的键值
+
+>>> dict2  
+{'c': '3333', 'b': 'no2'}  
+>>> dict1                            # dict2和dict1的键‘b'重复  
+{'a': 'no1', 'b': '2222'}  
+>>> dict1.update(dict2)   # 调用update后，dict1的键'b'值被覆盖了  
+>>> dict1  
+{'a': 'no1', 'c': '3333', 'b': 'no2'} 
+
+
+5：字典的高级应用
+
+A：get读取字典里的数据
+
+In [1]: dict = {'name':'liuziping','age':'20'} 
+In [2]: dict['name']                  # 传统方式取值，如果name这个key不存在，会报错
+Out[2]: 'liuziping'
+
+In [3]: dict.get('name')              # get取值， 格式： dict.get(key,默认值)   如果key不存在，则使用 默认值。不写的话，默认值为None                
+Out[3]: 'liuziping'
+
+In [4]: dict.get('name','cjk')
+Out[4]: 'liuziping'
+In [4]: dict.get('names','cjk')   # names这个key不存在，打印默认值
+Out[4]: 'cjk'
+
+B：高效的给字典赋值
+
+In [8]: str
+Out[8]: 'name=11&idc_id=0&unum=11&power=11'
+
+In [9]: dict([x.split('=', ) for x in str.split('&')])
+Out[9]: {'idc_id': '0', 'name': '11', 'power': '11', 'unum': '11'}
+
+等价于
+In [3]: l=str.split('&') 
+In [4]: l
+Out[4]: ['name=11', 'idc_id=0', 'unum=11', 'power=11']
+
+n [25]: for x in l:
+            print x.split('=')
+   ....:     
+['name', '11']
+['idc_id', '0']
+['unum', '11']
+['power', '11']
+
+
+n [23]: for x in l:
+           print  dict([x.split('=')])
+
+{'name': '11'}
+{'idc_id': '0'}
+{'unum': '11'}
+{'power': '11'}
+
+
+
+6、 字典和列表的效率比较
+
+举个例子，假设要根据同学的名字查找对应的成绩，如果用list实现，需要两个list：
+names = ['Michael', 'Bob', 'Tracy']
+scores = [95, 75, 85]
+给定一个名字，要查找对应的成绩，就先要在names中找到对应的位置，再从scores取出对应的成绩，list越长，耗时越长。
+
+如果用dict实现，只需要一个“名字”-“成绩”的对照表，直接根据名字查找成绩，无论这个表有多大，查找速度都不会变慢。
+用Python写一个dict如下：
+>>> d = {'Michael': 95, 'Bob': 75, 'Tracy': 85}
+>>> d['Michael']
+95
+
+    为什么dict查找速度这么快？因为dict的实现原理和查字典是一样的。假设字典包含了1万个汉字，我们要查某一个字
+第一种方式是把字典从第一页往后翻，直到找到我们想要的字为止，这种方法就是在list中查找元素的方法，list越大，查找越慢。
+第二种方法是先在字典的索引表里（比如部首表）查这个字对应的页码，然后直接翻到该页，找到这个字，无论找哪个字，这种查找速度都非常快，不会随着字典大小的增加而变慢。
+
+
+dict和list比较，dict有以下几个特点：
+    查找和插入的速度极快，不会随着key的增加而增加；
+    需要占用大量的内存，内存浪费多。
+而list相反：
+    查找和插入的时间随着元素的增加而增加；
+    占用空间小，浪费内存很少。
+所以，dict是用空间来换取时间的一种方法。
