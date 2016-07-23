@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block breadcrumb %}
+<li><a href="#">用户管理</a><span class="divider"></span></li>
+<li class="active">个人中心</li>
+{% endblock %}
+
+{% block body %}
+<div class="widget-box">
+   <div class="widget-title"> 
+      <h5 style="float:left;"><i class="fa fa-briefcase"></i>您的个人资料</h5>
+	  <h5 style="float:right;" id="edit"><i class="fa fa-edit"></i>编辑个人资料 </h5> 
+	  <h5 style="float:right;" id="passwd"><i class="fa fa-edit"></i>修改密码&nbsp;&nbsp;&nbsp;</h5>
+   </div> <!--widget-title end-->
+
+    <div class="widget-content">
+	<table class="table table-bordered">
+	<tr>
+	<td style="vertical-align:middle; text-align:center;"><h2>刘子平<h2></td>
+	<td>
+		<table class="table table-striped table-bordered table-hover">
+		<tr><td>邮箱</td><td>1111@111.com</td></tr>
+		<tr><td>手机</td><td>11111111</td></tr>
+		<tr><td>角色</td><td>sa,admin</td></tr>
+		<tr><td>权限</td><td>拥有权限</td></tr>
+		<table>
+	</td>
+	<tr>
+	</table>
+	</div><!--widget-content end-->
+
+</div><!--widget-box end-->
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

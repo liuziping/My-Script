@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title>Reboot Admin</title>
+<link href="/static/img/favicon.ico" type="image/x-icon" rel="shortcut icon">
+
+<!--第三方插件样式-->
+<link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/vendor/datatable/datatable.css" rel="stylesheet">
+<link href="/static/vendor/metismenu/metis-menu.min.css" rel="stylesheet">
+<link href="/static/vendor/alert/sweet-alert.css" rel="stylesheet">
+<link href="/static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<!--自定义样式文件 ＊重要＊-->
+<link href="/static/vendor/sb-admin-2.css" rel="stylesheet">
+
+
+<style type="text/css">
+.navbar-header{
+    width: 200px;
+    text-align: center;
+}
+.navbar-brand{
+    font-size: 20px;
+
+}
+.table{
+    margin-top: 10px;
+}
+
+.hover{
+    cursor: pointer;
+}
+.progress-reboot{
+    position: absolute;
+    height: 2px;
+    top:0px;
+    background: #337ab7;
+    width: 0%;
+    z-index: 2000;
+}
+#main-content{
+    overflow-x:auto;
+}
+#main-content .add-btn{
+    position: absolute;
+    z-index:100;
+    width: 200px;
+}
+#wrapper{
+    background: #2e3c4e;
+}
+.navbar-default .navbar-nav>li>a{
+    color:white;
+}
+.navbar-default .navbar-nav>li>a:hover{
+    background: #299d71;
+}
+
+.navbar-default .navbar-brand{
+    color:white;
+}
+
+.navbar-default .navbar-brand:hover{
+    color:white;
+}
+.select2-container{
+    width: 100% !important;
+}
+button.detail{
+    margin-left: 10px;
+}
+.sweet-alert h2{
+    margin-top: 30px;
+}
+
+</style>
+
+</head>
+
+<body>
+<div id="wrapper"> <!--页面全局样式-->
+
+<!--页面头部导航 -->
+<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+    <a class="navbar-brand" href="/">Reboot Admin</a>
+    <ul class="nav navbar-nav">
+	<li  class="dropdown" id="profile-messages" >
+	    <a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i class="fa fa-user fa-fw"></i><span class="text">{% if errmsg %}<span style="color: red;">{{errmsg}}</span>{%else%}{{user}}{%endif%}</span> <b class="caret"></b></a>
+	    <ul class="dropdown-menu">
+		<li><a href="/user/userinfo"><i class="fa fa-user fa-fw"></i>个人中心</a></li>
+		<li class="divider"></li>
+		<li><a href="/logout"><i class="fa fa-mail-forward fa-fw"></i>退出登录</a></li>
+	    </ul>
+	</li>
+	<li><a href="/logout"><i class="fa fa-mail-forward fa-fw" ></i><span>退出登录</span></a></li>
+    </ul>
+    <ul class="nav navbar-nav pull-right">
+        <li><a href="http://www.51reboot.com" target="_blank">Reboot官网</a></li>
+        <li><a href="#" target="_blank">API文档</a></li>
+        <li><a href="#" target="_blank">里程碑</a></li>
+    </ul>
+    <form class="navbar-form">
+        <input type="text" class="form-control" placeholder="Search...">
+    </form>
+</nav><!--nav  end -->
+
+<!--页面左边导航-->
+<div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav navbar-collapse">
+        <ul class="nav" id="side-menu">  <!--菜单列表-->
+            <li><a href="/"><i class="fa fa-home fa-fw"></i>控制面板</a></li>
+            <li> <!--用户管理-->
+            <a href="#"><i class="fa fa-user fa-fw"></i>用户管理<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li> 
+                    <a href="/user/userinfo">个人中心</a>
+                </li>
+                <li>
+                    <a href="/user/userlist">用户列表</a>
+                </li>
+                <li>
+                    <a href="/user/role">角色列表</a>
+                </li>
+                <li>
+                    <a href="/user/power">权限列表</a>
+                </li>
+            </ul>    
+            </li> <!--用户管理 end-->
+
+            <li><!--资产平台-->
+            <a href="#"><i class="fa fa-database fa-fw"></i>CMDB资产平台<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="#">服务器管理</a>
+                </li>
+                <li>
+                    <a href="#">IDC</a>
+                </li>
+                <li>
+                    <a href="#">机柜</a>
+                </li> 
+            </ul>    
+            </li> <!--CMDB资产平台结束-->
+
+            <li><!--代码发布系统-->
+            <a href="#"><i class="fa fa-rocket fa-fw"></i>代码发布系统<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="/project/project">项目管理</a>
+                </li>
+                <li>
+                    <a href="/project/apply">申请发布</a>
+                </li>
+                <li>
+                    <a href="/project/deploy">发布列表</a>
+                </li>
+            </ul>    
+            </li> <!--代码发布系统结束-->
+            <li><!--监控平台-->
+            <a href="#"><i class="fa fa-eye fa-fw"></i>监控平台<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="＃">zabbix监控</a>
+                </li>
+            </ul>
+            </li><!--监控平台结束-->
+            <li><!--运维可视化平台-->
+            <a href="#"><i class="fa fa-line-chart fa-fw"></i>运维可视化<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="＃">性能展示</a>
+                </li>
+            </ul>
+            </li><!--运维可视化平台结束-->
+            <li><!--第三方接口平台-->
+            <a href="#"><i class="fa fa-wrench fa-fw"></i>第三方API<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="＃">CDN刷新</a>
+                </li>
+            </ul>
+            </li><!--运维可视化平台结束-->
+
+        </ul><!--菜单列表结束-->
+
+    </div><!--sidebar-collapse end -->
+</div><!--navbar-static-side 左边菜单结束 -->
+
+<!--页面正文部分-->
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+        <div id='main-content' class="col-md-12" style='padding-top:20px;'>
+		<div id="content-header">
+			  <ul class="breadcrumb">
+				<li><i class="fa fa-home fa-fw"></i><a href="/">Home</a><span class="divider"></span></li>
+				{% block breadcrumb %}
+				{% endblock %}
+			  </ul> 
+			  <hr>
+    	</div><!--end content-header-->
+            {% block body %}
+            {% endblock %}
+        </div>
+        </div>
+    </div>
+</div>  <!--页面正文部分结束-->
+
+</div><!--页面全局样式结束-->
+
+<!--js 部分-->
+     <script src="/static/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="/static/vendor/datatable/datatable.js"></script>
+    <script src="/static/vendor/metismenu/metis-menu.min.js"></script>
+    <script src="/static/vendor/validate/validate.js"></script>
+    <script src="/static/vendor/validate/bootstrap.js"></script>
+    <script src='/static/vendor/alert/sweet-alert.min.js'></script>
+
+    <script>
+        $("#side-menu").metisMenu()
+        {% block js %}
+        {% endblock %}
+    </script>
+
+
+
+</body>
+
+</html>
