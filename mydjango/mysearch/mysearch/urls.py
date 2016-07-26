@@ -17,6 +17,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', "words.views.index"),
-    url(r'^search/$', "words.views.search"),
+    url(r'^$', "blog.views.index"),
+    url(r'^search/', include('words.urls')),
 ]
