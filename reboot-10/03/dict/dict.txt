@@ -97,7 +97,27 @@ Out[4]: 'liuziping'
 In [4]: dict.get('names','cjk')   # names这个key不存在，打印默认值
 Out[4]: 'cjk'
 
-B：高效的给字典赋值
+B：get方法优化代码——统计列表中元素的出现个数
+
+In [6]: list = ["wd","pc","kk","wd","panda"]
+In [7]: res = {}
+In [8]: for i in list:
+   ...:     if i in res:                              # 原始方法，if else判断
+   ...:         res[i] +=1
+   ...:     else:
+   ...:         res[i] = 1
+   ...:         
+In [9]: res
+Out[9]: {'kk': 1, 'panda': 1, 'pc': 1, 'wd': 2}
+
+       In [15]: res = {}
+In [16]: for i in list:
+             res[i] = res.get(i,0)+1          # 利用get方法，第一次的时候key不存在取值为0然后＋1
+   ....:     
+In [17]: res
+Out[17]: {'kk': 1, 'panda': 1, 'pc': 1, 'wd': 2}
+
+C：高效的给字典赋值
 
 In [8]: str
 Out[8]: 'name=11&idc_id=0&unum=11&power=11'
