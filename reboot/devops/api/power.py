@@ -21,7 +21,7 @@ def create(auth_info,**kwargs):
         if not util.check_name(data['name']):
             return json.dumps({'code': 1, 'errmsg': 'name must be string or num'})
         app.config['cursor'].execute_insert_sql('power', data)
-        util.write_log('api').info(username, "create power %s success"  %  data['name'])
+        util.write_log('api').info("%s:create power %s success" % (username,data['name']))
         return json.dumps({'code':0,'result':'create %s success' %  data['name']})
     except:
         util.write_log('api').error('create power error:%s' % traceback.format_exc())
@@ -44,11 +44,11 @@ def delete(auth_info,**kwargs):
         if not result:
             return json.dumps({'code':1,'errmsg':'data not exist'})
         app.config['cursor'].execute_delete_sql('power', where)
-        util.write_log('api').info(username, "delete power  success")
+        util.write_log('api').info("%s:delete power  success" % username)
         return json.dumps({'code':0,'result':'delete power success'})
     except:
         util.write_log('api').error("delete power error:%s" % traceback.format_exc())
-        return json.dumps({'code':1,'errmsg': 'delete power failed'})
+        return json.dumps({'code':1,'errmsg': 'delete power failed'}) 
 
 @jsonrpc.method('power.getlist')
 @auth_login
@@ -63,11 +63,11 @@ def getlist(auth_info,**kwargs):
         data = request.get_json()['params']
         fields = data.get('output', output)
         result = app.config['cursor'].get_results('power', fields)
-        util.write_log('api').info(username, 'select permission list success')
+        util.write_log('api').info('%s:select permission list success' % username)
         return json.dumps({'code':0,'result':result,'count':len(result)})
     except:
         util.write_log('api').error("get list permission error: %s"  %  traceback.format_exc())
-        return json.dumps({'code':1,'errmsg':'get power_list failed'})
+        return json.dumps({'code':1,'errmsg':'get power_list failed'}) 
 
 @jsonrpc.method('power.get')
 @auth_login
@@ -87,11 +87,11 @@ def getbyid(auth_info,**kwargs):
         result = app.config['cursor'].get_one_result('power', fields, where)
         if not result:
             return json.dumps({'code':1, 'errmsg':'data not exist'})
-        util.write_log('api').info(username,'select permission by id successed!')
-        return json.dumps({'code':0, 'result':result})
+        util.write_log('api').info('%s:select permission by id successed!' % username)
+        return json.dumps({' code':0, 'result':result})
     except:
         util.write_log('api').error("select power by id error: %s" %  traceback.format_exc())
-        return json.dumps({'code':1,'errmsg':'get power failed'})
+        return json.dumps({'code':1,'errmsg':'get power  failed'})
 
 
 @jsonrpc.method('power.update')
@@ -111,8 +111,8 @@ def update(auth_info, **kwargs):
         result=app.config['cursor'].execute_update_sql('power', data, where)
         if not result: 
             return json.dumps({'code':1, 'errmsg':'data not exist'})
-        util.write_log('api').info(username,"update power successed" )
+        util.write_log('api').info("%s:update power successed" % username)
         return json.dumps({'code':0,'result':'update power success'})
     except:
-        util.write_log('api').error("update error: %s" % traceback. format_exc())
+        util.write_log('api').error("update error: %s" % traceback.format_exc())
         return json.dumps({'code':1,'errmsg':'update power failed'})

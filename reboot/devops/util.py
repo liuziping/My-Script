@@ -64,19 +64,19 @@ def getinfo(table_name, fields):
         结果二，第二列是个列表如：用户name2r_id：{u'wd': [u'1', u'2'], u'admin': [u'1', u'2', u'4', u'3']}
 
         '''
-        result = app.config['cursor'].get_results(table_name,fields) #[{'id':1,'name':'wd'},.....]
-        if fields[1] in ['r_id','p_id','p_user','p_group']:  #第二列如果是列出的几项。则把字符串换成列表
+        result = app.config['cursor'].get_results(table_name,fields) # [{'id':1,'name':'wd'},.....]
+        if fields[1] in ['r_id','p_id','p_user','p_group']:  # 第二列如果是列出的几项。则把字符串换成列表
 	        result = dict((str(x[fields[0]]), x[fields[1]].split(',')) for x in result)
         else:
 	        result = dict((str(x[fields[0]]), x[fields[1]]) for x in result)
         return result
 
 
-#获取一个组里面的用户成员,以用户表的r_id,反推组成员，故如果组内无成员，则这个组就不会返回
+# 获取一个组里面的用户成员,以用户表的r_id,反推组成员，故如果组内无成员，则这个组就不会返回
 def role_members():
-    users = getinfo('user',['id','username'])   #{'1':'wd','2':'pc'}
-    roles = getinfo('role',['id','name'])   #{'1':'sa','2':'dba','3':'dev'}
-    r_id = getinfo('user',['id','r_id'])     #{'1':['1','2'],'2':['2'.'3']......}
+    users = getinfo('user',['id','username'])   # {'1':'wd','2':'pc'}
+    roles = getinfo('role',['id','name'])       # {'1':'sa','2':'dba','3':'dev'}
+    r_id = getinfo('user',['id','r_id'])        # {'1':['1','2'],'2':['2'.'3']......}
 
     g = {}
     for uid, rids in r_id.items():
@@ -87,36 +87,39 @@ def role_members():
                 g[roles[rid]] = []
             g[roles[rid]].append(users[uid])
     return g
-    #print g    #{'sa': ['wd'], 'dba': ['wd','pc'], 'dev': ['pc']}
+    # print g    #{'sa': ['wd'], 'dba': ['wd','pc'], 'dev': ['pc']}
 
-#获取一个项目中所有的用户成员（用户和组中的成员要去重）结果格式： {'devops':['wd','pc'],'test':['wd','rock']}
+# 获取所有项目中用户成员(用户和组中的成员要去重),结果格式:{'devops':['wd','pc'],'test':['wd','rock']}
 def project_members():
-        users = getinfo('user',['id','username'])   #{'1':'wd','2':'pc'}
-        roles = getinfo('role',['id','name'])   #{'1':'sa','2':'dba','3':'dev'}
-        r_users = role_members()        #{'sa': ['wd'], 'dba': ['wd','pc'], 'dev': ['pc']}
+        users = getinfo('user',['id','username'])   # {'1':'wd','2':'pc'}
+        roles = getinfo('role',['id','name'])       # {'1':'sa','2':'dba','3':'dev'}
+        r_users = role_members()                    # {'sa': ['wd'], 'dba': ['wd','pc'], 'dev': ['pc']}
         result = app.config['cursor'].get_results('project',['id','name','principal','p_user','p_group']) 
-        #result=[{'id':'1','name':'devops','principal':'1','p_user':'1,2','p_group':'1,3'},......]
-        pro_pri = {}
-        projects={}
+        # result=[{'id':'1','name':'devops','principal':'1','p_user':'1,2','p_group':'1,3'},......]
+        pro_pri = {}     # 项目负责人对应项目的字典
+        projects = {}    # 项目成员对应项目的字典
         for p in result:
-            projects[p['name']]=[]
-            pro_pri[p['name']]=[]
+            projects.setdefault(p['name'],[])
+            pro_pri.setdefault(p['name'],[])
             for pri in p['principal'].split(','):
                 if pri in users:
                     projects[p['name']].append(users[pri]) 
                     pro_pri[p['name']].append(users[pri]) 
             for u in p['p_user'].split(','):
                 if u in users:
-                    projects[p['name']].append(users[u]) 
+                      projects[p['name']].append(users[u]) 
             for g in p['p_group'].split(','):
                  if g in roles:
-                    projects[p['name']] + r_users.get(roles[g],[]) #由于r_users不保存空组的信息，但项目表可能选择了空组，r_users[role]就会出现keyerro.故遇到这种情况取空列表
-            projects[p['name']] = list(set(projects[p['name']])) #将p_user和p_group中的用户去重复
+                     # 由于r_users不保存空组的信息，但项目表可能选择了空组,故将空组默认位置为空列表
+                     projects[p['name']] += r_users.get(roles[g],[]) 
+            projects[p['name']] = list(set(projects[p['name']])) # 将p_user和p_group中的用户去重复
         
         return projects,pro_pri
 
-#返回用户所拥有权限的项目，结果为：{"1": "test", "3": "devops"}
+# 返回用户所拥有权限的项目，结果为：{"1": "devops", "3": "test123"},已经被project.getlist取代
+'''
 def user_projects(name):
-    members,pro_pri = project_members()       #{'devops':['wd','pc'],'test':['wd','rock']}
-    projects = getinfo('project',['name','id'])   #{'devops':'1','test':'2'}
+    members,pro_pri = project_members()           # {'devops':['wd','pc'],'test':['wd','rock']}
+    projects = getinfo('project',['name','id'])   # {'devops':'1','test':'2'}
     return dict([(projects[x],x) for x in members if name in members[x]] )
+'''

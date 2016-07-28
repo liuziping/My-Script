@@ -65,7 +65,8 @@ def project(htmlname):
     headers['authorization'] = session['author']
     validate_result = json.loads(util.validate(session['author'], app.config['passport_key']))
     if int(validate_result['code']) == 0:
-           data['method'] = 'userprojects.getlist'                                                      
+           # data['method'] = 'userprojects.getlist'                                                 
+           data['method'] = 'project.getlist'   # 只在申请列表中通过jinja2渲染                    
            data['params'] = {}
            r = requests.post(get_url(),headers=headers,json=data)
            result = json.loads(r.text)

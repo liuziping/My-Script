@@ -37,11 +37,11 @@ def createuser(auth_info,*arg,**kwargs):
         data['join_date'] = time.strftime('%Y-%m-%d %H:%M:%S')
         app.config['cursor'].execute_insert_sql('user', data)
 
-        util.write_log('api').info(username, "create_user %s" % data['username'])
+        util.write_log('api').info("%s:create_user %s" % (username,data['username']))
         return json.dumps({'code': 0, 'result': 'create user %s success' % data['username']})
     except:
         util.write_log('api').error("Create user error: %s" % traceback.format_exc())
-        return json.dumps({'code':  1, 'errmsg': 'Create user failed'})
+        return json.dumps({'code':  1, 'errmsg': 'Create user failed'}) 
 
 #通过传入的条件，通常为id，查询某条用户的信息，用于管理员修改用户信息
 @jsonrpc.method('user.get')
@@ -61,8 +61,8 @@ def userinfo(auth_info,**kwargs):
         result = app.config['cursor'].get_one_result('user', fields, where)
         if not result :
             return json.dumps({'code':1, 'errmsg':'user  not  exist'})
-        util.write_log('api').info(username, 'get_one_user info') 
-        return json.dumps({ 'code':0,'result':result})
+        util.write_log('api').info('%s:get_one_user info' % username) 
+        return json.dumps({'code':0,'result':result})
     except:
         util.write_log('api').error("Get users  error: %s" % traceback.format_exc())
         return json.dumps({'code':1,'errmsg':'Get user failed'})
@@ -95,10 +95,10 @@ def userselfinfo(auth_info,**kwargs):
         else:
             user['p_id'] = {}
 
-        util.write_log('api').info(username, 'get_user_info')
+        util.write_log('api').info('%s:get_user_info' % username)
         return  json.dumps({'code': 0, 'user': user})
     except:
-        logging.getLogger('api').error("Get users list error: %s" % traceback.format_exc())
+        util.write_log('api').error("Get users list error: %s" % traceback.format_exc())
         return json.dumps({'code':1,'errmsg':'get userinfo failed'})
 
 #获取用户列表
@@ -122,11 +122,11 @@ def userlist(auth_info,**kwargs):
         for user in result: #查询user表中的r_id,与role表生成的字典对比，一致则将id替换为name,如，"sa,php"
             user['r_id'] = ','.join([rids[x] for x in user['r_id'].split(',') if x in rids])
             users.append(user)
-        util.write_log('api').info(username, 'get_all_users')
+        util.write_log('api').info('%s:get_all_users' % username)
         return  json.dumps({'code': 0, 'users': users,'count':len(users)})
     except:
-        logging.getLogger().error("Get users list error: %s" % traceback.format_exc())
-        return json.dumps({'code':1,'errmsg':'获取用户列表失败'})
+        util.write_log('api').error("Get users list error: %s" % traceback.format_exc())
+        return json.dumps({'code':1,'errmsg':'获取用户列 表失败'})
 
 #更新用户信息
 @jsonrpc.method('user.update')
@@ -145,7 +145,7 @@ def userupdate(auth_info, **kwargs):
             result = app.config['cursor'].execute_update_sql('user', data, {'username':username},['name','username','email','mobile'])
         if not result :
             return json.dumps({'code':1, 'errmsg':'User not exist'})
-        util.write_log('api').info(username, 'Update user success!')
+        util.write_log('api').info('%s:Update user success!' % username)
         return  json.dumps({'code':0,'result':'Update user success' })
     except:
         util.write_log('api').error("update error: %s"  % traceback.format_exc())
@@ -169,7 +169,7 @@ def userdelete(auth_info, **kwargs):
         result = app.config['cursor'].execute_delete_sql('user', where)
         if not result:
             return json.dumps({'code':1,'errmsg':'User not exist'})
-        util.write_log('api').info(username, 'Delete user successed')
+        util.write_log('api').info('%s:Delete user successed' % username)
         return json.dumps({'code':0,'result':'Delete user success '})
     except:
         util.write_log('api').error('Delete user error: %s' %  traceback.format_exc())
@@ -202,9 +202,9 @@ def passwd(auth_info):
             password = hashlib.md5(data['password']).hexdigest()
             app.config['cursor'].execute_update_sql('user', {'password': password}, {'username': username})
 
-        util.write_log('api').info(username,'update user password success')
+        util.write_log('api').info('%s:update user password success' % username)
         return json.dumps({'code':0,'result':'update user passwd success'})
     except:
         util.write_log('api').error('update user password error : %s' % traceback.format_exc())
-        return json.dumps({' code':1,'errmsg':'update user password failed'})
+        return json.dumps({' code':1,'errmsg':'update user password failed' })
 

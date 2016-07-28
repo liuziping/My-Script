@@ -71,15 +71,15 @@
 		</thead> 
 		<tbody>
         {% if result %}
-        {% for project in  result %}
+        {% for p_id,p_name in result.iteritems() %}
         <tr>
-            <td class="p_name" style="text-align: center;">{{ project['name'] }}</td>
+            <td class="p_name" style="text-align: center;">{{ p_name }}</td>
             <td class="commit" style="text-align: center;">新项目</td>
             <td class="applicant" style="text-align: center;">新项目</td>
             <td class="apply_date" style="text-align: center;">新项目</td>
             <td class="status" style="color:#5EDF47; text-align: center;">新项目</td>
             <td style="text-align: center;">
-            <button  class='btn btn-primary btn-sm applybtn' project_name='{{ project['name'] }}' data-id='{{ project['id'] }}'>申请发布</button>   
+            <button  class='btn btn-primary btn-sm applybtn' data-id='{{ p_id }}' data='{{ p_name }}'>申请发布</button>   
               </td>
         </tr>
         {% endfor %}
@@ -162,7 +162,7 @@ list()
 
 /*弹出申请表单*/
 $("tbody").on('click','.applybtn',function(){
-    var project_name = $(this).attr('project_name')
+    var project_name = $(this).attr('data')
     var project_id = $(this).attr('data-id')
     var applicant = '{{ info.username }}'
     $('#project_name').val(project_name)

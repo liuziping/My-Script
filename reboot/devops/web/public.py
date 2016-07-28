@@ -48,7 +48,7 @@ def addapi():
     method = request.args.get('method')
     method = request.form.get('method')
     formdata = request.form.get('formdata')  #str
-    print repr(formdata)    #flask默认解码为unicode格式如： u'id=13&name=aa&remark=%E4%BD%A0%E5%A5%BD' 中文部分python无法解析 
+    # print repr(formdata)    #flask默认解码为unicode格式如： u'id=13&name=aa&remark=%E4%BD%A0%E5%A5%BD' 中文部分python无法解析 
     try:
         formdata = urllib.unquote(formdata).encode('iso-8859-1') 
         #print repr(formdata)          #解码后中文为utf8格式： u'id=13&name=aa&remark==\xe4\xbd\xa0\xe5\xa5\xbd' 

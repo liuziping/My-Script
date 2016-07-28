@@ -252,7 +252,7 @@ list()
 function userlist(){
     var url = "/listapi?method=user"
     $.getJSON(url, function(data){
-         data=JSON.parse(data['result'])
+        data=JSON.parse(data['result'])
         console.log(data)   
         if (data['code']== 0){
             var str = ''
@@ -263,7 +263,7 @@ function userlist(){
             $('#p_user,#principal').multiselect({maxHeight:200, enableCaseInsensitiveFiltering: true})
             $("#p_user,#principal").multiselect('refresh')
         }else{
-                swal("error","获取权限列表失败," + data['errmsg'],"error")
+                swal("error","获取用户列表失败," + data['errmsg'],"error")
         } //if end
     })
 }
@@ -282,7 +282,7 @@ function rolelist(){
             $('#p_group').multiselect({maxHeight:200, enableCaseInsensitiveFiltering: true})
             $("#p_group").multiselect('refresh')
         }else{
-                swal("error","获取权限列表失败," + data['errmsg'],"error")
+                swal("error","获取组/角色列表失败," + data['errmsg'],"error")
          } //if end
     })
 

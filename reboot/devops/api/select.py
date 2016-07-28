@@ -26,10 +26,10 @@ def selected(auth_info,**kwargs):
                #if f in  str(x['id']):    #不能这么干，因为 '1'in '1'是true。 '1' in "11"  也是true 
                if int(f) ==  int(x['id']): 
                     x['selected'] = 'selected="selected"'
-        util.write_log('api').info(username,'selected  %s  successfully' % (s_table))
+        util.write_log('api').info('%s:selected  %s  successfully' % (username,s_table))
         return json.dumps({'code':0,'result':result})
-    except:
-        util.write_log('api').error('selected  error: %s' % traceback.format_exc())
+    except: 
+        util .write_log('api').error('selected  error: %s' % traceback.format_exc())
         return json.dumps({'code':'1','errmsg':'selected.get  error'})
 
 

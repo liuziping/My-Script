@@ -26,11 +26,11 @@ def role_create(auth_info, **kwargs):
         if not util.check_name(data['name']):
             return json.dumps({'code': 1, 'errmsg': 'name must be string or int'})
         app.config['cursor'].execute_insert_sql('role', data)
-        util.write_log('api').info(username, "create role %s scucess" %  data['name'])
+        util.write_log('api').info("%s:create role %s scucess" % (username,data['name']))
         return json.dumps({'code':0,'result':'create role %s scucess' % data['name']})
     except:
-        util.write_log('api').error(username,"create role error: %s" % traceback.format_exc())
-        return json.dumps({'code':1,'errmsg':'create role fail'})
+        util.write_log('api').error("create role error: %s" % traceback.format_exc())
+        return json.dumps({'code':1,'errmsg':'create role fail'}) 
 
 @jsonrpc.method('role.getlist')
 @auth_login
@@ -57,11 +57,11 @@ def role_select(auth_info,**kwargs):
             x['p_id'] = ','.join(p_name)  #将原有x['p_id']中的id转为name
             result.append(x)
 
-        util.write_log('api').info(username, 'select role list success')
+        util.write_log('api').info('%s:select role list success' % username)
         return json.dumps({'code':0,'result':result,'count':len(result)})
     except:
         util.write_log('api').error("select role list error: %s"  %  traceback.format_exc())
-        return json.dumps({'code':1,'errmsg':'get rolelist failed'})
+        return json.dumps({'code':1,'errmsg':'get rolelist failed'}) 
 
 @jsonrpc.method('role.get')
 @auth_login
@@ -80,7 +80,7 @@ def role_get(auth_info, **kwargs):
         if not result :
             return json.dumps({'code':1, 'errmsg':'result is null'})
         else:
-            util.write_log('api').info(username, "select role by id success")
+            util.write_log('api').info("%s:select role by id success" % username)
             return json.dumps({'code':0,'result':result})
     except:
         util.write_log('api').error('select role by id error: %s'  % traceback.format_exc())
@@ -103,11 +103,11 @@ def role_update(auth_info, **kwargs):
         result = app.config['cursor'].execute_update_sql('role', data, where)
         if not result:
             return json.dumps({'code':1, 'errmsg':'result is  null'})
-        util.write_log('api').info(username, 'update role success!' )
+        util.write_log('api').info('%s:update role success!' % username )
         return json.dumps({'code':0,'result':'update role scucess'})
     except:
-        util.write_log('api' ).error("update error: %s"  % traceback.format_exc())
-        return  json.dumps( {'code':1,'errmsg':"update role failed"})
+        util.write_log('api').error("update error: %s"  % traceback.format_exc())
+        return  json.dumps({'code':1,'errmsg':"update role failed"})
 
 @jsonrpc.method('role.delete')
 @auth_login
@@ -123,11 +123,11 @@ def role_delete(auth_info,**kwargs):
         if not where:
             return json.dumps({'code':1, 'errmsg':'must need a condition'})
         result = app.config['cursor'].execute_delete_sql('role', where)
-        if not result :
+        if not result:
             return json.dumps({'code':1, 'errmsg':'result is null'})
-        util.write_log('api').info(username, 'delete role successed')
+        util.write_log('api').info('%s:delete role successed' % username)
         return json.dumps({'code':0,'result':'delete role scucess'})
     except:
-        util.write_log('api'). error('delete role error: %s' %  traceback.format_exc())
-        return json.dumps({'co de':1,'errmsg':'delete role failed'}) 
+        util.write_log('api').error('delete role error: %s' %  traceback.format_exc())
+        return json.dumps({'code':1,'errmsg':'delete role failed'}) 
 
