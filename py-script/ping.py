@@ -1,19 +1,20 @@
 #!/usr/bin/env python
 # encoding=utf-8
-import os
-ip = '192.168.1.1'
-def pingip(ip):   
-    n=0
+import os,time
+
+def ping_idc(ip):
+    num = 0
     while True:
-        data=os.system("ping -c 1 %s>/dev/null 2>&1" %ip)
-        if data==0:
-            return  'ok'
-	    break;
+        result = os.system("ping -c 1 %s>/dev/null 2>&1" %ip)
+        if result == 0:
+            print  'pong'                            
+            time.sleep(5)
         else:
-	     n=n+1
-	     #print n
-             if n==5:
-                 print '%s ping fail'% ip
-		 break;
+            num += 1
+            if num == 3:
+                 print "%s not pong" % ip    
+                 break;
 if __name__=='__main__':
-   pingip(ip)
+    ips=['182.18.40.227','182.18.40.226']
+    for ip in ips:
+       ping_idc(ip)
