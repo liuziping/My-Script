@@ -3,6 +3,7 @@
 import ping
 
 def ping_idc():
+    is_null = lambda x : x if x != None else 0.0   # 如果x参数为空返回0.0，否则返回x参数
     result = []
     addr = ['182.18.40.226','182.18.40.227']
     for ip in addr:
