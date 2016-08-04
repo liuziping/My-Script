@@ -1,0 +1,170 @@
+一：安装mysql包
+
+yum install python-dev
+pip   install  MySQL-python
+
+二：日常使用
+
+2.1：查询数据
+
+2.1.1：查询多条数据version0.1
+
+import MySQLdb as mysql     
+
+db=mysql.connect(user='root',passwd='123456',db='reboot',charset='utf8')   
+cur=db.cursor()                                         # 建立游标
+
+ cur.execute('select * from host')            # 执行sql
+
+  str = ""
+  result= cur.fetchall():                              # 结果以元组嵌套的形式返回   ((id,name), (id,iname),……）
+  for c in result:                                           # 循环父元祖，然后按照索引依次获取到每列的值，
+           str =   '<tr><td>%s</td> \
+            <td>%s</td> \
+            <td>%s</td> \
+             <td>%s</td> \
+            <td><span class="update-btn" data-id="%s">update</span></td> \
+            <td><span  class="delete-btn" data-id="%s">delete</span></td>  \
+            </tr>' % (c[0],c[1],c[2],c[3],c[0],c[0])   # get data and get id for update,delete 
+            str ＋= str
+
+    cur.close()
+    return jsondumps(str)
+
+2.1.2:  查询多条数据version1.0
+   
+            users = []
+            fields = ['id', 'username', 'name', 'email', 'mobile']           ＃指定需要返回的列，存入列表
+            sql = "SELECT %s FROM user"  % ','.join(fields)              # join将列表转为字符串，传入sql
+             cur.execute(sql)
+            for row in cur.fetchall():                                                  ＃循环返回的元组
+                user = {}
+                for i, k in enumerate(fields):                                      ＃利用enumerate遍历列表,i为索引号，k为元素
+                    user[k] = row[i]                                                       # fields中列作为user字典的k,索引作为mysql返回列表的k,给字典赋值
+                users.append(user)
+            return json.dumps({'code': 0, 'users': users})
+
+2.1.3:  查询多条数据version2.0——字典/列表生成式子
+
+             fields = ['id','username','name','email','mobile'] 
+
+             result= cur.fetchall()
+             users＝ [dict((k, row[i]) for i,k in enumerate(fields)) for row in result]
+             return json.dumps({'code':0,'users':users})
+
+            更高效的方式——直接将返回的嵌套元祖转换为嵌套的字典,常用与只查询id,username的场景
+            result = cur.fetchall()                                           # ((1,''ab'), (2,''bc'）)
+            result = dict([(x['0'], x['1']) for x in result])       #{1: 'ab', 2: 'bc'}
+
+
+2.1.4:：查询单条数据version0.1
+
+    sql = "select * from host where h_id=%s" % (id)   
+    cur.execute(sql)
+    dict = {}
+    res=cur.fetchone()                     # 结果以元祖返回 (id,ip,name,……),，按照列的顺序依次输出
+    cur.close()
+    dict['id']=res[0]                         # 结果返回的各个值传递 到字典中 ,可以按照序号索引取值        
+    dict['ip']=res[2]
+    return json.dumps(dict)
+
+
+2.1.5:  查询单条数据version1.0
+
+            user={}
+            fields = ['id','username','name','email','mobile']                
+            sql = "SELECT %s FROM user where id=%d" % (','.join(fields),user_id)    
+            cur.execute(sql) 
+            res =cur.fetchone()    
+            for i,k in enumerate(fields):    
+                user[k]=res[i]    
+            return json.dumps({'code':0,'user':user})
+
+
+2.1.6:  查询单条数据version2.0——字典/列表生成式子
+          
+            fields = ['id','username','name','email','mobile'] 
+            result= cur.fetchall()
+            user＝ dict((k, result_set[i]) for i,k in enumerate(fields))
+            return json.dumps({'code':0,'user':user})
+        
+   
+2.2：插入数据
+
+2.2.1: 指定列的插入
+
+            data = request.get_json()                              # 获取前端传来的json数据
+            fields = ['name','name_cn','comment']
+
+            sql = 'INSERT INTO groups (%s) VALUES (%s)' % (','.join(fields), ','.join(['"%s"' % data[x] for x in fields]))
+            cur.execute(sql)
+
+2.2.2:  根据前端传入的数据直接插入
+
+        data = request.get_json()
+        fields, values = [], [] 
+        for k,v data.items():
+            fields.append(k)
+            values.append("'%s'" % v)
+
+        sql = "insert into cabinet (%s) values (%s)" % (','.join(fields),','.join(values))
+        cur.execute(sql)
+
+
+2.3：更新数据
+
+2.3.1: 原始版本0.1
+data = request.get_json()
+sql = 'update user set username="%(username)s",name="%(name)s",email="%(email)s",mobile="%(mobile)s" where id=%(id)s'  % data 
+cur.execute(sql)
+2.3.1: 原始版本1.0——列表生成式
+上面的sql，update的时候，列名都写死了，不利于通用。可以通过列表生成式的方式，前端传来那些列，就更新那些列,传来的值默认为k,v格式的字典
+            data = request.get_json()
+            where  = data.get('where',None)
+            data = data.get('data',None)
+            conditions = ["%s='%s'" % (k,data[k]) for k in data]                       # 结果为： ["name='wd'","age='18'",......]
+            sql = "update user SET %s where id =where " %  (','.join(conditions),where) 
+            cur.execute(sql)
+
+
+三：其他常用操作
+
+3.1:  将一个表的数据插入到另一个表中
+
+         insert into table1.logs select * from table2.logs;    
+         create table test  select * from permission;    # 将一个表中的数据导入到一个新表
+
+3.2:   where in语句
+
+mysql> select  * from groups where id in (2,3);
++----+--------+-------------+-------+-------+
+| id | name   | name_cn     | p_id  | info  |
++----+--------+-------------+-------+-------+
+|  2 | admin  | guanliyuan2 | 1,2,3 | Test2 |
+|  3 | admin3 | guanliyuan3 | 1,2   | Tes3  |
++----+--------+-------------+-------+-------+
+
+3.3:  获取返回数据的条数
+
+In [6]: import MySQLdb as mysql
+In [7]: db=mysql.connect(host='127.0.0.1',user='root',passwd='123456',db='cmdb',charset='utf8')
+In [8]: cur=db.cursor()
+In [9]: sql ="select  * from host";
+In [10]: cur.execute(sql)
+Out[10]: 2L
+
+In [11]: result = cur.fetchall()      #返回结果是一个双元组，fetchone() 返回单元组
+In [12]: result                                 ＃如果没有数据，返回空元组                          
+Out[12]: 
+    ((1L, u'test1', u'182.18.40.230', u'aliyun'),
+     (2L, u'sa', u'182.18.40.228', u'aliyun'))
+In [13]: len(result)                     #通过len获得返回结果的数量 
+Out[13]: 2
+
+
+通过for循环的统计结果数量 ——不推荐
+count = 0      
+for row in result:
+        count +=0
+        ……
+
