@@ -1,6 +1,11 @@
-1: 异常处理模块
-2：loging模块
-3：os，sys模块
-4：requests模块
-5：psutil模块
-6: 优化用户管理系统代码
+
+1: 作业处理
+2: 实现jquery版本的增删改查
+
+
+3：jquery基本语法介绍（变量，数据结构，条件判断，循环，函数）
+4: 常用选择器（重点）
+3：常用动作及事件
+4：ajax
+5：html css bootstrap jinja2
+6: 美化页面
