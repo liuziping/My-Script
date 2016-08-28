@@ -1,0 +1,20 @@
+
+bootstrap讲解思路
+
+1: 讲解bootstrap基础知识，了解booststrap组织结构，尤其是骨架
+2: 通过审查元素或者源代码，伪代码实现jumpserver的骨架
+3: 根据骨架，庖丁解牛jumpserver，搞出想要的任何一块
+4:jinja2讲解，实现前端代码的复用
+5:讲用户管理系统套上新衣服
+
+
+模块部分
+1: 异常处理模块
+2：loging模块
+3：os，sys模块
+4：requests模块
+5：psutil模块
+6: 优化用户管理系统代码
+
+
+
