@@ -1,0 +1,18 @@
+一：API
+    1：resfulAPI标准
+    2：jsonrpc api使用
+
+    扩展： token的实现方式
+二：flask扩展——浅尝辄止
+    ORM
+
+三：实战班知识回顾
+    1：基础知识。数据结构，代码结构，列表，字典，字符串 文件，函数
+    2：flask框架——MVC，前端，数据端，逻辑端
+    3：实战项目——用户权限系统
+        前端：html，css,jquery(ajax),bootstrap
+        逻辑端：flask，session，各种模块，get/post
+        数据库：db类，dbutil连接池，各种生成式
+    4: echart,各种模块
+    5：API
+

@@ -1,0 +1,15 @@
+python操作数据库工作流
+
+1: 导入mysql扩展模块  import MySQLdb as mysql
+2：链接数据库 db = mysql.connect(各种参数)
+3：建立游标，cur = db.cursor(),自此数据库初始化完成，可以干活了
+4: 编写你的sql语句（增删改查） sql = "******"
+5: 执行sql语句cur.exectute(sql)
+6: 数据提交db.commit()
+7: 关闭游标，关闭数据库连接 cur.close()   db.close()
+
+查询数据的两种方式     
+
+1：查询单条记录， cur.fetchone()
+2: 查询多条记录， cur.fetchall()
+

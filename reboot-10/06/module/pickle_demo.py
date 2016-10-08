@@ -5,7 +5,7 @@ import pickle
 # 增
 def Create():
   users = {'pc':'123456','wd':'123','kk':'234'}
-  fo=open('users.txt','wb')       # pickle模块是以二进制形式存储在文件中，故必须以二进制形式打开
+  fo=open('users.txt','wb')        # pickle模块是以二进制形式存储在文件中，故必须以二进制形式打开
   pickle.dump(users,fo)            # 将字典写入文件中
   fo.close()
 

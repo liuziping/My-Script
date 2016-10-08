@@ -1,9 +1,13 @@
-import session
+from flask  import session
 
 app.sercet_key = 'ssdsds'
 
+
+
 what
-session就是一个全局的字典，在整个flask页面中都能调用
+session就是一个全局的字典，在整个flask页面中都能调用.一般在登录成功之后 生成session
+    session[key]=value
+    token    
 整个就像一家大公司，有多栋大楼，每个楼层都有门卫，session就是第一门
 给你发的一个通行证，带着这个通行证就可以各个楼层区转了
 
