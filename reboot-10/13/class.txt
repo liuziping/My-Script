@@ -1,10 +1,14 @@
 一：API
     1：resfulAPI标准
     2：jsonrpc api使用
+    3: requests 模块
 
     扩展： token的实现方式
+
 二：flask扩展——浅尝辄止
     ORM
+    Form
+    ....
 
 三：实战班知识回顾
     1：基础知识。数据结构，代码结构，列表，字典，字符串 文件，函数
