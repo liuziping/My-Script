@@ -1,0 +1,204 @@
+{% extends "layout.html" %}
+
+{% block breadcrumb %}
+<li><a href="#">发布系统</a><span class="divider"></span></li>
+<li class="active">发布列表</li>
+{% endblock %}
+
+{% block body %}
+<div class="widget-box">
+   <div class="widget-title"> 
+      <h5 style="float:left;"><i class="fa fa-table fa-fw"></i>发布列表</h5>
+   </div> <!--widget-title end-->
+
+<!-- modal for  project detail-->
+<div id="detail" class="modal fade">
+ <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">上线发布详情</h4>
+      </div><!--modal-header end-->
+   
+    <div class="modal-body">
+        <p hidden id="errorMsg" class="text-danger" style="color:red"></p> <!-- foe error msg-->
+        <div class="form-group"> 
+            <label class="control-label col-sm-3">项目名</label>
+            <div class="col-sm-9">
+                 <span id="project_name" class="input-xlarge uneditable-input form-control"></span>
+            </div>
+        </div> <!--project_name end-->
+        <div class="form-group">
+            <label class="control-label col-sm-3">发布简介</label>
+            <div class="col-sm-9">
+                <span id="project_info" class="input-xlarge uneditable-input form-control"></span>
+            </div>
+        </div><!--project_info end-->
+        <div class="form-group">
+            <label class="control-label col-sm-3">发布版本</label>
+            <div class="col-sm-9">
+                <span id="project_version" class="input-xlarge uneditable-input form-control"></span>
+            </div>
+        </div><!--version end-->
+        <div class="form-group">
+            <label class="control-label col-sm-3">代码版本</label>
+            <div class="col-sm-9">
+                <span id="project_commit" class="input-xlarge uneditable-input form-control"></span>
+            </div>
+        </div> <!--commit end-->
+        <div class="form-group">
+            <label class="control-label col-sm-3">操作人</label>
+            <div class="col-sm-9">
+                <span id="project_applicant" class="input-xlarge uneditable-input form-control"></span>
+            </div>
+        </div> <!--applicant end-->
+        <div class="form-group">
+            <label class="control-label col-sm-3">操作时间</label>
+            <div class="col-sm-9">
+                <span id="project_date" class="input-xlarge uneditable-input form-control"></span>
+            </div>
+        </div> <!--project_date end-->
+        <div class="form-group">
+            <label class="control-label col-sm-3">发布状态</label>
+            <div class="col-sm-9">
+                <span id="project_status" class="input-xlarge uneditable-input form-control"></span>
+            </div>
+        </div> <!--project_status end-->
+        <div class="form-group">
+            <label class="control-label col-sm-3">发布详情</label>
+            <div class="col-sm-9">
+                <span id="project_detail" class="input-xlarge uneditable-input form-control"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="modal-footer">
+                <button class="btn btn-warning" data-dismiss="modal">退出</button> 
+            </div>
+      </div><!--button end-->
+    </div> <!--modal body  end-->
+   </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!--add modal emulation end-->
+
+<div class="widget-content">  
+    <!--发布列表-->
+		<table id ="datatable"  class="table table-bordered table-striped table-hover">
+		<thead>
+			<tr> 
+				<th>项目名</th>
+				<th>发布版本</th>
+				<th>Commit</th>
+				<th>操作人</th>
+				<th>操作时间</th>
+				<th>发布状态</th>
+				<th>操作</th>
+			</tr>
+		</thead> 
+		<tbody>
+		</tbody>
+	   </table>
+
+	</div><!--widget-content end-->
+
+</div><!--widget-box end-->
+{% endblock %}
+
+{% block js %}
+
+/* list all data */
+function list(){
+    var url = "/listapi?method=deploy"
+    $.getJSON(url,function(data){
+       data=JSON.parse(data['result']); //object 
+       console.log(data)
+       var str = ''
+       $.each(data.result,function(k,v){   //循环输出数组Array[3]的值
+           if (v['status'] == 1){
+               v['status'] ="申请中...."
+           }else if (v['status'] == 2){
+               v['status'] ="审核中...."
+           } else if  (v['status'] == 3){
+               v['status'] ="发布失败."
+           }else{
+               v['status'] ="发布完成"
+           }
+           str +='<tr class="odd gradeX">'+ 
+           '<td>'+v['project_name']+'</td>'+  
+           '<td>'+v['version']+'</td>'+  
+           '<td>'+v['commit']+'</td>'+  
+           '<td>'+v['applicant']+'</td>'+  
+           '<td>'+v['apply_date']+'</td>'+ 
+           '<td>'+v['status']+'</td>'+ 
+           '<td>'+
+           '<button class="btn btn-primary btn-sm detail-btn" data-id="'+v['id']+'">详情</button>'+
+           '</td>'+
+           '</tr>'
+       })
+         $("tbody").html(str)
+         style()
+         datatable()
+    })
+}
+list()
+/* DataTable */
+function datatable(){
+$('#datatable').DataTable({
+    "bDestroy":true,
+    "language": {
+        "lengthMenu": "每页 _MENU_ 条记录",
+        "zeroRecords": "没有找到记录",
+        "sInfo": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 ),显示第 _START_ 至 _END_ 项(总共 _TOTAL_ 项)",
+        "infoEmpty": "无记录",
+        "infoFiltered": "(从 _MAX_ 条记录过滤)",
+        "sSearch": "搜索:",
+        "oPaginate": {
+            "sFirst": "首页",
+            "sPrevious": "上一页",
+            "sNext": "下一页",
+            "sLast": "末页"
+        }
+    },
+    "order": [[4, 'desc'], [0, 'asc']]
+});
+}
+function style(){
+    $('td:contains("申请中")').css('color','Lime')
+    $('td:contains("审核中")').css('color','blue')
+    $('td:contains("发布失败")').css('color','red')
+    $('td:contains("发布完成")').css('color','green')
+}
+
+/*弹出详情页 */
+$("tbody").on('click','.detail-btn',function(){
+    var id = $(this).attr('data-id')
+    var url = "/getapi?method=deploy&id="+id
+    $.getJSON(url,function(data){
+    data = JSON.parse(data['result'])
+    console.log(data)
+    if (data['code']==0){
+        data=data.result
+        console.log(data.status)
+        if (data.status=='1'){
+           data.status="申请中......"
+        }else if(data.status=='2'){
+           data.status='审核中.....'
+        }else if(data.status=='3'){
+           data.status='发布失败'
+        }else{
+           data.status='发布完成'
+        } 
+        $('#project_name').html(data.project_name);
+        $('#project_info').html(data.info);
+        $('#project_version').html(data.version);
+        $('#project_commit').html(data.commit);
+        $('#project_applicant').html(data.applicant);
+        $('#project_date').html(data.apply_date);
+        $('#project_status').html(data.status);
+        $('#project_detail').html(data.detail);
+        $('#detail').modal('show')
+      }else{
+         $('#errorMsg').html('failed '+data['errmsg']).show()
+      }
+    })
+})
+{% endblock %}

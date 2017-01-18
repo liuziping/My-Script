@@ -1,0 +1,24 @@
+一：rbac思想
+   1: 数据库链表
+   2: 数据库存放关联ID组成的字符串建立关系，通过python的技巧实现id2name
+
+二：jquery + flask_web + jsonrpc api
+
+API后端：
+   1： 通过字典，列表生成式优化sql代码
+   2:  jsonrpc的设计和请求格式
+   3:  通过python的技巧实现id2name
+
+flask web端
+   1: public.py 抽象增删改查的操作
+   2: 通过<string:name>的方式优雅的规范html请求
+
+
+jquery前端
+   1: 添加数据时，如何将关联表通过下拉菜单优雅的展示
+   2: 更新数据时，除了优雅展示关联表的下来菜单外，还要展示当前的选项
+
+
+
+
+
