@@ -1,0 +1,119 @@
+*** Starting uWSGI 2.0.11.2 (64bit) on [Wed Dec 23 18:01:42 2015] ***
+compiled with version: 4.4.7 20120313 (Red Hat 4.4.7-16) on 23 December 2015 16:25:01
+os: Linux-2.6.32-573.3.1.el6.x86_64 #1 SMP Thu Aug 13 22:55:16 UTC 2015
+nodename: sa
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 2
+current working directory: /home/liuziping/flask-demo/test
+detected binary path: /home/liuziping/venv/bin/uwsgi
+your processes number limit is 1024
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to TCP address 0.0.0.0:8088 fd 3
+Python version: 2.7.8 (default, Jun  1 2015, 22:04:10)  [GCC 4.4.7 20120313 (Red Hat 4.4.7-11)]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x2714a80
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 363840 bytes (355 KB) for 4 cores
+*** Operational MODE: preforking ***
+added /home/liuziping/flask-demo/test/ to pythonpath.
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x2714a80 pid: 565 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 565)
+spawned uWSGI worker 1 (pid: 568, cores: 1)
+spawned uWSGI worker 2 (pid: 569, cores: 1)
+spawned uWSGI worker 3 (pid: 570, cores: 1)
+spawned uWSGI worker 4 (pid: 571, cores: 1)
+...brutally killing workers...
+worker 1 buried after 0 seconds
+worker 2 buried after 0 seconds
+worker 3 buried after 0 seconds
+worker 4 buried after 0 seconds
+binary reloading uWSGI...
+chdir() to /home/liuziping/flask-demo/test
+closing all non-uwsgi socket fds > 2 (max_fd = 1024)...
+found fd 3 mapped to socket 0 (0.0.0.0:8088)
+running /home/liuziping/venv/bin/uwsgi
+[uWSGI] parsing config file demo_uwsgi.xml
+*** Starting uWSGI 2.0.11.2 (64bit) on [Wed Dec 23 19:21:37 2015] ***
+compiled with version: 4.4.7 20120313 (Red Hat 4.4.7-16) on 23 December 2015 16:25:01
+os: Linux-2.6.32-573.3.1.el6.x86_64 #1 SMP Thu Aug 13 22:55:16 UTC 2015
+nodename: sa
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 2
+current working directory: /home/liuziping/flask-demo/test
+detected binary path: /home/liuziping/venv/bin/uwsgi
+your processes number limit is 1024
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to TCP address 0.0.0.0:8088 fd 3
+Python version: 2.7.8 (default, Jun  1 2015, 22:04:10)  [GCC 4.4.7 20120313 (Red Hat 4.4.7-11)]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0xbbc990
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 363840 bytes (355 KB) for 4 cores
+*** Operational MODE: preforking ***
+added /home/liuziping/flask-demo/test/ to pythonpath.
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0xbbc990 pid: 565 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+gracefully (RE)spawned uWSGI master process (pid: 565)
+spawned uWSGI worker 1 (pid: 5046, cores: 1)
+spawned uWSGI worker 2 (pid: 5047, cores: 1)
+spawned uWSGI worker 3 (pid: 5048, cores: 1)
+spawned uWSGI worker 4 (pid: 5049, cores: 1)
+...brutally killing workers...
+worker 1 buried after 1 seconds
+worker 2 buried after 1 seconds
+worker 3 buried after 1 seconds
+worker 4 buried after 1 seconds
+binary reloading uWSGI...
+chdir() to /home/liuziping/flask-demo/test
+closing all non-uwsgi socket fds > 2 (max_fd = 1024)...
+found fd 3 mapped to socket 0 (0.0.0.0:8088)
+running /home/liuziping/venv/bin/uwsgi
+[uWSGI] parsing config file demo_uwsgi.xml
+*** Starting uWSGI 2.0.11.2 (64bit) on [Wed Dec 23 19:21:40 2015] ***
+compiled with version: 4.4.7 20120313 (Red Hat 4.4.7-16) on 23 December 2015 16:25:01
+os: Linux-2.6.32-573.3.1.el6.x86_64 #1 SMP Thu Aug 13 22:55:16 UTC 2015
+nodename: sa
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 2
+current working directory: /home/liuziping/flask-demo/test
+detected binary path: /home/liuziping/venv/bin/uwsgi
+your processes number limit is 1024
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to TCP address 0.0.0.0:8088 fd 3
+Python version: 2.7.8 (default, Jun  1 2015, 22:04:10)  [GCC 4.4.7 20120313 (Red Hat 4.4.7-11)]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x1cfe990
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 363840 bytes (355 KB) for 4 cores
+*** Operational MODE: preforking ***
+added /home/liuziping/flask-demo/test/ to pythonpath.
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x1cfe990 pid: 565 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+gracefully (RE)spawned uWSGI master process (pid: 565)
+spawned uWSGI worker 1 (pid: 5052, cores: 1)
+spawned uWSGI worker 2 (pid: 5053, cores: 1)
+spawned uWSGI worker 3 (pid: 5054, cores: 1)
+spawned uWSGI worker 4 (pid: 5055, cores: 1)
+Wed Dec 23 19:21:54 2015 - uWSGI worker 1 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Wed Dec 23 19:21:54 2015 - uWSGI worker 4 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Wed Dec 23 19:21:54 2015 - uWSGI worker 2 screams: UAAAAAAH my master disconnected: i will kill myself !!!
+Wed Dec 23 19:21:54 2015 - uWSGI worker 3 screams: UAAAAAAH my master disconnected: i will kill myself !!!

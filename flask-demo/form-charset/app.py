@@ -27,8 +27,6 @@ def Handleformdata(formdata):   #将类似'id=1&name=lzp&pid=2&pid=3'得表单�
 @app.route('/',methods=['GET','POST'])
 def index():
     if request.method == 'POST':      #接受原生表单通过action='/',method='POST'提交数据
-        print request.form        #ImmutableMultiDict([('username', u'\u4f60\u597d')])
-        print dict(request.form)  #{'username': [u'\u4f60\u597d']} 
         username = request.form.get('username')
         print repr(username)   #u'\u4f60\u597d'   flask会自动按照Unicode的转码文本
         print username         #你好
@@ -38,8 +36,6 @@ def index():
 @app.route('/add',methods=['GET','POST']) #通过ajax直接提交表单的数据，flask统一解码
 def add():
     if request.method == 'POST':  #ajax post直接提交表单serialize()数据
-        print request.form        #ImmutableMultiDict([('username', u'\u4f60\u597d')])
-        print dict(request.form)  #{'username': [u'\u4f60\u597d']} 
         username = request.form.get('username')
         print repr(username)    #u'\u4f60\u597d\u5417'
         print username          #你好吗

@@ -1,6 +1,6 @@
 #coding:utf-8
 from flask_script import Manager,prompt_bool
-from app import app,db
+from . import app,db
 from app.models import User
 
 manager = Manager(app)

@@ -1,0 +1,9 @@
+<uwsgi>
+     <pythonpath>/home/liuziping/flask-demo/test</pythonpath>
+     <module>demo</module>
+     <callable>app</callable>
+	 <socket>0.0.0.0:8089</socket>       
+     <master/>
+     <processes>4</processes>           
+     <memory-report/>
+</uwsgi>

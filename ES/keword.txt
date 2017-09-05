@@ -80,3 +80,67 @@ PUT keyword-2016.07.31/mall/_mapping
      }
    }
  }
+
+
+
+PUT keyword-2016.09
+{
+  "settings": {
+        "number_of_shards": 5,
+        "number_of_replicas": 0
+  },
+  "mappings": {
+      "mall": {
+        "properties": {
+          "city_cn_name": {
+            "type": "string","index": "not_analyzed"
+          },
+          "city_py_name": {
+            "type": "string"
+          },
+          "host": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "province_cn_name": {
+            "type": "string","index": "not_analyzed"
+          },
+          "province_py_name": {
+            "type": "string"
+          },
+          "search_date": {
+            "type": "string"
+          },
+          "search_index_file": {
+            "type": "string",
+             "index": "not_analyzed"
+          },
+          "search_keyword": {
+            "type": "string","index": "not_analyzed"
+          },
+          "search_platform":{
+            "type": "long"
+          },
+          "search_platform_name": {
+            "type": "string","index": "not_analyzed"
+          },
+          "search_result_total": {
+            "type": "string"
+          },
+         "search_ip_area_name":{
+         "type":"string",
+         "index":"not_analyzed"
+         },
+        "city_id":{
+         "type":"long"
+        },
+        "search_ip":{
+         "type":"string",
+         "index":"not_analyzed"
+        }
+        }
+      }
+  }
+}

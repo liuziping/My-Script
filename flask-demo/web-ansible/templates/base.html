@@ -1,0 +1,65 @@
+<html lang="en">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>命令编排系统</title>
+    <!-- Bootstrap core CSS -->
+    <!--link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet"-->
+    <link href="{{ url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <!--link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet"-->
+    <link href="{{ url_for('static',filename='css/dashboard.css')}}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/jquery.dataTables.min.css')}}" rel="stylesheet">
+	{% block css %}{% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">  <!--导航-->
+  <div class="container-fluid">
+  
+	<div class="navbar-header">
+	  <a class="navbar-brand" href="#">DevOps</a>
+	</div>
+	
+	<div id="navbar" class="navbar-collapse collapse">
+	  <ul class="nav navbar-nav navbar-right">
+		<li><a href="#">welcome {{username}}</a></li>
+		<li><a href="#">Dashboard</a></li>
+		<li><a href="/logout">logout</a></li>
+	  </ul>
+	</div><!--collapse end-->
+	
+  </div><!--container-fluid end-->
+</nav>   <!--nav end-->
+
+<div class="container-fluid">
+  <div class="row">
+	<div class="col-sm-3 col-md-2 sidebar">  <!--left sidebar-->
+    <ul class="nav nav-sidebar">
+		<li class="active" id="ansible"><a href="#">批量管理系统 <span class="sr-only">(current)</span></a></li>
+		<li class="ansible-menu"><a href="/index">批量执行命令</a></li>
+		<li class="ansible-menu"><a href="/index">批量执行脚本</a></li>
+		<li class="ansible-menu"><a href="/index">批量传输文件</a></li>
+  	</ul>
+    </div> 
+ 		
+	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">  <!--main-->
+	{% block main %}  
+    {% endblock %}
+	</div> <!--main end-->
+
+  </div><!---row end-->
+</div> <!--container-fluid-->
+
+<!--script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script-->
+<script src="{{url_for('static',filename='js/jquery.min.js')}}"></script>
+<!--script src="http://cdn.bootcss.com/bootstrap/3.3.2/js/bootstrap.min.js"></script-->
+<script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+<script src="{{url_for('static',filename='js/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript">
+$('body').ready(function () {
+	$('.dropdown-toggle').dropdown();
+	$('#ansible').click(function(){ 
+		$('.ansible-menu').slideToggle("slow");  
+	});
+})
+{% block js%} {%endblock%}
+</script>
