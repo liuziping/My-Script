@@ -1,0 +1,63 @@
+{% extends "public/layout.html" %}
+
+{% block breadcrumb %}
+     <ol class="breadcrumb">
+        <li>
+            <a href="{% url 'index' %}">首页</a>
+        </li>
+         <li>
+             <a>资源管理</a>
+         </li>
+        <li class="active">
+            <strong>添加机房</strong>
+         </li>
+    </ol>
+{% endblock %}
+{% block body %}
+    <form class="form-horizontal" method="post">
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">idc字母简称：</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control"  placeholder="请输入机房字母简称" name="name">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">idc名称：</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" placeholder="请输入机房中文名字" name="idc_name" >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">机房地址：</label>
+            <div class="col-sm-5">
+                <input type="text"  class="form-control" placeholder="请输入机房具体地址" name="address">
+            </div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">联系人姓名：</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" placeholder="请输入机房联系人姓名" name="user">
+            </div> 
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">联系人电话：</label>
+            <div class="col-sm-5">
+                <input type="text"  class="form-control" placeholder="请输入机房联系人电话" name="user_phone">
+            </div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">联系人邮件：</label>
+            <div class="col-sm-5">
+                <input type="email" class="form-control" placeholder="请输入机房联系人email" name="user_email">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">提交</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "public/layout.html" %}
+
+{% block breadcrumb %}
+     <ol class="breadcrumb">
+        <li>
+            <a href="{% url 'index' %}">首页</a>
+        </li>
+         <li>
+             <a>资源管理</a>
+         </li>
+        <li class="active">
+            <strong>添加业务线</strong>
+         </li>
+    </ol>
+{% endblock %}
+
+
+{% block body %}
+    <form class="form-horizontal" parsley-validate method="post">
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">业务线名称：</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control"  placeholder="请输入业务线名称" name="name"
+                        parsley-required="true" >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">字母简称：</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" placeholder="请输入字母简称" name="module_letter"  parsley-required="true" >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">上级业务线：</label>
+            <div class="col-sm-5" id="pid">
+                <select class="chosen-select  form-control" data-placeholder=""  name="pid"
+                        parsley-required="true" parsley-error-container="#pid">
+                    <option value="0">顶级业务线</option>
+                    {% for product in products %}
+                    <option value="{{ product.id }}"> {{ product.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">运维负责人：</label>
+            <div class="col-sm-5" id="op_interface_div">
+                <select class="chosen-select  form-control" data-placeholder="" multiple="选择联系人" name="op_interface" id="select_dev_interface"
+                        parsley-required="true" parsley-error-container="#op_interface_div">
+                {% for user_obj in user_object_list %}
+                    <option value="{{ user_obj.username }}">{{ user_obj.username}}</option>
+                {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">业务负责人：</label>
+            <div class="col-sm-5" id="dev_interface_div">
+                <select class="chosen-select  form-control" data-placeholder="" multiple="选择联系人" name="dev_interface" id="select_dev_interface"
+                        parsley-required="true" parsley-error-container="#dev_interface_div">
+                {% for user_obj in user_object_list %}
+                    <option value="{{ user_obj.username }}">{{ user_obj.username}}</option>
+                {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">提交</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+
+{% block js %}
+    <script>
+        $(function(){
+            //chosen select input
+            $(".chosen-select").chosen({disable_search_threshold: 8});
+        })
+    </script>
+{% endblock %}

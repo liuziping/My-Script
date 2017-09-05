@@ -1,0 +1,53 @@
+{% extends "public/layout.html" %}
+
+{% block breadcrumb %}
+     <ol class="breadcrumb">
+        <li>
+            <a href="{% url 'index' %}">首页</a>
+        </li>
+         <li>
+             <a>资源管理</a>
+         </li>
+        <li class="active">
+            <strong>更新服务器状态</strong>
+         </li>
+    </ol>
+{% endblock %}
+{% block body %}
+    <form class="form-horizontal" method="post">
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">主机名</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputEmail3" value="{{ obj.hostname }}"
+                       disabled>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">ip地址</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputEmail3" value="{{ obj.inner_ip }}"
+                       disabled>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">状态</label>
+            <div class="col-sm-5">
+                <select class="form-control" name="status">
+                    <option value="0">请选择状态</option>
+                    {% for status in status_obj_list %}
+                        <option value="{{ status.name }}">{{ status.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="hidden" name="id" value="{{ obj.id }}">
+                <button type="submit" class="btn btn-primary">提交</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

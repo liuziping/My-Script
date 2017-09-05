@@ -1,0 +1,78 @@
+{% extends "public/layout.html"%}
+
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li>
+            <a href="{% url 'index' %}">仪表盘</a>
+        </li>
+        <li class="active">
+            <strong></strong>
+        </li>
+    </ol>
+{% endblock %}
+
+
+{% block body %}
+ <div class="wrapper wrapper-content">
+     <div class="row">
+
+                <div class="col-lg-3">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <span class="label label-success pull-right">Users</span>
+                            <h5>用户数</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">5</h1>
+                            <small>用户总数</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <span class="label label-info pull-right">Hosts</span>
+                            <h5>主机总数</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">10</h1>
+                            <small>主机总数</small>
+                        </div>
+                    </div>
+                </div>
+               
+		         <div class="col-lg-3">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <span class="label label-primary pull-right">Projects</span>
+                            <h5>项目总数</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">6</h1>
+		                    <small>项目总数</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <span class="label label-danger pull-right">Release</span>
+                            <h5>总上线次数</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">100</h1>
+                            <small>总上线次数</small>
+                        </div>
+                    </div>
+               </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block js%}
+{% endblock %}

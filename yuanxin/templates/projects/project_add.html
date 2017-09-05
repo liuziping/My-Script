@@ -1,0 +1,96 @@
+{% extends "public/layout.html" %}
+
+{% block breadcrumb %}
+     <ol class="breadcrumb">
+        <li>
+            <a href="{% url 'index' %}">首页</a>
+        </li>
+         <li>
+             <a>项目管理</a>
+         </li>
+        <li class="active">
+            <strong>添加项目</strong>
+        </li>
+    </ol>
+{% endblock %}
+
+
+{% block body %}
+<div  class="wrapper wrapper-content animated fadeInRight">
+<div class="row">
+
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5> 填写项目基本信息 </h5>
+            </div>
+            
+            <div class="ibox-content">
+                <form method="post" action="{% url 'project_add' %}" class="form-horizontal">
+                     {% if msg %}
+                        <div class="alert alert-success alert-dismissable">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                        {{ msg | safe }}
+                         </div>
+                     {% endif %}
+
+
+                    <div class="form-group"><label class="col-sm-2 control-label">项目路径：</label>
+                        <div class="col-sm-3"><input type="text" value="http://59.110.12.72:9090/" name="url" class="form-control" disabled></div>
+                        <div class="col-sm-2">
+                            <select  name="group" class="group-select form-control" required="">
+                                {% for group in all_group %}
+                                    <option value="{{ group.name }}" >{{ group.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-3"><input type="text" name="name" class="form-control" required=""></div>
+                    </div>
+                    
+                    
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group"><label class="col-sm-2 control-label">项目描述：</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" name ="description" rows="3" placeholder="说明格式"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group"><label class="col-sm-2 control-label">可见等级：</label>
+                        <div class="col-sm-8">
+                            <div class="radio i-checks">
+                                <label><input type="radio" value="0" name="visibility_level" checked><i class="fa fa-lock fa-fw"></i> <strong>私有</strong> <small>项目必须明确授权给每个用户访问。</small></label>
+                            </div>
+                            <div class="radio i-checks">
+                                <label><input type="radio" value="10" name="visibility_level"><i class="fa fa-shield fa-fw"></i> <strong>内部</strong> <small>项目可以被所有已登录用户克隆。</small></label>
+                            </div>
+                             <div class="radio i-checks">
+                                <label><input type="radio" value="20" name="visibility_level"><i class="fa fa-globe fa-fw"></i> <strong>公开</strong> <small>项目可以被任何用户克隆。</small></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button id="submit_button" class="btn btn-primary" type="submit">添加项目</button>
+                            <button class="btn btn-white" type="reset">取消</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "public/layout.html" %}
+
+{% block breadcrumb %}
+     <ol class="breadcrumb">
+        <li>
+            <a href="{% url 'index' %}">首页</a>
+        </li>
+         <li>
+             <a>资源管理</a>
+         </li>
+        <li class="active">
+            <strong>编辑产品线</strong>
+         </li>
+    </ol>
+{% endblock %}
+
+
+{% block body %}
+
+
+
+            <form class="form-horizontal"  role="form" parsley-validate id="basicvalidations" method="post">
+
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">主机名：</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" readonly value="{{ server.hostname }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">ip：</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" readonly value="{{ server.inner_ip }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="select_idc_id" class="col-sm-2 control-label">业务线：*</label>
+                    <div class="col-sm-8" id="select_service_id">
+                        <select class="chosen-select chosen-transparent form-control" name="service_id" id="service_id" parsley-trigger="change" parsley-required="true" parsley-error-container="#select_service_id">
+                            <option value="">请选择</option>
+                            {% for product in products %}
+                                {% if product.pid == 0 %}
+                                <option value="{{ product.id }}" {% if server.service_id  == product.id %}selected{% endif %}>{{ product.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="select_idc_id" class="col-sm-2 control-label">产品线：*</label>
+                    <div class="col-sm-8" id="select_server_purpose">
+                        <select class="chosen-select chosen-transparent form-control" name="server_purpose" id="server_purpose" parsley-trigger="change" parsley-required="true" parsley-error-container="#select_server_purpose">
+                            <option value="">请选择</option>
+                            {% for product in products %}
+                                {% if product.pid == server.service_id %}
+                                <option value="{{ product.id }}" {% if server.server_purpose.id  == product.id %}selected{% endif %}>{{ product.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group form-footer">
+                    <div class="col-sm-offset-4 col-sm-8">
+                        <input type="hidden" name="id" value="{{ server.id }}">
+                        <button type="submit" class="btn btn-primary">提交</button>
+                        <button type="reset" class="btn btn-default">重置</button>
+                    </div>
+                </div>
+
+            </form>
+{% endblock %}
+{% block js %}
+    <script>
+        $(function(){
+
+            //chosen select input
+            $(".chosen-select").chosen({disable_search_threshold: 10});
+
+            // 当选择业务线后
+            $("#service_id").change(function(){
+                service_id = $(this).val();
+                if(service_id == ""){
+                    return false;
+                }
+                server_purpose = $("#server_purpose");
+                server_purpose.empty().append('<option value="">请选择</option>');
+                $.get("/server/product_get/", {pid:service_id}, function(data){
+                    $.each(data, function(i, obj){
+                        server_purpose.append('<option value="'+ obj.pk +'">'+ obj.fields.name +'</option>');
+                    });
+                    server_purpose.trigger("chosen:updated");
+                });
+            });
+        })
+
+    </script>
+
+{% endblock %}

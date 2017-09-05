@@ -1,0 +1,34 @@
+{% extends "public/layout.html" %}
+
+{% block breadcrumb %}
+     <ol class="breadcrumb">
+        <li>
+            <a href="{% url 'index' %}">仪表盘</a>
+        </li>
+         <li>
+             <a>任务管理</a>
+         </li>
+        <li class="active">
+            <strong>任务执行详情</strong>
+        </li>
+    </ol>
+{% endblock %}
+{% block body %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5> 任务详细过程 </h5>
+                </div>
+
+                <div class="ibox-content">
+                   <pre style="color:#f8f8ff;background:#000000">{{ task.detail_result }}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+{% endblock %}

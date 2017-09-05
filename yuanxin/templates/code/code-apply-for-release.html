@@ -1,0 +1,173 @@
+{% extends "public/layout.html" %}
+
+{% block css %}
+     <link href="/static/select2/select2.min.css" rel="stylesheet">
+    <style>
+    .select2-container--default .select2-selection--single, .select2-container--default .select2-selection--multiple, .select2-dropdown{ border: 1px solid #e5e6e7;}
+    .select2-container .select2-selection--single{height:34px;}
+    .select2-container--default .select2-selection--single .select2-selection__rendered{line-height: 34px;}
+    .select2-container--default .select2-selection--single .select2-selection__arrow{top:5px;}
+    .select2-container .select2-selection--multiple{min-height:34px;}
+    .select2-container--default .select2-selection--multiple .select2-selection__choice{margin-top:6px;}
+    .errorlist{list-style: none}
+    .red{color: red;}
+
+    </style>
+{% endblock %}
+
+{% block breadcrumb %}
+     <ol class="breadcrumb">
+        <li>
+            <a href="{% url 'index' %}">首页</a>
+        </li>
+         <li>
+             <a>发布系统</a>
+         </li>
+        <li class="active">
+            <strong>申请发布</strong>
+        </li>
+    </ol>
+{% endblock %}
+
+
+{% block body %}
+<div  class="wrapper wrapper-content animated fadeInRight">
+<div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5> 申请要正式上线的项目 </h5>
+                </div>
+
+                <div class="ibox-content">
+                    <form method="post" action="{% url 'apply_for_release' %}" class="form-horizontal">
+                            {% if msg %}
+                                <div class="alert alert-success alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                    {{ msg | safe }}
+                                </div>
+                            {% elif errmsg %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                    {{ errmsg | safe }}
+                                </div>
+                            {% endif %}
+                            <div class="form-group"><label class="col-sm-2 control-label">选择项目：</label>
+                                <div class="col-sm-8">
+                                    <select name="name" id="name" class="select2_demo_3 form-control">
+                                        <option selected="selected">----请选择----</option>
+                                        {% for user_project in user_projects %}
+                                            <option value="{{ user_project.id }}/{{ user_project.name }}">{{ user_project.namespace.name }} / {{ user_project.name }}</option>
+                                           
+                                        {% endfor %}
+                                    </select>
+                                     {% for error in forms.name.errors %}<span class="help-block m-b-none red">{{ error }}</span>{% endfor %}
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group"><label class="col-sm-2 control-label">选择版本：</label>
+                                <div class="col-sm-8">
+                                    <!-- select name="project_version" id = "project_version"  class="select_version form-control" onchange="getTagDesc(this.id)" -->
+                                    <select name="project_version" id = "project_version"  class="select_version form-control">
+                                       <option selected="selected">----请选择----</option>
+                                    </select>
+                                     {% for error in forms.project_version.errors %}<span class="help-block m-b-none red">{{ error }}</span>{% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group"><label class="col-sm-2 control-label">版本描述：</label>
+                                <div class="col-sm-8"> 
+                                    <input type="text" name ="version_desc" id="version_desc" class="form-control" readonly="readonly"  value="" placeholder="版本描述" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group"><label class="col-sm-2 control-label">指派给：</label>
+                                <div class="col-sm-8">
+                                    <select name="assigned_to" class="select2_demo_4 form-control">
+                                       <option selected="selected">----请选择----</option>
+                                        {% for user in assign_to_users %}
+                                            <option value="{{ user.id }}">{{ user.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                     {% for error in forms.assigned_to.errors %}<span class="help-block m-b-none red">{{ error }}</span>{% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                             <div class="form-group"><label class="col-sm-2 control-label">更新详情：</label>
+                                <div class="col-sm-8">
+                                 <textarea class="form-control" name ="update_detail" rows="5" placeholder="更新详情"></textarea>
+                                 {% for error in forms.update_detail.errors %}<span class="help-block m-b-none red">{{ error }}</span>{% endfor %}
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button id="submit_button" class="btn btn-primary" type="submit">申请</button>
+                                    <button class="btn btn-white" type="reset">取消</button>
+                                </div>
+                            </div>
+                        </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block js %}
+<script src="/static/select2/select2.full.min.js"></script>
+    <script>
+        $(".select2_demo_3").select2({
+            placeholder: "请选择你要申请上线的项目",
+            allowClear: true
+        });
+        $(".select_version").select2({
+           placeholder: "请您选择要发布的版本",
+            allowClear: true
+        });
+        $(".select2_demo_4").select2({
+                placeholder: "指派给你要申请的人",
+                allowClear: true
+        });
+
+        var tags = '';
+        $("#name").change(function(){
+            var project_id = $(this).val()
+            console.log(project_id)
+            $.ajax({
+                type: "GET",
+                url: "{% url 'get_project_versions' %}",
+                data:{"project_id": project_id},
+                success: function(data){
+                    console.log(data);
+                    var option_html = "<option selected="+"'selected'>----请选择----</option>";
+                    tags = data
+                    $.each(data, function(i,k) {
+                        option_html += "<option value="+ k[0]+">"+ k[0] + "</option>"
+                    });
+                    $("#project_version").html(option_html);
+
+                 }
+            })
+        })
+
+       $("#project_version").change(function(){
+            var tag = $(this).val()
+            $.each(tags, function(i,k) {
+                 if(tag == k[0]){
+                   $('#version_desc').val(k[1]);
+                 }
+            })
+         }) 
+
+
+
+</script>
+
+{% endblock %}

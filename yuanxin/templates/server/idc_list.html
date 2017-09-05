@@ -1,0 +1,59 @@
+{% extends "public/layout.html" %}
+{% block breadcrumb %}
+     <ol class="breadcrumb">
+        <li>
+            <a href="{% url 'index' %}">首页</a>
+        </li>
+         <li>
+             <a>资源管理</a>
+         </li>
+        <li class="active">
+            <strong>机房列表</strong>
+         </li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+
+    <caption>
+            <a href="{% url 'idc_add'%}" class="btn btn-primary" type="button">添加</a>
+        </caption>
+
+    <table class="table table-striped">
+        <tr> 
+            <th>#</th>
+            <th>机房简写</th>
+            <th>机房中文名</th>
+            <th>地址</th>
+            <th>机房联系人</th>
+            <th>机房电话</th>
+            <th>email</th>
+            <th>操作</th>
+        </tr>
+        {% for idc in object_list %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ idc.name }}</td>
+            <td>{{ idc.idc_name }}</td>
+            <td>{{ idc.address }}</td>
+            <td>{{ idc.user }}</td>
+            <td>{{ idc.user_phone }}</td>
+            <td>{{ idc.user_email }}</td>
+
+            <td>
+                 <div class="btn-group">
+                    <div class="btn-group">
+                        <button class="btn btn-primary btn-sm">修改
+                        </button>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "public/layout.html" %}
+
+{% block css %}
+    <link href="/static/zTree_v3-master/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css">
+    <style>
+        #ztree *{padding: 0px; margin: 0px;font-size: 14px; line-height: 16px;}
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="col-xs-3">
+        <div id="ztree" class="ztree"></div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript" src="/static/zTree_v3-master/js/jquery.ztree.core.js"></script>
+
+
+    <script>
+        function zTreeOnClick(event, treeId, treeNode) {
+            //console.log(treeNode.tId + ", " + treeNode.name);
+            console.log(treeNode)
+        }
+    
+    
+        var zTreeObj;
+       // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+       var setting = {
+            callback: {
+                onClick: zTreeOnClick
+            },
+            view: {
+                fontCss : {fontSize:"16px"}
+            }
+       };
+       // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
+
+       var zNodes = [{"children": [{"pid": 1, "name": "web", "id": 2},
+           {"pid": 1, "name": "wap", "id": 3},
+           {"pid": 1, "name": "app", "id": 4},
+           {"pid": 1, "name": "api", "id": 5}], "pid": 0, "name": "\u623f\u4ea7", "id": 1},
+           {"children": [{"pid": 6, "name": "web", "id": 7},
+               {"pid": 6, "name": "wap", "id": 8},
+               {"pid": 6, "name": "app", "id": 9},
+               {"pid": 6, "name": "api", "id": 10}], "pid": 0, "name": "\u62db\u8058", "id": 6},
+           {"children": [{"pid": 11, "name": "web", "id": 12},
+               {"pid": 11, "name": "wap", "id": 13},
+               {"pid": 11, "name": "app", "id": 14},
+               {"pid": 11, "name": "api", "id": 15}], "pid": 0, "name": "\u4e8c\u624b", "id": 11},
+           {"children": [{"pid": 16, "name": "web", "id": 17},
+               {"pid": 16, "name": "wap", "id": 18},
+               {"pid": 16, "name": "app", "id": 19}], "pid": 0, "name": "\u670d\u52a1", "id": 16},
+           {"children": [{"pid": 20, "name": "app", "id": 21}], "pid": 0, "name": "\u652f\u4ed8", "id": 20},
+           {"children": [], "pid": 0, "name": "111", "id": 22}];
+
+       $(function(){
+           zTreeObj = $.fn.zTree.init($("#ztree"), setting, zNodes);
+       })
+
+    </script>
+{% endblock %}

@@ -1,0 +1,247 @@
+{% extends "public/layout.html" %}
+
+{% load mytags %} 
+
+{% block breadcrumb %}
+     <ol class="breadcrumb">
+        <li>
+            <a href="{% url 'index' %}">首页</a>
+        </li>
+         <li>
+             <a>用户管理</a>
+         </li>
+        <li class="active">
+            <strong>查看小组</strong>
+         </li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+
+<!--查看组成员模态窗-->
+    <div class="modal fade" id="modal_show_group_users_list" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>                    
+                    <h4>用户组名: <span id="modal_show_group_users_list_title"></span></h4>
+                </div>
+
+                <div class="modal-body form-inline" id="modal_show_group_users_content_list">
+                </div>
+                
+                <div class="modal-footer">
+                    <input class="btn btn-default" data-dismiss="modal" aria-hidden="true" type="button" value="确定">
+                </div>
+            </div>
+        </div>
+    </div> <!--end modal-->
+
+<!--添加组模态窗-->
+    <div class="modal fade" id="create_group" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>                  
+                     <h4>添加group</h4>
+                </div>
+                <div class="modal-body form-inline">
+                    <div class="form-group">
+                        <label for="exampleInputName2">用户组：</label>
+                        <input type="text" class="form-control" id="form_groupname" placeholder="请输入用户组名称" />
+                    </div>
+                    <button class="btn btn-primary" id="create_group_btn">提交</button>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-default" data-dismiss="modal" aria-hidden="true" type="button" value="取消">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+     
+<!--组列表部分-->
+    <div class="ibox-content">
+        <!--标题部分-->
+        <div class="">
+            <button class="btn btn-sm btn-primary" id="add_group"> 添加小组 </button>
+
+            <form  method="get" action="" class="pull-right mail-search">
+                <div class="input-group">
+                    <input type="text" class="form-control input-sm" value="{{keyword}}" name="keyword" placeholder="组名">
+                    <div class="input-group-btn">
+                        <button  type="submit" class="btn btn-sm btn-primary">
+                            搜索
+                         </button>
+                     </div>
+                </div>
+            </form>
+        </div>
+
+        <!--组列表部分-->
+        <table class="table table-striped table-bordered table-hover " id="editable" >
+            <thead>
+                <tr>
+                    <th class="text-center">组名</th>
+                    <th class="text-center">组员</th>
+                    <th class="text-center">权限</th>
+                    <th class="text-center">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for group in page_obj.object_list %}
+                <tr class="gradeX">
+                    <td class="text-center">{{ group.name }}</td>
+                    <td class="text-center"> {{ group.user_set.all | group_str2| default:'无' }} 
+                    <a class="btn btn-xs btn-info more" gid="{{group.id}}" gname="{{group.name}}">更多</a>
+                    </td>
+                    <td class="text-center"> {{ group.permissions.all | perm_str2 | default:'无'  }} </td>
+                    <td class="text-center">
+                       <div class="btn-group">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="false">
+                                编辑
+                                 <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'group_perm' %}?id={{ group.id }}">编辑组名</a></li>
+                                 <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'group_perm' %}?id={{ group.id }}">更新权限</a></li>
+                            </ul>                                                                                                                                                        
+                        </div>
+                         <a href="#" class="btn btn-xs btn-danger delete" data-id = {{ group.id }} >删除</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <!--分页部分-->
+        <div class="row">
+            <div class="col-sm-6">
+                 <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                    显示 [{{ p.count }}] 条数据中的 第 [{{ page_obj.start_index }}] 至 [{{ page_obj.end_index }}] 的数据
+                </div>
+            </div> 
+            {% include 'public/paginator.html' %}
+      </div>
+    
+    </div> <!--ibox-content-->
+
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+      
+/*POST请求*/
+function post(group_value){
+    if (group_value == ""){
+        swal("添加失败", "用户组名不能为空", 'error');
+        return false;
+    }
+    $.post("", {"name": group_value},function(res){
+        if(res.code==0){
+            swal({
+                "title": "添加成功",
+                "text": "",
+                "type": "success"
+            },function(){
+                setTimeout(function(){
+                    window.location.reload();
+                },50);
+            })
+        }else{
+            swal("操作失败", res.errmsg, "error");
+        }
+    })
+
+}
+
+ /*执行添加用户组*/
+ $("#add_group").click(function(){
+        $("#create_group").modal("show");
+        $("#create_group_btn").click(function(){
+            var group_value = $("#form_groupname").val();
+            $("#create_group").modal("hide");
+            post(group_value)
+        })
+
+    });
+
+
+/*删除组*/
+$("tbody").on('click','.delete',function(){
+    if(confirm("是否确认删除组？")){
+        var that = this;
+        var id = $(this).attr('data-id')
+        $.ajax({
+            url:"",
+            type: "DELETE",
+            data: {"id":id},
+            datatype: "json",
+            success: function(res){
+                console.log(res)
+                if (res.code ==0){
+                    swal("Good!", res.result, "success")
+                    window.location.reload();
+                }else{
+                    swal("操作失败", res.errmsg, "error")
+                }
+            }
+        })         
+
+    }  // end confirm
+     return false   //get data and end
+})  
+
+/*组与组成员关系模态窗*/
+  $(".more").click(function(){
+      $("#modal_show_group_users_list").modal("show");
+      var gid=$(this).attr('gid');
+      var gname=$(this).attr('gname');
+      // 展示组内成员
+      $.get("/user/groupuser/", {"gid": gid},function(res){
+            var html = '<table class="table table-striped">';
+            $.each(res, function(n, obj){
+                html += '<tr>';
+                html += '<td>'+obj.username+'</td>';
+                html += '<td>'+obj.email+'</td>';
+                html += '<td><button class="btn btn-danger btn-xs del_group_user" uid="'+obj.id+'">删除</button></td>';
+                html += '</tr>'
+            });
+            html += '</table>';
+            $("#modal_show_group_users_list_title").html(gname);
+            $("#modal_show_group_users_content_list").html(html);
+      // 删除组内成员
+      $(".del_group_user").click(function(){
+            var that = $(this);
+            var uid = that.attr('uid');
+            $.ajax({
+                url:"/user/groupuser/",
+                type: "DELETE",
+                data: {"groupid": gid, "userid": uid},
+                datatype: "json",
+                success: function(res){
+                    if (res.code == 0){
+                        that.parents("tr").remove();
+                    }else{
+                        swal("操作失败", res.errmsg, "error")
+                    }
+                }
+            })  // end ajax
+         });    // end del
+      });   // end get
+  })
+</script>
+{% endblock %}
+

@@ -1,0 +1,99 @@
+{% extends "public/layout.html" %}
+
+
+{% block css %}
+    <link href="/static/footable/footable.core.css" rel="stylesheet">
+{% endblock %}
+
+{% block breadcrumb %}
+     <ol class="breadcrumb">
+        <li>
+            <a href="{% url 'index' %}">首页</a>
+        </li>
+         <li>
+             <a>工单管理</a>
+         </li>
+        <li class="active">
+            <strong>历史工单</strong>
+        </li>
+    </ol>
+{% endblock %}
+
+
+{% block body %}
+<div  class="wrapper wrapper-content animated fadeInRight">
+<div class="row">
+ <div class="col-sm-12">
+    <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5> 历史工单 </h5>
+                    </div>
+
+                    <div class="ibox-content">
+                        <div class="">
+                            <form id="search_form" method="get" action="" class="pull-right mail-search">
+                                <div class="input-group">
+                                    <input type="text" class="form-control input-sm" id="search_input" name="search_keywords" placeholder="标题|工单详情|处理结果">
+                                    <div class="input-group-btn">
+                                        <button id='search_btn' type="submit" class="btn btn-sm btn-primary">
+                                            -搜索- 
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                         <table class="footable table table-stripped table-bordered toggle-arrow-tiny" data-page-navigation=".paginations">
+                                <thead>
+                                <tr>
+                                    <th class="text-center" data-toggle="true">工单类型</th>
+                                    <th class="text-center">工单标题</th>
+                                    <th class="text-center">申请人</th>
+                                    <th class="text-center">指派给</th>
+                                    <th class="text-center">申请时间</th>
+                                    <th class="text-center">完成时间</th>
+                                    <th data-hide="all">详情</th>
+                                    <th data-hide="all">处理结果</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for work_order in page_obj.object_list %}
+                                <tr>
+                                    <td class="text-center">{{ work_order.get_type_display }}</td>
+                                    <td class="text-center">{{ work_order.title }}</td>
+                                    <td class="text-center">{{ work_order.applicant.name }}</td>
+                                    <td class="text-center">{{ work_order.assign_to.name }}</td>
+                                    <td class="text-center">{{ work_order.apply_time}}</td>
+                                    <td class="text-center">{{ work_order.complete_time}}</td>
+                                    <td><pre>{{ work_order.order_contents }}</pre></td>
+                                    <td>{{ work_order.result_desc }}</td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                                    显示 [{{ p.count }}] 条数据中的 第 [{{ page_obj.start_index }}] 至 [{{ page_obj.end_index }}] 条数据
+                                </div>
+                            </div>
+                            {% include 'public/paginator.html' %}
+                        </div>
+                    </div>
+                </div>
+           </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+
+{% block js %}
+<script src='/static/footable/footable.all.min.js'></script>
+<script>
+   $(document).ready(function() {
+            $('.footable').footable();
+   });
+</script>
+{% endblock %}

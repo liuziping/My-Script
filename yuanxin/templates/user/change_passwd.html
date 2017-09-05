@@ -1,0 +1,48 @@
+{% extends "public/layout.html" %}
+
+{% block breadcrumb %}
+     <ol class="breadcrumb">
+        <li>
+            <a href="{% url 'index' %}">首页</a>
+        </li>
+         <li>
+             <a>用户管理</a>
+         </li>
+        <li class="active">
+            <strong>密码修改</strong>
+        </li>
+    </ol>
+{% endblock %}
+
+
+{% block body %}
+<div  class="wrapper wrapper-content animated fadeInRight">
+<div class="row">
+            
+            <div class="col-md-6">
+                <div class="ibox-content">
+                    <h2 class="font-bold">重置密码</h2>
+                    <div class="hr-line-dashed"></div>
+                         <form class="form-horizontal" action="{% url 'modify_pwd' %}" method="post" >
+                                <input type="hidden" name="uid" value="{{ uid }}">
+                                <div class="form-group">
+                                    <div class="col-sm-12"><input type="password" name="password1" placeholder="新密码" class="form-control" required=""></div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <div class="col-sm-12"><input type="password" name="password2" placeholder="确认密码" class="form-control" required="">
+                                    </div>
+                                </div>
+                                {% if msg %}
+                                    <div class="alert alert-danger">{{ msg }}</div>
+                                {% endif %}
+                                <button type="submit" class="btn btn-primary block full-width m-b">重置</button>
+
+                        </form>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

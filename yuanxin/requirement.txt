@@ -1,0 +1,8 @@
+ansible=1.9.6    
+Django=1.8.17   
+django-guardian                    
+django-pure-pagination               
+ipython                                
+MySQL-python                
+python-gitlab        
+requests                            

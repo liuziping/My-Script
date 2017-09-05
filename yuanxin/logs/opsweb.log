@@ -1,0 +1,409 @@
+[2017-05-26 15:13:41,996] [23423] [140150769256192] [     __init__.py:  61] [ERROR ] create user  error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 58, in post
+    user.save()
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/base.py", line 734, in save
+    force_update=force_update, update_fields=update_fields)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/base.py", line 762, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/base.py", line 846, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/base.py", line 885, in _do_insert
+    using=using, raw=raw)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 920, in _insert
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/sql/compiler.py", line 974, in execute_sql
+    cursor.execute(sql, params)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/backends/utils.py", line 79, in execute
+    return super(CursorDebugWrapper, self).execute(sql, params)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/backends/utils.py", line 64, in execute
+    return self.cursor.execute(sql, params)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/utils.py", line 98, in __exit__
+    six.reraise(dj_exc_type, dj_exc_value, traceback)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/backends/utils.py", line 64, in execute
+    return self.cursor.execute(sql, params)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/backends/mysql/base.py", line 124, in execute
+    return self.cursor.execute(query, args)
+  File "/data/devops4/venv/lib/python2.7/site-packages/MySQLdb/cursors.py", line 205, in execute
+    self.errorhandler(self, exc, value)
+  File "/data/devops4/venv/lib/python2.7/site-packages/MySQLdb/connections.py", line 36, in defaulterrorhandler
+    raise errorclass, errorvalue
+IntegrityError: (1062, "Duplicate entry 'admin' for key 'username'")
+
+[2017-05-26 15:14:00,508] [23423] [140150769256192] [     __init__.py:  61] [ERROR ] create user  error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 59, in post
+    ret =  {'code':0,'result': '添加用户 {0} 成功，用户名密码已经发送到 {1} 邮箱!'.format(name, email)}
+UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-2: ordinal not in range(128)
+
+[2017-05-26 15:14:19,797] [23721] [139831142946560] [     __init__.py:  61] [ERROR ] create user  error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 58, in post
+    user.save()
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/base.py", line 734, in save
+    force_update=force_update, update_fields=update_fields)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/base.py", line 762, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/base.py", line 846, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/base.py", line 885, in _do_insert
+    using=using, raw=raw)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 920, in _insert
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/sql/compiler.py", line 974, in execute_sql
+    cursor.execute(sql, params)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/backends/utils.py", line 79, in execute
+    return super(CursorDebugWrapper, self).execute(sql, params)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/backends/utils.py", line 64, in execute
+    return self.cursor.execute(sql, params)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/utils.py", line 98, in __exit__
+    six.reraise(dj_exc_type, dj_exc_value, traceback)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/backends/utils.py", line 64, in execute
+    return self.cursor.execute(sql, params)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/backends/mysql/base.py", line 124, in execute
+    return self.cursor.execute(query, args)
+  File "/data/devops4/venv/lib/python2.7/site-packages/MySQLdb/cursors.py", line 205, in execute
+    self.errorhandler(self, exc, value)
+  File "/data/devops4/venv/lib/python2.7/site-packages/MySQLdb/connections.py", line 36, in defaulterrorhandler
+    raise errorclass, errorvalue
+IntegrityError: (1062, "Duplicate entry 'liuziping' for key 'username'")
+
+[2017-05-26 15:40:24,869] [2673] [140272876590848] [     __init__.py: 170] [ERROR ] create user  error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 165, in post
+    user = UserProfile.objects.get(pk=uid)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 334, in get
+    self.model._meta.object_name
+DoesNotExist: UserProfile matching query does not exist.
+
+[2017-05-26 15:40:46,214] [2673] [140272876590848] [     __init__.py: 170] [ERROR ] create user  error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 165, in post
+    user = UserProfile.objects.get(pk=uid)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 334, in get
+    self.model._meta.object_name
+DoesNotExist: UserProfile matching query does not exist.
+
+[2017-05-26 17:31:40,781] [18616] [139776512419584] [     __init__.py: 103] [ERROR ] update user  error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 99, in post
+    UserProfile.objects.filter(pk=uid).update(**data)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 561, in update
+    query.add_update_values(kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/sql/subqueries.py", line 122, in add_update_values
+    field = self.get_meta().get_field(name)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/options.py", line 554, in get_field
+    raise FieldDoesNotExist('%s has no field named %r' % (self.object_name, field_name))
+FieldDoesNotExist: UserProfile has no field named u'uid'
+
+[2017-05-27 16:46:16,419] [6798] [140230053340928] [        views.py:  85] [ERROR ] delete order  error: Traceback (most recent call last):
+  File "/data/yuanxin/work_order/views.py", line 81, in delete
+    WorkOrder.objects.filter(id=work_order_id).delete()
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 679, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 697, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1310, in add_q
+    clause, require_inner = self._add_q(where_part, self.used_aliases)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1338, in _add_q
+    allow_joins=allow_joins, split_subq=split_subq,
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1209, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1102, in build_lookup
+    return final_lookup(lhs, rhs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/lookups.py", line 105, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/lookups.py", line 143, in get_prep_lookup
+    return self.lhs.output_field.get_prep_lookup(self.lookup_name, self.rhs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/fields/__init__.py", line 727, in get_prep_lookup
+    return self.get_prep_value(value)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/fields/__init__.py", line 985, in get_prep_value
+    return int(value)
+ValueError: invalid literal for int() with base 10: ''
+
+[2017-05-27 16:59:38,112] [10114] [139864535725824] [        views.py:  86] [ERROR ] delete order  error: Traceback (most recent call last):
+  File "/data/yuanxin/work_order/views.py", line 81, in delete
+    print "id is %" % work_order_id
+ValueError: incomplete format
+
+[2017-06-04 19:14:41,660] [27031] [139669178312448] [     __init__.py: 237] [ERROR ] change_passwd error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 227, in post
+    user = UserProfile.objects.get(pk=uid)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 334, in get
+    self.model._meta.object_name
+DoesNotExist: UserProfile matching query does not exist.
+
+[2017-06-04 19:14:52,110] [27031] [139669178312448] [     __init__.py: 237] [ERROR ] change_passwd error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 227, in post
+    user = UserProfile.objects.get(pk=uid)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 334, in get
+    self.model._meta.object_name
+DoesNotExist: UserProfile matching query does not exist.
+
+[2017-06-04 19:15:05,376] [27031] [139669178312448] [     __init__.py: 237] [ERROR ] change_passwd error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 227, in post
+    user = UserProfile.objects.get(pk=uid)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 334, in get
+    self.model._meta.object_name
+DoesNotExist: UserProfile matching query does not exist.
+
+[2017-06-04 19:16:35,838] [28134] [139805000197888] [     __init__.py: 237] [ERROR ] change_passwd error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 227, in post
+    user = UserProfile.objects.get(pk=uid)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 334, in get
+    self.model._meta.object_name
+DoesNotExist: UserProfile matching query does not exist.
+
+[2017-06-04 19:18:48,187] [29243] [139893993096960] [     __init__.py: 238] [ERROR ] change_passwd error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 228, in post
+    user = UserProfile.objects.get(pk=uid)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 334, in get
+    self.model._meta.object_name
+DoesNotExist: UserProfile matching query does not exist.
+
+[2017-06-04 19:20:23,892] [29989] [140189178287872] [     __init__.py: 238] [ERROR ] change_passwd error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 228, in post
+    user = UserProfile.objects.get(pk=uid)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 334, in get
+    self.model._meta.object_name
+DoesNotExist: UserProfile matching query does not exist.
+
+[2017-06-04 19:20:40,975] [29989] [140189178287872] [     __init__.py: 238] [ERROR ] change_passwd error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 228, in post
+    user = UserProfile.objects.get(pk=uid)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 334, in get
+    self.model._meta.object_name
+DoesNotExist: UserProfile matching query does not exist.
+
+[2017-06-04 19:21:54,930] [30682] [139671461414656] [     __init__.py: 239] [ERROR ] change_passwd error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 229, in post
+    user = UserProfile.objects.get(pk=uid)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 334, in get
+    self.model._meta.object_name
+DoesNotExist: UserProfile matching query does not exist.
+
+[2017-06-04 19:22:43,536] [31076] [139800151877376] [     __init__.py: 239] [ERROR ] change_passwd error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 229, in post
+    user = UserProfile.objects.get(pk=uid)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 334, in get
+    self.model._meta.object_name
+DoesNotExist: UserProfile matching query does not exist.
+
+[2017-06-04 19:24:18,482] [31634] [140370376353536] [     __init__.py: 237] [ERROR ] change_passwd error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 227, in post
+    user = UserProfile.objects.get(pk=uid)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 334, in get
+    self.model._meta.object_name
+DoesNotExist: UserProfile matching query does not exist.
+
+[2017-06-04 19:26:45,111] [32587] [140053947311872] [     __init__.py: 238] [ERROR ] change_passwd error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 228, in post
+    user = UserProfile.objects.get(pk=uid)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 334, in get
+    self.model._meta.object_name
+DoesNotExist: UserProfile matching query does not exist.
+
+[2017-06-04 19:28:59,250] [790] [139698841294592] [     __init__.py: 238] [ERROR ] change_passwd error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 228, in post
+    user = UserProfile.objects.get(pk=uid)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 334, in get
+    self.model._meta.object_name
+DoesNotExist: UserProfile matching query does not exist.
+
+[2017-06-04 19:30:43,522] [2075] [140435004876544] [     __init__.py: 239] [ERROR ] change_passwd error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 229, in post
+    user = UserProfile.objects.get(pk=uid)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 334, in get
+    self.model._meta.object_name
+DoesNotExist: UserProfile matching query does not exist.
+
+[2017-06-04 22:12:35,949] [5408] [140062263994112] [     __init__.py:  71] [ERROR ] create user  error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 63, in post
+    user = gl.users.create({'username': username,
+NameError: global name 'gl' is not defined
+
+[2017-06-04 22:14:06,408] [8580] [140190045296384] [     __init__.py:  72] [ERROR ] create user  error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 61, in post
+    user.save()
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/base.py", line 734, in save
+    force_update=force_update, update_fields=update_fields)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/base.py", line 762, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/base.py", line 846, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/base.py", line 885, in _do_insert
+    using=using, raw=raw)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/manager.py", line 127, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/query.py", line 920, in _insert
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/models/sql/compiler.py", line 974, in execute_sql
+    cursor.execute(sql, params)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/backends/utils.py", line 79, in execute
+    return super(CursorDebugWrapper, self).execute(sql, params)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/backends/utils.py", line 64, in execute
+    return self.cursor.execute(sql, params)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/utils.py", line 98, in __exit__
+    six.reraise(dj_exc_type, dj_exc_value, traceback)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/backends/utils.py", line 64, in execute
+    return self.cursor.execute(sql, params)
+  File "/data/devops4/venv/lib/python2.7/site-packages/django/db/backends/mysql/base.py", line 124, in execute
+    return self.cursor.execute(query, args)
+  File "/data/devops4/venv/lib/python2.7/site-packages/MySQLdb/cursors.py", line 205, in execute
+    self.errorhandler(self, exc, value)
+  File "/data/devops4/venv/lib/python2.7/site-packages/MySQLdb/connections.py", line 36, in defaulterrorhandler
+    raise errorclass, errorvalue
+IntegrityError: (1062, "Duplicate entry 'panda' for key 'username'")
+
+[2017-06-04 22:15:02,489] [8580] [140189812913920] [     __init__.py:  72] [ERROR ] create user  error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 67, in post
+    'name': name})
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/base.py", line 139, in create
+    return self.obj_cls.create(self.gitlab, data, **args)
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/base.py", line 358, in create
+    obj.save()
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/base.py", line 328, in save
+    self._create(**kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/base.py", line 313, in _create
+    json = self.gitlab.create(self, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/__init__.py", line 561, in create
+    raise_error_from_response(r, GitlabCreateError, 201)
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/exceptions.py", line 204, in raise_error_from_response
+    response_body=response.content)
+GitlabCreateError: 400: {u'password': [u'is too short (minimum is 8 characters)']}
+
+[2017-06-04 22:25:03,055] [12877] [139989274818304] [     __init__.py:  54] [DEBUG ] liuziping add group sa fail:(u'Failed to save group {:"route.path"=>["has already been taken"], :route=>["is invalid"], :name=>["has already been taken"]}',)
+[2017-06-05 18:09:55,427] [9935] [140340606531328] [        views.py:  51] [ERROR ] Cancel the release error: Traceback (most recent call last):
+  File "/data/yuanxin/code_release/views.py", line 48, in post
+    Deploy.objects.filter(id=int(apply_id)).update(status=3)
+ValueError: invalid literal for int() with base 10: ''
+
+[2017-06-06 14:57:11,871] [27821] [140549259757312] [     __init__.py:  78] [ERROR ] create user  error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 73, in post
+    'name': name})
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/base.py", line 139, in create
+    return self.obj_cls.create(self.gitlab, data, **args)
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/base.py", line 358, in create
+    obj.save()
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/base.py", line 328, in save
+    self._create(**kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/base.py", line 313, in _create
+    json = self.gitlab.create(self, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/__init__.py", line 561, in create
+    raise_error_from_response(r, GitlabCreateError, 201)
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/exceptions.py", line 204, in raise_error_from_response
+    response_body=response.content)
+GitlabCreateError: 409: Email has already been taken
+
+[2017-06-07 18:37:02,370] [8907] [139934909810432] [          idc.py:  43] [ERROR ] user  add checked failed:{"name": [{"message": "\u673a\u623f\u7b80\u79f0\u4e0d\u80fd\u4e3a\u7a7a", "code": "required"}], "user_phone": [{"message": "\u8fd9\u4e2a\u5b57\u6bb5\u662f\u5fc5\u586b\u9879\u3002", "code": "required"}], "idc_name": [{"message": "\u8fd9\u4e2a\u5b57\u6bb5\u662f\u5fc5\u586b\u9879\u3002", "code": "required"}], "user": [{"message": "\u8fd9\u4e2a\u5b57\u6bb5\u662f\u5fc5\u586b\u9879\u3002", "code": "required"}], "address": [{"message": "\u8fd9\u4e2a\u5b57\u6bb5\u662f\u5fc5\u586b\u9879\u3002", "code": "required"}], "user_email": [{"message": "\u8fd9\u4e2a\u5b57\u6bb5\u662f\u5fc5\u586b\u9879\u3002", "code": "required"}]}
+[2017-06-08 11:10:12,918] [24351] [140215593682688] [          idc.py:  43] [ERROR ] user admin add checked failed:{"name": [{"message": "\u673a\u623f\u7b80\u79f0\u4e0d\u80fd\u4e3a\u7a7a", "code": "required"}], "user_phone": [{"message": "\u8fd9\u4e2a\u5b57\u6bb5\u662f\u5fc5\u586b\u9879\u3002", "code": "required"}], "idc_name": [{"message": "\u8fd9\u4e2a\u5b57\u6bb5\u662f\u5fc5\u586b\u9879\u3002", "code": "required"}], "user": [{"message": "\u8fd9\u4e2a\u5b57\u6bb5\u662f\u5fc5\u586b\u9879\u3002", "code": "required"}], "address": [{"message": "\u8fd9\u4e2a\u5b57\u6bb5\u662f\u5fc5\u586b\u9879\u3002", "code": "required"}], "user_email": [{"message": "\u8fd9\u4e2a\u5b57\u6bb5\u662f\u5fc5\u586b\u9879\u3002", "code": "required"}]}
+[2017-06-08 11:10:36,835] [24351] [140215498548992] [          idc.py:  43] [ERROR ] user admin add checked failed:{"name": [{"message": "\u957f\u5ea6\u5fc5\u987b\u5c0f\u4e8e10", "code": "max_length"}]}
+[2017-06-08 11:10:57,346] [24351] [140215509038848] [          idc.py:  43] [ERROR ] user admin add checked failed:{"name": [{"message": "\u957f\u5ea6\u5fc5\u987b\u5c0f\u4e8e10", "code": "max_length"}]}
+[2017-06-08 17:21:39,326] [18417] [140364899940096] [      product.py:  79] [ERROR ] 用户admin 添加业务线验证失败
+[2017-06-08 17:48:55,314] [30208] [139665316534016] [      product.py:  79] [ERROR ] 用户 添加业务线验证失败:<ul class="errorlist"><li>pid<ul class="errorlist"><li>请选择正确的上级业务线</li></ul></li></ul>
+[2017-06-08 18:19:24,843] [10417] [140577617860352] [      product.py:  73] [ERROR ] 用户 业务线出错：(1048, "Column 'pid' cannot be null")
+[2017-06-10 22:45:54,037] [19091] [139704817153792] [          idc.py:  44] [ERROR ] user admin add checked failed:{"name": [{"message": "\u673a\u623f\u7b80\u79f0\u4e0d\u80fd\u4e3a\u7a7a", "code": "required"}], "user_phone": [{"message": "\u8fd9\u4e2a\u5b57\u6bb5\u662f\u5fc5\u586b\u9879\u3002", "code": "required"}], "idc_name": [{"message": "\u8fd9\u4e2a\u5b57\u6bb5\u662f\u5fc5\u586b\u9879\u3002", "code": "required"}], "user": [{"message": "\u8fd9\u4e2a\u5b57\u6bb5\u662f\u5fc5\u586b\u9879\u3002", "code": "required"}], "address": [{"message": "\u8fd9\u4e2a\u5b57\u6bb5\u662f\u5fc5\u586b\u9879\u3002", "code": "required"}], "user_email": [{"message": "\u8fd9\u4e2a\u5b57\u6bb5\u662f\u5fc5\u586b\u9879\u3002", "code": "required"}]}
+[2017-06-17 18:09:38,432] [4023] [140170547664640] [        views.py:  84] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/data/yuanxin/auto_tasks/views.py", line 77, in post
+    task_result.unreachable = record['unreachable']
+TypeError: string indices must be integers, not str
+
+[2017-06-17 18:09:38,432] [4023] [140170547664640] [        views.py:  84] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/data/yuanxin/auto_tasks/views.py", line 77, in post
+    task_result.unreachable = record['unreachable']
+TypeError: string indices must be integers, not str
+
+[2017-06-17 18:13:35,354] [6504] [140064578787072] [        views.py:  84] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/data/yuanxin/auto_tasks/views.py", line 77, in post
+    task_result.unreachable = int(record['unreachable'])
+TypeError: string indices must be integers, not str
+
+[2017-06-17 18:13:35,354] [6504] [140064578787072] [        views.py:  84] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/data/yuanxin/auto_tasks/views.py", line 77, in post
+    task_result.unreachable = int(record['unreachable'])
+TypeError: string indices must be integers, not str
+
+[2017-06-17 18:17:23,291] [8896] [139919864624896] [        views.py:  86] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/data/yuanxin/auto_tasks/views.py", line 78, in post
+    print "unreachable is %s" % record['unreachable']
+TypeError: string indices must be integers, not str
+
+[2017-06-17 18:17:23,292] [8896] [139919864624896] [        views.py:  86] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/data/yuanxin/auto_tasks/views.py", line 78, in post
+    print "unreachable is %s" % record['unreachable']
+TypeError: string indices must be integers, not str
+
+[2017-06-17 18:23:43,627] [11699] [139997609838336] [        views.py:  87] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/data/yuanxin/auto_tasks/views.py", line 79, in post
+    print "unreachable is %s" % record[0]['unreachable']
+TypeError: string indices must be integers, not str
+
+[2017-06-17 18:23:43,627] [11699] [139997609838336] [        views.py:  87] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/data/yuanxin/auto_tasks/views.py", line 79, in post
+    print "unreachable is %s" % record[0]['unreachable']
+TypeError: string indices must be integers, not str
+
+[2017-06-17 18:50:46,380] [25515] [139756745762560] [        views.py:  72] [ERROR ] insert AutoTasks  error: Traceback (most recent call last):
+  File "/data/yuanxin/auto_tasks/views.py", line 67, in post
+    print "msg: %s" % result.msg
+AttributeError: 'dict' object has no attribute 'msg'
+
+[2017-06-17 18:53:32,360] [27035] [140440867174144] [        views.py:  72] [ERROR ] insert AutoTasks  error: Traceback (most recent call last):
+  File "/data/yuanxin/auto_tasks/views.py", line 67, in post
+    print "msg: %s" % result.msg
+AttributeError: 'dict' object has no attribute 'msg'
+
+[2017-06-17 20:57:21,930] [7031] [139830024349440] [        views.py:  71] [ERROR ] insert AutoTasks  error: Traceback (most recent call last):
+  File "/data/yuanxin/auto_tasks/views.py", line 66, in post
+    exec_result = playbook.run('/tmp/ansible.log', '/tmp/tmp_ansible.log')
+  File "/data/yuanxin/utils/ansible_api.py", line 39, in run
+    data = json.dumps(simple,indent=4)
+NameError: global name 'json' is not defined
+
+[2017-06-20 17:54:09,506] [3382] [140023687005952] [     __init__.py:  78] [ERROR ] create user  error: Traceback (most recent call last):
+  File "/data/yuanxin/dashboard/user/__init__.py", line 73, in post
+    'name': name})
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/base.py", line 139, in create
+    return self.obj_cls.create(self.gitlab, data, **args)
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/base.py", line 358, in create
+    obj.save()
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/base.py", line 328, in save
+    self._create(**kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/base.py", line 313, in _create
+    json = self.gitlab.create(self, **kwargs)
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/__init__.py", line 561, in create
+    raise_error_from_response(r, GitlabCreateError, 201)
+  File "/data/devops4/venv/lib/python2.7/site-packages/gitlab/exceptions.py", line 204, in raise_error_from_response
+    response_body=response.content)
+GitlabCreateError: 400: {u'username': [u"can contain only letters, digits, '_', '-' and '.'. Cannot start with '-' or end in '.', '.git' or '.atom'.", u"can't be blank"], u'notification_email': [u"can't be blank", u'is invalid'], u'email': [u"can't be blank"], u'name': [u"can't be blank"]}
+

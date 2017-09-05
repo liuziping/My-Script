@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title>Devops运维平台</title>
+<link href="/static/img/favicon.ico" type="image/x-icon" rel="shortcut icon">
+
+<!--第三方插件样式-->
+<link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/vendor/datatable/datatable.css" rel="stylesheet">
+<link href="/static/vendor/metismenu/metismenu.min.css" rel="stylesheet">
+<link href="/static/vendor/alert/sweet-alert.css" rel="stylesheet">
+<link href="/static/vendor/bootstrap-multiselect.css" rel="stylesheet">
+<link href="/static/vendor/validform.css" rel="stylesheet">
+<link href="/static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="/static/chosen/css/chosen.min.css" rel="stylesheet" type="text/css">
+<link href="/static/chosen/css/chosen-bootstrap.css" rel="stylesheet" type="text/css">
+<!--自定义样式文件 ＊重要＊-->
+<link href="/static/vendor/sb-admin-2.css" rel="stylesheet">
+
+
+<style type="text/css">
+.navbar-header{
+    width: 200px;
+    text-align: center;
+}
+.navbar-brand{
+    font-size: 20px;
+
+}
+.table{
+    margin-top: 10px;
+}
+
+.hover{
+    cursor: pointer;
+}
+.progress-reboot{
+    position: absolute;
+    height: 2px;
+    top:0px;
+    background: #337ab7;
+    width: 0%;
+    z-index: 2000;
+}
+
+#main-content .add-btn{
+    position: absolute;
+    z-index:100;
+    width: 200px;
+}
+#wrapper{
+    background: #2e3c4e;
+}
+.navbar-default .navbar-nav>li>a{
+    color:white;
+}
+.navbar-default .navbar-nav>li>a:hover{
+    background: #299d71;
+}
+
+.navbar-default .navbar-brand{
+    color:white;
+}
+
+.navbar-default .navbar-brand:hover{
+    color:white;
+}
+.select2-container{
+    width: 100% !important;
+}
+button.detail{
+    margin-left: 10px;
+}
+.sweet-alert h2{
+    margin-top: 30px;
+}
+    
+</style>
+{% block css %} {% endblock%}
+</head>
+
+<body>
+<div id="wrapper"> <!--页面全局样式-->
+
+<!--页面头部导航 -->
+<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+    <a class="navbar-brand" href="/">Devops Admin</a>
+    <ul class="nav navbar-nav">
+	<li  class="dropdown" id="profile-messages" >
+    <a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i class="fa fa-user fa-fw"></i><span class="text">
+    {% if request.user.is_authenticated %} {{ user.username }} {% else %} hello {% endif %}
+    </span><b class="caret"></b></a>
+	    <ul class="dropdown-menu">
+		<li><a href="#"><i class="fa fa-user fa-fw"></i>个人中心</a></li>
+		<li class="divider"></li>
+		<li><a href="{% url 'logout' %}"><i class="fa fa-mail-forward fa-fw"></i>退出登录</a></li>
+	    </ul>
+	</li>
+	<li><a href="{% url 'logout' %}"><i class="fa fa-mail-forward fa-fw" ></i><span>退出登录</span></a></li>
+    </ul>
+    <ul class="nav navbar-nav pull-right">
+                
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell"></i>  <span class="label label-primary">{{ request.user.unread_messages.count }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        {% for message in request.user.unread_messages %}
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-envelope fa-twitch"></i> {{ message.message|slice:"15" }}
+                                    <span class="pull-right text-muted small">{{ message.add_time}}</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        {% endfor %}
+                        <li>
+                            <div class="text-center link-block">
+                                <a href="{% url 'user_messages' %}">
+                                    <strong>查看所有消息</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+
+        <li><a href="http://www.51reboot.com" target="_blank">Reboot官网</a></li>
+        <li><a href="http://59.110.12.72:8000/zabbix/" target="_blank">zabbix</a></li>
+    </ul>
+    <form class="navbar-form">
+        <input type="text" class="form-control" placeholder="Search...">
+    </form>
+</nav><!--nav  end -->
+
+<!--左边菜单部分-->
+{% block navbar %}
+    {% include "public/default_navbar.html" %}
+{% endblock %}
+
+
+<!--页面正文部分-->
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div id='main-content' class="col-md-12" style='padding-top:20px;'>
+                <div id="content-header">
+                    {% block breadcrumb %}
+                    {% endblock %}
+                  <hr>
+                </div><!--end content-header-->
+                {% block body %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>  <!--页面正文部分结束-->
+
+</div><!--页面全局样式结束-->
+
+<!--js 部分-->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/chosen/chosen.jquery.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="/static/vendor/metismenu/metismenu.min.js"></script>
+    <script src="/static/vendor/validform.js"></script>
+    <script src="/static/vendor/bootstrap-multiselect.js"></script>
+    <script src='/static/vendor/alert/sweet-alert.min.js'></script>
+    <script src='/static/parsley/parsley.min.js'></script>
+
+
+    <script>
+        function apply_menu(obj){
+            obj.parent('li').addClass("active").parent('ul').addClass('in').attr("aria-expanded","true").siblings('a').attr("aria-expanded","true").parent("li").addClass("active")
+        }
+
+        $(function(){
+            $("#side-menu").metisMenu();
+        })
+    </script>
+    {% block js %}
+
+    {% endblock %}
+
+
+
+</body>
+
+</html>

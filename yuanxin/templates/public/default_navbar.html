@@ -1,0 +1,91 @@
+<div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav navbar-collapse">
+
+        <ul class="nav" id="side-menu">  <!--菜单列表-->
+            <li><a href="{% url 'index' %}"><i class="fa fa-home fa-fw"></i>控制面板</a></li>
+
+            {% if perms.dashboard %}
+            <li> <!--用户管理-->
+                <a href="#"><i class="fa fa-user fa-fw" ></i>用户管理<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level  collapse">
+                    <li>
+                        <a href="{% url 'user_list' %}" class="menu-link" id="menu-userlist">用户列表</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'group_list' %}" class="menu-link" id="menu-rolelist">角色管理</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'power_list' %}" class="menu-link" id="menu-powerlist">权限管理</a>
+                    </li>
+                </ul>
+            </li> <!--用户管理 end-->
+            {% endif %}
+            <li class=""><!--资产平台-->
+                <a href="#" ><i class="fa fa-database fa-fw"></i>资源管理<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse" >
+                    <li class="">
+                        <a href="{% url 'idc_list' %}" class="menu-link" id="menu-idc-list">机房管理</a>
+                    </li>
+                    <li class="">
+                        <a href="{% url 'server_list' %}" class="menu-link" id="menu-server-manage">服务器管理</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'product_manage' %}" class="menu-link" id="menu-product-manage">业务线管理</a>
+                    </li>
+                </ul>
+            </li> <!--CMDB资产平台结束-->
+
+            <li class=""><!--项目管理-->
+                <a href="#"><i class="fa fa-git fa-fw"></i>项目管理<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse" >
+                    <li>
+                        <a href="{% url 'project_list' %}" class="menu-link" id="menu-product-manage">我的项目</a>
+                    </li>
+                </ul>
+            </li> <!--项目管理-->
+            
+            <li class=""><!--发布系统-->
+                <a href="#"><i class="fa fa-code fa-fw"></i>发布系统<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse" >
+                    <li>
+                        <a href="{% url 'apply_for_release' %}" class="menu-link" id="menu-product-manage">申请发布</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'apply_list' %}" class="menu-link" id="menu-product-manage">申请列表</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'deploy_history' %}" class="menu-link" id="menu-product-manage">发布历史</a>
+                    </li>
+                </ul>
+            </li> <!--发布系统-->
+
+            <li class=""><!--工单系统-->
+                <a href="#" ><i class="fa fa-book fa-fw"></i>工单管理<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse" >
+                    <li class="">
+                        <a href="{% url 'work_order:apply' %}" class="menu-link">工单申请</a>
+                    </li>
+                    {% if perms.work_order.deal_workorder %}
+                    <li>
+                        <a href="{% url 'work_order:list' %}" class="menu-link">申请列表</a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a href="{% url 'work_order:history' %}" class="menu-link">历史工单</a>
+                    </li>
+                </ul>
+            </li> <!--工单系统结束-->
+
+           <li class="auto_tasks">
+                <a href="#"><i class="fa fa-book"></i> <span class="nav-label">任务管理</span><span class="fa arrow"></span></a>                   
+                <ul class="nav nav-second-level">
+                    <li class="add "><a href="{% url 'auto_tasks:add' %}">添加任务</a></li>
+                    <li class="list  exec_detail"><a href="{% url 'auto_tasks:list' %}">查看任务</a></li>
+                </ul>   
+           </li>   
+            
+
+        </ul><!--菜单列表结束-->
+
+    </div><!--sidebar-collapse end -->
+</div><!--navbar-static-side 左边菜单结束 -->

@@ -1,0 +1,79 @@
+{% extends "public/layout.html" %}
+
+
+
+{% block breadcrumb %}
+     <ol class="breadcrumb">
+        <li>
+            <a href="{% url 'index' %}">首页</a>
+        </li>
+         <li>
+             <a>工单管理</a>
+         </li>
+        <li class="active">
+            <strong>工单详情</strong>
+        </li>
+    </ol>
+{% endblock %}
+
+
+{% block body %}
+<div  class="wrapper wrapper-content animated fadeInRight">
+<div class="row">
+ <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5> {{ work_order.title }} </h5>
+                    </div>
+
+                    <div class="ibox-content">
+                        <form method="post" action="{% url 'work_order:detail' %}" class="form-horizontal">
+                            {% if msg %}
+                                <div class="alert alert-success alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                    {{ msg | safe }}
+                                </div>
+                            {% elif errmsg %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                    {{ errmsg | safe }}
+                                </div>
+                            {% endif %}
+                             <input type="hidden" name="work_order_id" value="{{ work_order.id }}">
+                            <input type="hidden" name="status" value="{{ work_order.status }}">
+                            <pre>{{ work_order.order_contents }}</pre>
+                            <div class="hr-line-dashed"></div>
+                            {% if work_order.status == 1 %}
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <textarea  name="result_desc" class="form-control" rows="5" placeholder="处理结果"></textarea>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    {% if work_order.status == 0 %}
+                                        <button id="submit_button" class="btn btn-primary" type="submit">接受</button>
+                                    {% elif work_order.status == 1 %}
+                                        <button id="submit_button" class="btn btn-primary" type="submit">完成</button>
+                                    {% endif %}
+                                    <button class="btn btn-white" type="reset">取消</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

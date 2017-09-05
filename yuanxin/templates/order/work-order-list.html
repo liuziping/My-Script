@@ -1,0 +1,143 @@
+{% extends "public/layout.html" %}
+
+{% block css %}
+    <link href="/static/footable/footable.core.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block breadcrumb %}
+     <ol class="breadcrumb">
+        <li>
+            <a href="{% url 'index' %}">首页</a>
+        </li>
+         <li>
+             <a>工单管理</a>
+         </li>
+        <li class="active">
+            <strong>工单申请列表</strong>
+        </li>
+    </ol>
+{% endblock %}
+
+
+{% block body %}
+<div  class="wrapper wrapper-content animated fadeInRight">
+<div class="row">
+    <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5> 工单申请列表 </h5>
+                </div>
+        
+                   <div class="ibox-content">
+                        <div class="">
+                            <form id="search_form" method="get" action="" class="pull-right mail-search">
+                                <div class="input-group">
+                                    <input type="text" class="form-control input-sm" id="search_input" name="search_keywords" placeholder="工单标题">
+                                    <div class="input-group-btn">
+                                        <button id='search_btn' type="submit" class="btn btn-sm btn-primary">
+                                            -搜索-
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <table class="footable table table-striped table-bordered table-hover toggle-arrow-tiny"  >
+                            <thead>
+                                <tr>
+                                    <th class="text-center" data-toggle="true">工单类型</th>
+                                    <th class="text-center">工单标题</th>
+                                    <th class="text-center">申请人</th>
+                                    <th class="text-center">指派给</th>
+                                    <th class="text-center">工单状态</th>
+                                    <th class="text-center">申请时间</th>
+                                    <th class="text-center">操作</th>
+                                    <th class="text-center" data-hide="all">详情</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for work_order in page_obj.object_list %}
+                                <tr class="{{ work_order.id }}">
+                                    <td class="text-center">{{ work_order.get_type_display }}</td>
+                                    <td class="text-center">{{ work_order.title }}</td>
+                                    <td class="text-center"> {{ work_order.applicant.name }} </td>
+                                    <td class="text-center"> {{ work_order.assign_to.name }} </td>
+                                    <td class="text-center"><span class="label {% if work_order.status == 0 %}label-success{% elif work_order.status == 1 %}label-warning{% endif %}">{{ work_order.get_status_display }}</span></td>
+                                    <td class="text-center">{{ work_order.apply_time}}</td>
+                                    <td class="text-center">
+                                        {% if request.user.id == work_order.assign_to_id %}
+                                            <a href="{% url 'work_order:detail' %}?order_id={{ work_order.id }}" class="btn btn-xs btn-info">去处理</a>
+                                        {% endif %}
+                                        {% if request.user.id == work_order.applicant_id %}
+                                            <button  data-id="{{ work_order.id }}"  class="btn btn-xs btn-danger delete" {% if work_order.status == 1 %}disabled{% endif %}>取消</button>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center"><pre>{{ work_order.order_contents }}</pre></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                             </table>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                                    显示 [{{ p.count }}] 条数据中的 第 [{{ page_obj.start_index }}] 至 [{{ page_obj.end_index }}] 条数据
+                                </div>
+                            </div>
+                            {% include 'public/paginator.html' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+{% endblock %}
+
+{% block js %}
+<script src='/static/footable/footable.all.min.js'></script>
+  <script>
+        $(document).ready(function() {
+            $('.footable').footable();
+        });
+$("tbody").on('click','.delete',function(){
+            var work_order_id = $(this).attr('data-id');
+            swal({
+                title: "你确定取消工单?",
+                text: "取消工单将会删除本条申请记录，需要重新申请",
+                type: "warning",
+                showCancelButton: true,
+                cancelButtonText:"取消",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确定",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                    type: "DELETE",
+                    url: "{% url 'work_order:list' %}",
+                    data:{"work_order_id": work_order_id},
+                    success: function(data){
+                        console.log(data);
+                        if (data['code']== 0){
+                                swal({
+                                    title: "是",
+                                    text: "本条申请记录已经删除！",
+                                    type: "success",
+                                    confirmButtonText: "确定"
+                                }, function () {
+                                     location.reload()
+                                });
+                       }else{
+                                swal("Error", data['errmsg'], "error")
+                       }
+                 }
+                });
+            });
+        })
+    </script>
+
+{% endblock %}
