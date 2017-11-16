@@ -1,0 +1,269 @@
+<html>
+
+<body>
+
+<div id="map" style="width: 70%;height:700px;float:left"></div>
+<div id="area" style="width: 30%;height:700px;float:left"></div>
+<div id="bar" style="width: 100%;height:500px;float:left"></div>
+<script src='echarts.js'></script>
+<script src='china.js'></script>
+<script src="shine.js"></script>   
+<script>
+var myChart = echarts.init(document.getElementById('map'),'shine');  //换个主题
+var myChart1 = echarts.init(document.getElementById('area'),'shine');
+var myChart2 = echarts.init(document.getElementById('bar'),'shine');
+var option = {
+    title: {
+        text: '网站访问来源',
+        subtext: '测试数据',
+        left: 'center'
+    },
+    tooltip: {
+        trigger: 'item'
+    },
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: ["国内网站访问分布"]
+    },
+    visualMap: {                      // 调节数据大小的组件
+        min: 0 ,
+        max: 5000,
+        left: 'left',
+        top: 'bottom',
+        text: ['高','低'],           // 文本，默认为数值文本
+        calculable: true
+    },
+    toolbox: {
+        show: true,
+        orient: 'horizontal', // horizontal水平（默认），vertical垂直
+        left: 'right',
+        feature: {
+            dataView: {readOnly: false},
+            restore: {},
+            saveAsImage: {}
+         }
+    },
+    series: [
+          {
+            name: '国内网站访问分布',
+            type: 'map',
+            mapType: 'china',
+            roam: false,
+            label: {
+                normal: {
+                    show: true
+                },
+                emphasis: {
+                    show: true
+                  }
+            },
+            data: [{'name':'北京','value':300},
+			{'name':'上海','value':400},
+		    {'name':'河南','value':500},
+			{'name':'四川','value':1000},
+			{'name':'浙江','value':100},
+			{'name':'广东','value':700},
+			{'name':'江苏','value':4000},],
+        }, 
+    ] 
+ }; 
+
+var option1 = {
+    title : {
+        text: '各大区销售占比',
+        subtext: '销售额数据',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient : 'vertical',
+        x : 'left',
+        data:['华南战区','华东战区','华北战区','西北战区','西南战区']
+    },
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {
+                show: true, 
+                type: ['pie', 'funnel'],
+                option: {
+                    funnel: {
+                        x: '25%',
+                        width: '50%',
+                        funnelAlign: 'left',
+                        max: 1548
+                    }
+                }
+            },
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    series : [
+        {
+            name:'销售数据',
+            type:'pie',
+            radius : '55%',
+            center: ['50%', '60%'],
+            data:[
+                {value:335, name:'华南战区'},
+                {value:310, name:'华东战区'},
+                {value:234, name:'华北战区'},
+                {value:135, name:'西北战区'},
+                {value:1548, name:'西南战区'}
+            ]
+        }
+    ]
+};
+ 
+var option2 = {
+    tooltip : {
+        show: true,
+        trigger: 'item'
+    },
+    legend: {
+        data:['A类药品','B类药品','C类药品','D类药品']
+    },
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    xAxis : [
+        {
+            type : 'category',
+            data : ['周一','周二','周三','周四','周五','周六','周日']
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value'
+        }
+    ],
+    series : [
+        {
+            name:'A类药品',
+            type:'bar',
+            itemStyle: {   // 系列级个性化样式，纵向渐变填充
+                normal: {
+                    barBorderColor:'red',
+                    barBorderWidth: 1,
+					label : {
+								show : true,
+								textStyle : {
+									fontSize : '10',
+									fontFamily : '微软雅黑',
+									fontWeight : 'bold'
+								}
+							}
+                },       
+            },
+            data:[220, 232, 101, 234, 190, 330, 210]
+        },
+        {
+            name:'B类药品',
+            type:'bar',
+			itemStyle: {   // 系列级个性化样式，纵向渐变填充
+                normal: {
+                    barBorderWidth: 1,
+					label : {
+								show : true,
+								textStyle : {
+									fontSize : '10',
+									fontFamily : '微软雅黑',
+									fontWeight : 'bold'
+								}
+							}
+                },       
+            },
+            data:[120, 100, 451, 134, 190, 230, 110]
+        },
+        {
+            name:'C类药品',
+            type:'bar',
+            itemStyle: {                // 系列级个性化
+                normal: {
+                    barBorderWidth: 1,
+                    barBorderColor:'tomato',
+                    color: 'red',
+					label : {
+								show : true,
+								textStyle : {
+									fontSize : '10',
+									fontFamily : '微软雅黑',
+									fontWeight : 'bold'
+								},
+							},
+                },
+                emphasis: {             // 鼠标选中时变蓝色
+                    barBorderColor:'red',
+                    color: 'blue'
+                }
+            },
+            data:[
+                320, 332, 100, 334,
+                {
+                    value: 390,
+                    symbolSize : 100,   // 对某条数据重写样式
+                    itemStyle: {
+                        normal: {
+                            color :'lime',
+                        },
+                        emphasis: {
+                            color: 'skyBlue'
+                        }
+                    }
+                },
+                330, 320
+            ]
+        },
+        {
+            name:'D类药品',
+            type:'bar',
+            barWidth: 40,       // 系列级个性化，柱形宽度
+            itemStyle: {
+                normal: {       // 系列级个性化，横向渐变填充
+                    borderRadius: 5,
+                    label : {
+                        show : true,
+                        textStyle : {
+                            fontSize : '20',
+                            fontFamily : '微软雅黑',
+                            fontWeight : 'bold'
+                        }
+                    }
+                }
+            },
+            data:[620, 732, 701,734, 890, 930, 820],
+			markLine : {           // 辅助线
+                data : [
+                    {type : 'average', name : '平均值'},
+                    {type : 'max',name : '最大值'},
+                    {type : 'min',name : '最小值'}
+                ]
+            },
+        },
+		
+    ]
+};
+                    
+myChart.setOption(option)
+myChart1.setOption(option1)
+myChart2.setOption(option2)
+</script>
+
+</body>
+</html>
